@@ -1,0 +1,200 @@
+/**
+ * Implicit Graph Search Library(C), 2009 
+ */
+package org.igsl.traversal.linear;
+
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Stack;
+
+import org.igsl.functor.NodeGenerator;
+import org.igsl.traversal.TreeTraversal;
+
+/**
+ * Depth-first search implementation for a problem graph without edge cost.
+ */
+public class DepthFirstTreeTraversal<T> implements TreeTraversal<T>
+{
+	/**
+	 * Constructor based on a start search node and expansion operator
+	 * 
+	 * @param value root node value
+	 * @param generator node generator function
+	 * @throws NullPointerException thrown if node generator is null
+	 * @see NodeGenerator
+	 */
+	public DepthFirstTreeTraversal(T value, NodeGenerator<T> generator) 
+		throws NullPointerException
+	{
+		if(generator == null) {
+			throw new NullPointerException();
+		} else {
+			this.generator = generator;
+		}
+		
+		nodes.push(new TreeNode(value));
+	}
+	
+	/**
+	 * Expands nodes base on "last found - first expanded" technique.
+	 * For an empty traversal returns without any action.
+	 * If the result of node expansion is empty list of nodes then
+	 * searches for other nodes in the tree performing pruning procedure.
+	 */
+	public void moveForward() {
+		if(isEmpty()) return;
+		
+		TreeNode n = nodes.peek();
+		List<T> result = generator.expand(n.getValue());
+		
+		if(result == null || result.isEmpty()) {
+			TreeNode parent = null;
+			
+			do {
+				n = nodes.pop();
+				parent = n.getParent();
+			} while(parent != null && parent == nodes.peek());
+		} else {
+			ListIterator<T> li = result.listIterator(result.size());
+			
+			do {
+				T p = li.previous();
+				nodes.push(new TreeNode(p, n));
+			} while(li.hasPrevious());
+		}
+	}
+	
+	/**
+	 * Simply prunes the cursor node and its predecessors if necessary
+	 * till a ready-for-expansion node is found.
+	 */
+	public void backtrack() {
+		if(isEmpty()) return;
+		
+		TreeNode parent = null;
+		
+		do {
+			TreeNode n = nodes.pop();
+			parent = n.getParent();
+		} while(parent != null && parent == nodes.peek());
+	}
+	
+	/**
+	 * Returns value for cursor node, null - if traversal is empty
+	 */
+	public T getCursor() { return isEmpty() ? null : nodes.peek().getValue(); }
+	
+	/**
+	 * Returns a node generator functor.
+	 */
+	public NodeGenerator<T> getNodeGenerator() { return generator; }
+	
+	/**
+	 * Check if traversal has no nodes to expand
+	 */
+	public boolean isEmpty() { return nodes.empty(); }
+	
+	/**
+	 * Returns a list of traversal from a root node to cursor including both
+	 */
+	public Enumeration<T> getPath() {
+		Stack<T> result = new Stack<T>();
+		
+		if(!nodes.isEmpty()) {
+			TreeNode n = nodes.peek();
+			
+			while(n != null) {
+				result.push(n.getValue());
+				n = n.getParent();
+			}
+		}
+		
+		return result.elements();
+	}
+	
+	/**
+	 * Returns a list of nodes to be expanded.
+	 * Nodes are ordered by expansion priority in the tree:
+	 * from a cursor to a least "perspective" node
+	 */
+	public Collection<T> getLeafs() {
+		ArrayList<T> leafs = new ArrayList<T>();		
+		ArrayList<TreeNode> parents = new ArrayList<TreeNode>();		
+		
+		if(!nodes.isEmpty()) {
+			ListIterator<TreeNode> i = nodes.listIterator(nodes.size());
+			
+			while(i.hasPrevious()) {
+				TreeNode n = i.previous();
+				
+				if(!parents.contains(n)) {
+					leafs.add(n.getValue());
+				}
+	
+				TreeNode parent = n.getParent();
+				if((parent != null) && (!parents.contains(parent))) {
+					parents.add(parent);
+				}
+			}
+		}
+		
+		return leafs;
+	}
+	
+	/**
+	 * Depth is a number of edges from a root node to cursor.
+	 */
+	public int getDepth() {
+		if(isEmpty()) {
+			return -1;
+		}
+		
+		int result = 0;
+		
+		TreeNode n = nodes.peek();
+		while(n.getParent() != null) {
+			++result;
+			n = n.getParent();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Splits a search tree into two parts: a tree with a cursor node as root and
+	 * the rest part without a cursor node.
+	 *  
+	 * @return a search tree with a cursor node as root
+	 */
+	public DepthFirstTreeTraversal<T> split() {
+		DepthFirstTreeTraversal<T> result = 
+			new DepthFirstTreeTraversal<T>(getCursor(), getNodeGenerator());
+		backtrack();
+		return result;
+	}
+	
+	private Stack<TreeNode> nodes = new Stack<TreeNode>();
+	private NodeGenerator<T> generator;
+	
+	class TreeNode {
+		T value;
+		TreeNode parent;
+		
+		TreeNode(T value) {
+			this.value = value;
+			this.parent = null;
+		}
+		
+		TreeNode(T value, TreeNode parent) {
+			this(value);
+			this.parent = parent;
+		}
+		
+		T getValue() { return value; }
+		TreeNode getParent() { return parent; }
+	}
+
+}

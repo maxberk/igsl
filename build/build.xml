@@ -1,0 +1,88 @@
+<!-- Implicit Graph Search Library(C), 2009 -->
+
+<project name="igsl" default="doc" basedir="..">
+	<filelist id="src.files" dir="src" files="
+		org/igsl/traversal/TreeTraversal.java,
+		org/igsl/traversal/CostTreeTraversal.java,
+		org/igsl/traversal/linear/DepthFirstTreeTraversal.java,
+		org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java,
+		org/igsl/functor/NodeGenerator.java,
+		org/igsl/functor/CostFunction.java,
+		org/igsl/cost/Addable.java,
+		org/igsl/algorithm/Sequential.java"
+	/>
+	
+	<filelist id="app.files" dir="app" files="
+		org/igsl/app/tsp/Route.java,
+		org/igsl/app/tsp/AddableDouble.java,
+		org/igsl/app/tsp/TSPSolver.java"
+	/>
+	
+	<target name="doc">
+		<javadoc destdir="doc">
+			<sourcefiles>
+				<filelist refid="src.files"/>
+				<filelist refid="app.files"/>
+			</sourcefiles>
+		</javadoc>
+	</target>
+	
+	<target name="release">
+		<delete dir="temp"/>
+		<mkdir dir="temp"/>
+		<mkdir dir="bin"/>
+		<mkdir dir="lib"/>
+		
+		<copy preservelastmodified="true" todir="temp">
+			<filelist refid="src.files"/>
+		</copy>
+		
+		<javac 
+			nowarn="on"
+			listfiles="yes"
+			fork="yes"
+			srcdir="temp"
+			destdir="bin"
+		/>
+		
+		<jar basedir="bin" destfile="lib/igsl.jar"/>
+	</target>
+	
+	<target name="test" depends="release">
+		<delete>
+			<fileset dir="temp" includes="**/*java"/>
+		</delete>
+		<copy preservelastmodified="true" todir="temp">
+			<filelist refid="app.files"/>
+		</copy>
+
+		<delete>
+			<fileset dir="bin" includes="**/*class"/>
+		</delete>
+		<javac
+			listfiles="yes"
+			fork="yes"
+			srcdir="temp"
+			destdir="bin"
+			classpath="lib/igsl.jar"
+		/>
+		
+		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+	</target>
+	
+	<target name="clean">
+		<delete dir="temp"/>
+		<delete dir="bin"/>
+		<delete dir="lib"/>
+	</target>
+	
+	<target name="clean.doc">
+		<delete dir="doc"/>
+	</target>
+	
+</project>
