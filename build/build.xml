@@ -19,7 +19,7 @@
 	/>
 	
 	<target name="doc">
-		<javadoc destdir="doc">
+		<javadoc destdir="doc/javadoc">
 			<sourcefiles>
 				<filelist refid="src.files"/>
 				<filelist refid="app.files"/>
@@ -27,7 +27,7 @@
 		</javadoc>
 	</target>
 	
-	<target name="release">
+	<target name="make.jar">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
 			<filelist refid="src.files"/>
@@ -48,7 +48,7 @@
 		<delete dir="bin"/>
 	</target>
 	
-	<target name="test" depends="release">
+	<target name="compile.test" depends="make.jar">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
 			<filelist refid="app.files"/>
@@ -63,7 +63,9 @@
 			classpath="lib/igsl.jar"
 		/>
 		<delete dir="temp"/>
-		
+	</target>
+	
+	<target name="run.test" depends="compile.test">
 		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
 			<classpath>
 				<pathelement path="bin"/>
@@ -73,12 +75,22 @@
 		<delete dir="bin"/>
 	</target>
 	
+	<target name="make.release" depends="compile.test,doc">
+		<mkdir dir="release"/>
+		<zip destfile="release/igsl.zip">
+			<fileset dir="." includes="doc/**"/>
+			<fileset dir="." includes="lib/**"/>
+			<fileset dir="." includes="bin/**"/>
+		</zip>
+	</target>
+	
 	<target name="clean">
+		<delete dir="bin"/>
 		<delete dir="lib"/>
 	</target>
 	
-	<target name="clean.doc">
-		<delete dir="doc"/>
+	<target name="clean.javadoc">
+		<delete dir="doc/javadoc"/>
 	</target>
 	
 </project>
