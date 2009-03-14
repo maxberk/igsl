@@ -28,15 +28,12 @@
 	</target>
 	
 	<target name="release">
-		<delete dir="temp"/>
 		<mkdir dir="temp"/>
-		<mkdir dir="bin"/>
-		<mkdir dir="lib"/>
-		
-		<copy preservelastmodified="true" todir="temp">
+		<copy todir="temp">
 			<filelist refid="src.files"/>
 		</copy>
 		
+		<mkdir dir="bin"/>
 		<javac 
 			nowarn="on"
 			listfiles="yes"
@@ -44,21 +41,20 @@
 			srcdir="temp"
 			destdir="bin"
 		/>
-		
+		<delete dir="temp"/>
+
+		<mkdir dir="lib"/>
 		<jar basedir="bin" destfile="lib/igsl.jar"/>
+		<delete dir="bin"/>
 	</target>
 	
 	<target name="test" depends="release">
-		<delete>
-			<fileset dir="temp" includes="**/*java"/>
-		</delete>
-		<copy preservelastmodified="true" todir="temp">
+		<mkdir dir="temp"/>
+		<copy todir="temp">
 			<filelist refid="app.files"/>
 		</copy>
 
-		<delete>
-			<fileset dir="bin" includes="**/*class"/>
-		</delete>
+		<mkdir dir="bin"/>
 		<javac
 			listfiles="yes"
 			fork="yes"
@@ -66,6 +62,7 @@
 			destdir="bin"
 			classpath="lib/igsl.jar"
 		/>
+		<delete dir="temp"/>
 		
 		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
 			<classpath>
@@ -73,11 +70,10 @@
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
+		<delete dir="bin"/>
 	</target>
 	
 	<target name="clean">
-		<delete dir="temp"/>
-		<delete dir="bin"/>
 		<delete dir="lib"/>
 	</target>
 	
