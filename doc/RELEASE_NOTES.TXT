@@ -1,0 +1,16 @@
+(C) Implicit Graph Search Library, 2009
+
+=== RELEASE NOTES ===
+
+Release contains IGSL classes packed into igsl.jar which could be found in lib directory.
+Generated IGSL core interfaces' and traversal's implementations' documentation could be
+found in javadoc directory. A sample dedicated to Traveling Salesman Person problem in planar
+statement is presented with source files located in app directory.
+
+To run the sample please try
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.app.tsp.TSPSolver
+
+with samples' classes already compiled into bin directory.
+
+Initial IGSL release contains only depth-first traversals implementations.

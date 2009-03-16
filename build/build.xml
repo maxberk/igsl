@@ -77,10 +77,11 @@
 	
 	<target name="make.release" depends="compile.test,doc">
 		<mkdir dir="release"/>
-		<zip destfile="release/igsl.zip">
-			<fileset dir="." includes="doc/**"/>
+		<zip destfile="release/igsl-${os.arch}-win32.zip">
+			<fileset dir="./doc"/>
 			<fileset dir="." includes="lib/**"/>
 			<fileset dir="." includes="bin/**"/>
+			<fileset dir="." includes="app/**"/>
 		</zip>
 	</target>
 	
