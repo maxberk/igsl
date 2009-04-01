@@ -126,7 +126,11 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 	 * The route is complete if the initial and final waypoints are the same.
 	 */
 	public boolean isGoal(Route t) {
-		return t.getVisitedNumber() > 1 && t.getFirst().equalsIgnoreCase(t.getLast());
+		boolean result1 = t.getVisitedNumber() > 1;
+		//System.out.println("result1=" + result1 + " t.getVisitedNumber()=" + t.getVisitedNumber());
+		boolean result2 = t.getFirst().equalsIgnoreCase(t.getLast());
+		//System.out.println("result2=" + result2);
+		return result1 && result2;
 	}
 
 	/**
@@ -210,6 +214,23 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			System.out.print(toPrint);
 		}
 		System.out.println();
+		
+		// Initialize a third instance of depth-first tree traversal
+		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
+			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
+				new Route(solver.getWaypoints()), new AddableDouble(0),
+				solver, solver);
+
+		// Find an optimal(minimal cost) solution with a branch-and-bound technique
+		Enumeration<Route> path3 = Sequential.deepenIteratively(tr3);
+		System.out.print("The iterative deepening gives following path: ");
+		while(path3.hasMoreElements()) {
+			Route r = path3.nextElement();
+			String toPrint = (path3.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			System.out.print(toPrint);
+		}
+		System.out.println();
+		
 		
 	}
 

@@ -25,6 +25,6 @@ public interface CostTreeTraversal<T,C> extends TreeTraversal<T> {
 	 * @return - reference to a <code>CostFunction</code> instance
 	 * @see CostFunction
 	 */
-	public CostFunction<T,C> getCostFunction();	
+	public CostFunction<T,C> getCostFunction();
 
 }

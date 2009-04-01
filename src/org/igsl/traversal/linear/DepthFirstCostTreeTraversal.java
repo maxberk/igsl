@@ -13,12 +13,15 @@ import java.util.Stack;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.traversal.CopyableCostTreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
 
 /**
  * Depth-first search implementation for a problem graph with edge cost.
+ * Implements Copyable interface to enable iterative search schemas 
  */
-public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> implements CostTreeTraversal<T,C>
+public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
+	implements CopyableCostTreeTraversal<T,C>
 {
 	/**
 	 * Constructor based on a start search node, expansion operator and cost function
@@ -178,6 +181,16 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 			n = n.getParent();
 		}
 		
+		return result;
+	}
+
+	/**
+	 * Implementation details of Copyable interface.
+	 * Returns a CostTreeTraversal with a copy of a cursor node
+	 */
+	public CostTreeTraversal<T,C> getCopyOf() {
+		DepthFirstCostTreeTraversal<T,C> result = 
+			new DepthFirstCostTreeTraversal<T,C>(getCursor(), getCost(), getNodeGenerator(), getCostFunction());
 		return result;
 	}
 	
