@@ -15,6 +15,7 @@ import org.igsl.algorithm.Sequential;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
+import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 /**
  * NodeGenerator and CostFunction implementations for Traveling Salesman Problem.
@@ -215,18 +216,35 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		}
 		System.out.println();
 		
+		// Depth-first search tree traversal using TSPSolver class
+		// both for NodeGenerator and CostFunction implementations
+		DepthFirstTreeTraversal<Route> tr3 =
+			new DepthFirstTreeTraversal<Route>(
+				new Route(solver.getWaypoints()), solver);
+
+		// Find a solution without cost preference
+		Sequential.deepenIteratively(tr3);
+		System.out.print("An admissable path found is: ");
+		Enumeration<Route> path3 = tr3.getPath();
+		while(path3.hasMoreElements()) {
+			Route r = path3.nextElement();
+			String toPrint = (path3.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			System.out.print(toPrint);
+		}
+		System.out.println();
+		
 		// Initialize a third instance of depth-first tree traversal
-		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
+		DepthFirstCostTreeTraversal<Route,AddableDouble> tr4 =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
 				new Route(solver.getWaypoints()), new AddableDouble(0),
 				solver, solver);
 
 		// Find an optimal(minimal cost) solution with a branch-and-bound technique
-		Enumeration<Route> path3 = Sequential.deepenIteratively(tr3);
+		Enumeration<Route> path4 = Sequential.deepenIteratively(tr4);
 		System.out.print("The iterative deepening gives following path: ");
-		while(path3.hasMoreElements()) {
-			Route r = path3.nextElement();
-			String toPrint = (path3.hasMoreElements()) ? r.toString() + "->" : r.toString();
+		while(path4.hasMoreElements()) {
+			Route r = path4.nextElement();
+			String toPrint = (path4.hasMoreElements()) ? r.toString() + "->" : r.toString();
 			System.out.print(toPrint);
 		}
 		System.out.println();

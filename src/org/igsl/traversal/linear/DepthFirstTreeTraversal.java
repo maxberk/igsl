@@ -11,12 +11,14 @@ import java.util.ListIterator;
 import java.util.Stack;
 
 import org.igsl.functor.NodeGenerator;
+import org.igsl.traversal.CopyableTreeTraversal;
+import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
  */
-public class DepthFirstTreeTraversal<T> implements TreeTraversal<T>
+public class DepthFirstTreeTraversal<T> implements CopyableTreeTraversal<T>
 {
 	/**
 	 * Constructor based on a start search node and expansion operator
@@ -160,6 +162,16 @@ public class DepthFirstTreeTraversal<T> implements TreeTraversal<T>
 			n = n.getParent();
 		}
 		
+		return result;
+	}
+	
+	/**
+	 * Implementation details of Copyable interface.
+	 * Returns a TreeTraversal with a copy of a cursor node
+	 */
+	public TreeTraversal<T> getCopyOf() {
+		DepthFirstTreeTraversal<T> result = 
+			new DepthFirstTreeTraversal<T>(getCursor(), getNodeGenerator());
 		return result;
 	}
 	

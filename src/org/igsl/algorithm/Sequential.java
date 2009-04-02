@@ -7,6 +7,7 @@ import java.util.Enumeration;
 
 import org.igsl.cost.Addable;
 import org.igsl.traversal.CopyableCostTreeTraversal;
+import org.igsl.traversal.CopyableTreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
 
@@ -84,6 +85,40 @@ public final class Sequential {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Iterative deepening limited by depth on each step
+	 * 
+	 * @param <T> type of the node
+	 * @param tr search tree traversal
+	 * @return an enumeration containing nodes on a path from beginning to end,
+	 * null if no path found
+	 */
+	public static <T> Enumeration<T> deepenIteratively(
+			CopyableTreeTraversal<T> tr) {
+		if(tr.isEmpty()) {
+			return null;
+		}
+
+		int depth = 0;
+		do {
+			TreeTraversal<T> tr1 = tr.getCopyOf();
+
+			while(!tr1.isEmpty() && !tr1.getNodeGenerator().isGoal(tr1.getCursor())) {
+				if(tr1.getDepth() < depth) {
+					tr1.moveForward();
+				} else {
+					tr1.backtrack();
+				}
+			}
+			
+			if(!tr1.isEmpty()) {
+				return tr1.getPath();
+			}
+			
+			++depth;
+		} while(true);
 	}
 	
 	/**

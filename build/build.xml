@@ -5,6 +5,7 @@
 		org/igsl/traversal/TreeTraversal.java,
 		org/igsl/traversal/CostTreeTraversal.java,
 		org/igsl/traversal/Copyable.java,
+		org/igsl/traversal/CopyableTreeTraversal.java,
 		org/igsl/traversal/CopyableCostTreeTraversal.java,
 		org/igsl/traversal/linear/DepthFirstTreeTraversal.java,
 		org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java,
