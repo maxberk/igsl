@@ -216,16 +216,14 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		}
 		System.out.println();
 		
-		// Depth-first search tree traversal using TSPSolver class
-		// both for NodeGenerator and CostFunction implementations
+		// Depth-first iterative search limited by depth
 		DepthFirstTreeTraversal<Route> tr3 =
 			new DepthFirstTreeTraversal<Route>(
 				new Route(solver.getWaypoints()), solver);
 
 		// Find a solution without cost preference
-		Sequential.deepenIteratively(tr3);
-		System.out.print("An admissable path found is: ");
-		Enumeration<Route> path3 = tr3.getPath();
+		Enumeration<Route> path3 = Sequential.deepenIteratively(tr3);
+		System.out.print("An admissable path found while searching iteratively: ");
 		while(path3.hasMoreElements()) {
 			Route r = path3.nextElement();
 			String toPrint = (path3.hasMoreElements()) ? r.toString() + "->" : r.toString();
