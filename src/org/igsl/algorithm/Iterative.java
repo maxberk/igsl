@@ -1,3 +1,6 @@
+/**
+ * Implicit Graph Search Library(C), 2009 
+ */
 package org.igsl.algorithm;
 
 import java.util.Enumeration;
