@@ -12,7 +12,8 @@
 		org/igsl/functor/NodeGenerator.java,
 		org/igsl/functor/CostFunction.java,
 		org/igsl/cost/Addable.java,
-		org/igsl/algorithm/Sequential.java"
+		org/igsl/algorithm/Direct.java,
+		org/igsl/algorithm/Iterative.java"
 	/>
 	
 	<filelist id="app.files" dir="app" files="

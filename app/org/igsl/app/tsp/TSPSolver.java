@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import org.igsl.algorithm.Sequential;
+import org.igsl.algorithm.Direct;
+import org.igsl.algorithm.Iterative;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
@@ -190,7 +191,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 				solver, solver);
 
 		// Find a solution without cost preference
-		Sequential.searchForward(tr);
+		Direct.searchForward(tr);
 		System.out.print("An admissable path found is: ");
 		Enumeration<Route> path = tr.getPath();
 		while(path.hasMoreElements()) {
@@ -207,7 +208,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 				solver, solver);
 
 		// Find an optimal(minimal cost) solution with a branch-and-bound technique
-		Enumeration<Route> path2 = Sequential.branchAndBound(tr2);
+		Enumeration<Route> path2 = Direct.branchAndBound(tr2);
 		System.out.print("The best path is: ");
 		while(path2.hasMoreElements()) {
 			Route r = path2.nextElement();
@@ -222,7 +223,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 				new Route(solver.getWaypoints()), solver);
 
 		// Find a solution without cost preference
-		Enumeration<Route> path3 = Sequential.deepenIteratively(tr3);
+		Enumeration<Route> path3 = Iterative.deepenIteratively(tr3);
 		System.out.print("An admissable path found while searching iteratively: ");
 		while(path3.hasMoreElements()) {
 			Route r = path3.nextElement();
@@ -238,7 +239,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 				solver, solver);
 
 		// Find an optimal(minimal cost) solution with a branch-and-bound technique
-		Enumeration<Route> path4 = Sequential.deepenIteratively(tr4);
+		Enumeration<Route> path4 = Iterative.deepenIteratively(tr4);
 		System.out.print("The iterative deepening gives following path: ");
 		while(path4.hasMoreElements()) {
 			Route r = path4.nextElement();
