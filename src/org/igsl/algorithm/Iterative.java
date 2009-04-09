@@ -12,12 +12,14 @@ import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
 
 /**
- * Class containing iterative graph search methods.
+ * Class containing iterative graph search methods. Iterative schemas return a path found while a traversal
+ * does not change its state. It means that only traversals that implement <code>Copyable</code> interface
+ * could be used in iterative schemas.
  */
 public final class Iterative {
 	
 	/**
-	 * Iterative deepening limited by depth on each step
+	 * Iterative deepening limited by depth on each step.
 	 * 
 	 * @param <T> type of the node
 	 * @param tr search tree traversal

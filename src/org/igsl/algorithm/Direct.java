@@ -10,7 +10,9 @@ import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
 
 /**
- * Class containing direct graph search methods.
+ * Class containing direct graph search methods. All these methods return <code>void</code> and usually modify
+ * a traversal state until a goal is reached. To access a solution one should exploit <code>getPath</code> method
+ * that is common for <code>TreeTraversal</code> interface.
  */
 public final class Direct {
 	
