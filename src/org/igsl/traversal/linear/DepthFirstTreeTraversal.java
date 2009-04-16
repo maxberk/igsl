@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Stack;
 
@@ -171,22 +172,29 @@ public class DepthFirstTreeTraversal<T> implements CopyableTreeTraversal<T>
 	 */
 	public TreeTraversal<T> getCopyOf() {
 		DepthFirstTreeTraversal<T> result = 
-			new DepthFirstTreeTraversal<T>(getCursor(), getNodeGenerator());
+			new DepthFirstTreeTraversal<T>();
+		
+		result.generator = generator;
+		
+		Iterator<TreeNode> iterator = nodes.iterator();
+		while(iterator.hasNext()) {
+			TreeNode node = iterator.next();
+
+			T value = node.getValue();
+			TreeNode parent = node.getParent();
+			
+			if(parent != null) {
+				int idx = nodes.indexOf(parent);
+				parent = result.nodes.elementAt(idx);
+			}
+			
+			result.nodes.push(new TreeNode(value, parent));
+		}
+		
 		return result;
 	}
 	
-	/**
-	 * Splits a search tree into two parts: a tree with a cursor node as root and
-	 * the rest part without a cursor node.
-	 *  
-	 * @return a search tree with a cursor node as root
-	 */
-	public DepthFirstTreeTraversal<T> split() {
-		DepthFirstTreeTraversal<T> result = 
-			new DepthFirstTreeTraversal<T>(getCursor(), getNodeGenerator());
-		backtrack();
-		return result;
-	}
+	private DepthFirstTreeTraversal() {}
 	
 	private Stack<TreeNode> nodes = new Stack<TreeNode>();
 	private NodeGenerator<T> generator;

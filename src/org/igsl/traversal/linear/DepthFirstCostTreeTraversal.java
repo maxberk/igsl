@@ -5,6 +5,7 @@ package org.igsl.traversal.linear;
 
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -15,6 +16,7 @@ import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.CopyableCostTreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
+import org.igsl.traversal.linear.DepthFirstTreeTraversal.TreeNode;
 
 /**
  * Depth-first search implementation for a problem graph with edge cost.
@@ -190,16 +192,31 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	 */
 	public CostTreeTraversal<T,C> getCopyOf() {
 		DepthFirstCostTreeTraversal<T,C> result = 
-			new DepthFirstCostTreeTraversal<T,C>(getCursor(), getCost(), getNodeGenerator(), getCostFunction());
+			new DepthFirstCostTreeTraversal<T,C>();
+		
+		result.generator = generator;
+		result.function = function;
+		
+		Iterator<TreeNode> iterator = nodes.iterator();
+		while(iterator.hasNext()) {
+			TreeNode node = iterator.next();
+
+			T value = node.getValue();
+			C cost = node.getCost();
+			TreeNode parent = node.getParent();
+			
+			if(parent != null) {
+				int idx = nodes.indexOf(parent);
+				parent = result.nodes.elementAt(idx);
+			}
+			
+			result.nodes.push(new TreeNode(value, cost, parent));
+		}
+		
 		return result;
 	}
 	
-	public DepthFirstCostTreeTraversal<T, C> split() {
-		DepthFirstCostTreeTraversal<T,C> result = 
-			new DepthFirstCostTreeTraversal<T,C>(getCursor(), getCost(), getNodeGenerator(), getCostFunction());
-		backtrack();
-		return result;
-	}
+	private DepthFirstCostTreeTraversal() {}
 	
 	private Stack<TreeNode> nodes = new Stack<TreeNode>();
 	
