@@ -17,6 +17,8 @@
 	/>
 	
 	<filelist id="app.files" dir="app" files="
+		org/igsl/app/eightknights/Board.java,
+		org/igsl/app/eightknights/EKPSolver.java,
 		org/igsl/app/tsp/Route.java,
 		org/igsl/app/tsp/AddableDouble.java,
 		org/igsl/app/tsp/TSPSolver.java"
@@ -71,6 +73,12 @@
 	
 	<target name="run.test" depends="compile.test">
 		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<java fork="true" classname="org.igsl.app.eightknights.EKPSolver">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>

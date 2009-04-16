@@ -35,9 +35,9 @@ public final class Iterative {
 		int depth = 0;
 		do {
 			TreeTraversal<T> tr1 = tr.getCopyOf();
-
+			
 			while(!tr1.isEmpty() && !tr1.getNodeGenerator().isGoal(tr1.getCursor())) {
-				if(tr1.getDepth() < depth) {
+				if(tr1.getDepth() <= depth) {
 					tr1.moveForward();
 				} else {
 					tr1.backtrack();

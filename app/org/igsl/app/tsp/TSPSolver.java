@@ -175,7 +175,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		solver.addWaypoint("g", -0.8, 0.1);
 		solver.addWaypoint("i", -0.8, 0.8);
 		
-		System.out.println("All waypoints:");
+		System.out.println("Traveling Salesman Problem: all waypoints:");
 		Iterator<String> waypointsIterator = solver.getWaypoints().iterator();
 		while(waypointsIterator.hasNext()) {
 			String waypointName = waypointsIterator.next();
