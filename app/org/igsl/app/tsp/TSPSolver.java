@@ -21,8 +21,8 @@ import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 /**
  * NodeGenerator and CostFunction implementations for Traveling Salesman Problem.
  * The problem is formulated as a planar for a set of waypoints presented by (x,y) coordinates.
- * The TSPSolver uses a Route and the AddableDouble classes as node and cost instances
- * in the template initialization.
+ * The TSPSolver uses a <code>Route</code> and the <code>AddableDouble</code> classes as node and
+ * cost instances in the template initialization.
  *
  */
 public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,AddableDouble>
@@ -128,11 +128,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 	 * The route is complete if the initial and final waypoints are the same.
 	 */
 	public boolean isGoal(Route t) {
-		boolean result1 = t.getVisitedNumber() > 1;
-		//System.out.println("result1=" + result1 + " t.getVisitedNumber()=" + t.getVisitedNumber());
-		boolean result2 = t.getFirst().equalsIgnoreCase(t.getLast());
-		//System.out.println("result2=" + result2);
-		return result1 && result2;
+		return (t.getVisitedNumber() > 1) && t.getFirst().equalsIgnoreCase(t.getLast());
 	}
 
 	/**
@@ -155,11 +151,11 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			this.x = x;
 			this.y = y;
 		}
-		
 	}
 	
 	/**
-	 * TSP test based on DepthFirstCostTreeTraversal searchForward and branchAndBound algorithms 
+	 * TSP test based on DepthFirstCostTreeTraversal <code>searchForward</code>, <code>branchAndBound</code>
+	 * and <code>deepenIteratively</code> algorithms 
 	 * 
 	 * @param args
 	 */
@@ -175,12 +171,13 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		solver.addWaypoint("g", -0.8, 0.1);
 		solver.addWaypoint("i", -0.8, 0.8);
 		
-		System.out.println("Traveling Salesman Problem: all waypoints:");
+		System.out.println("=====Traveling Salesman Problem. Waypoints.=====");
 		Iterator<String> waypointsIterator = solver.getWaypoints().iterator();
+		int id = 0;
 		while(waypointsIterator.hasNext()) {
 			String waypointName = waypointsIterator.next();
 			Waypoint waypoint = solver.getWaypoint(waypointName);
-			System.out.println("Waypoint " + waypointName + ": x = " + waypoint.x + "; y = " + waypoint.y + ".");
+			System.out.println(waypointName + ": x = " + waypoint.x + "; y = " + waypoint.y + ".");
 		}
 
 		// Depth-first search tree traversal using TSPSolver class
@@ -192,7 +189,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 
 		// Find a solution without cost preference
 		Direct.searchForward(tr);
-		System.out.print("An admissable path found is: ");
+		System.out.print("Admissable(non-optimal) path found while searching forward: ");
 		Enumeration<Route> path = tr.getPath();
 		while(path.hasMoreElements()) {
 			Route r = path.nextElement();
@@ -209,7 +206,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 
 		// Find an optimal(minimal cost) solution with a branch-and-bound technique
 		Enumeration<Route> path2 = Direct.branchAndBound(tr2);
-		System.out.print("The best path is: ");
+		System.out.print("Optimal path found with branch-and-bound method: ");
 		while(path2.hasMoreElements()) {
 			Route r = path2.nextElement();
 			String toPrint = (path2.hasMoreElements()) ? r.toString() + "->" : r.toString();
@@ -217,37 +214,21 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		}
 		System.out.println();
 		
-		// Depth-first iterative search limited by depth
-		DepthFirstTreeTraversal<Route> tr3 =
-			new DepthFirstTreeTraversal<Route>(
-				new Route(solver.getWaypoints()), solver);
+		// Initialize a third instance of depth-first tree traversal
+		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
+			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
+				new Route(solver.getWaypoints()), new AddableDouble(0),
+				solver, solver);
 
-		// Find a solution without cost preference
+		// Find an optimal(minimal cost) solution with iterative deepening technique
 		Enumeration<Route> path3 = Iterative.deepenIteratively(tr3);
-		System.out.print("An admissable path found while searching iteratively: ");
+		System.out.print("The optimal path found with iterative deepening: ");
 		while(path3.hasMoreElements()) {
 			Route r = path3.nextElement();
 			String toPrint = (path3.hasMoreElements()) ? r.toString() + "->" : r.toString();
 			System.out.print(toPrint);
 		}
 		System.out.println();
-		
-		// Initialize a third instance of depth-first tree traversal
-		DepthFirstCostTreeTraversal<Route,AddableDouble> tr4 =
-			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
-				new Route(solver.getWaypoints()), new AddableDouble(0),
-				solver, solver);
-
-		// Find an optimal(minimal cost) solution with a branch-and-bound technique
-		Enumeration<Route> path4 = Iterative.deepenIteratively(tr4);
-		System.out.print("The iterative deepening gives following path: ");
-		while(path4.hasMoreElements()) {
-			Route r = path4.nextElement();
-			String toPrint = (path4.hasMoreElements()) ? r.toString() + "->" : r.toString();
-			System.out.print(toPrint);
-		}
-		System.out.println();
-		
 		
 	}
 
