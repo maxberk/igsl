@@ -16,7 +16,6 @@ import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.CopyableCostTreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
-import org.igsl.traversal.linear.DepthFirstTreeTraversal.TreeNode;
 
 /**
  * Depth-first search implementation for a problem graph with edge cost.
@@ -122,7 +121,7 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	public boolean isEmpty() { return nodes.empty(); }
 	
 	/**
-	 * Returns a list of traversal from a root node to cursor including both
+	 * Returns a list of node values from a root node to cursor including both
 	 */	
 	public Enumeration<T> getPath() {
 		Stack<T> result = new Stack<T>();
