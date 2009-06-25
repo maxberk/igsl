@@ -1,5 +1,4 @@
 package org.igsl.app.fifteens;
-
 import org.igsl.cost.Addable;
 
 public class AddableInteger implements Addable<AddableInteger>, Comparable<AddableInteger>{

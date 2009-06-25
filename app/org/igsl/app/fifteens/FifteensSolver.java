@@ -13,30 +13,32 @@ import org.igsl.traversal.exponential.AStarTreeTraversal;
 public class FifteensSolver implements NodeGenerator<Position>,
 	CostFunction<Position,AddableInteger>, HeuristicFunction<Position,AddableInteger> {
 	
+	private Position terminal;
+	
+	public FifteensSolver(Position terminal) {
+		this.terminal = terminal;
+	}
+	
 	public List<Position> expand(Position position) {
 		List<Position> result = new LinkedList<Position>();
 		
-		if(position.canMoveUp()) {
-			result.add(position.moveTileUp());
-		}
+		Position p = position.moveTileUp();
+		if(p != null) result.add(p);
 		
-		if(position.canMoveDown()) {
-			result.add(position.moveTileDown());
-		}
+		p = position.moveTileDown();
+		if(p != null) result.add(p);
 		
-		if(position.canMoveLeft()) {
-			result.add(position.moveTileLeft());
-		}
+		p = position.moveTileLeft();
+		if(p != null) result.add(p);
 		
-		if(position.canMoveRight()) {
-			result.add(position.moveTileRight());
-		}
+		p = position.moveTileRight();
+		if(p != null) result.add(p);
 		
 		return result;
 	}
 	
 	public boolean isGoal(Position position) {
-		return position.isTerminal();
+		return position.isTerminal(terminal);
 	}
 	
 	public AddableInteger getTransitionCost(Position from, Position to) {
@@ -44,15 +46,17 @@ public class FifteensSolver implements NodeGenerator<Position>,
 	}
 	
 	public AddableInteger getEstimatedCost(Position p) {
-		return new AddableInteger(p.manhattanDistance());
+		return new AddableInteger(p.manhattanDistance(terminal));
 	}
 	
 	public static void main(String[] args) {
-		FifteensSolver solver = new FifteensSolver();
+		FifteensSolver solver = new FifteensSolver(
+			new Position(new int[][] {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}})		
+		);
 		
 		AStarTreeTraversal<Position, AddableInteger> tr =
 			new AStarTreeTraversal<Position, AddableInteger>(
-				new Position(new int[][] {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}}),
+				new Position(new int[][] {{1, 2, 0, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}}),
 				new AddableInteger(0),
 				solver, solver, solver
 			);

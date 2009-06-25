@@ -20,7 +20,7 @@ public class Position {
 		}
 	}
 	
-	private Position(Position parent, int di, int dj) {
+	private Position(Position parent, int i0, int j0) {
 		this.parent = parent;
 		this.tiles = new int[4][4];
 
@@ -30,52 +30,49 @@ public class Position {
 			}
 		}
 		
-		this.i0 = parent.i0;
-		this.j0 = parent.j0;
+		this.i0 = i0;
+		this.j0 = j0;
 		
-		tiles[i0][j0] = tiles[i0 + di][j0 + dj];
-		tiles[i0 + di][j0 + dj] = 0;
-		
-		i0 = i0 + di;
-		j0 = j0 + dj;
-	}
-	
-	public boolean canMoveUp() {
-		return (i0 > 0) && ((parent == null) || (parent.i0 != i0 - 1));
+		tiles[parent.i0][parent.j0] = tiles[this.i0][this.j0];
+		tiles[this.i0][this.j0] = 0;
 	}
 	
 	public Position moveTileUp() {
-		return new Position(this, i0 - 1, j0);
-	}
-	
-	public boolean canMoveDown() {
-		return (i0 < 3) && ((parent == null) || (parent.i0 != i0 + 1));
+		if((i0 > 0) && ((parent == null) || (parent.i0 != i0 - 1))) {
+			return new Position(this, i0 - 1, j0);
+		} else {
+			return null;
+		}
 	}
 	
 	public Position moveTileDown() {
-		return new Position(this, i0 + 1, j0);
-	}
-	
-	public boolean canMoveLeft() {
-		return (j0 > 0) && ((parent == null) || (parent.j0 != j0 - 1));
+		if((i0 < 3) && ((parent == null) || (parent.i0 != i0 + 1))) {
+			return new Position(this, i0 + 1, j0);
+		} else {
+			return null;
+		}
 	}
 	
 	public Position moveTileLeft() {
-		return new Position(this, i0, j0 - 1);
-	}
-	
-	public boolean canMoveRight() {
-		return (j0 < 3) && ((parent == null) || (parent.j0 != j0 + 1));
+		if((j0 > 0) && ((parent == null) || (parent.j0 != j0 - 1))) {
+			return new Position(this, i0, j0 - 1);
+		} else {
+			return null;
+		}
 	}
 	
 	public Position moveTileRight() {
-		return new Position(this, i0, j0 + 1);
+		if((j0 < 3) && ((parent == null) || (parent.j0 != j0 + 1))) {
+			return new Position(this, i0, j0 + 1);
+		} else {
+			return null;
+		}
 	}
 	
-	public boolean isTerminal() {
+	public boolean isTerminal(Position p) {
 		for(int i = 0; i < 3; ++i) {
 			for(int j = 0; j < 3; ++j) {
-				if(tiles[i][j] != (j + i * 4)) {
+				if(tiles[i][j] != p.tiles[i][j]) {
 					return false;
 				}
 			}
@@ -84,8 +81,28 @@ public class Position {
 		return true;
 	}
 	
-	public int manhattanDistance() {
-		return 0;
+	public int manhattanDistance(Position p) {
+		int result = 0;
+		
+		for(int i = 0; i < 3; ++i) {
+			for(int j = 0; j < 3; ++j) {
+				boolean found = false;
+				
+				for(int i1 = 0; i1 < 3; ++i1) {
+					for(int j1 = 0; j1 < 3; ++j1) {
+						if(p.tiles[i][j] == tiles[i1][j1]) {
+							result += Math.abs(i1 - i) + Math.abs(j1 - j);
+							found = true;
+							break;
+						}
+					}
+					
+					if(found) break;
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	public String toString() {
