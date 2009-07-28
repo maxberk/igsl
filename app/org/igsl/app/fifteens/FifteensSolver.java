@@ -50,20 +50,39 @@ public class FifteensSolver implements NodeGenerator<Position>,
 	}
 	
 	public static void main(String[] args) {
-		FifteensSolver solver = new FifteensSolver(
-			new Position(new int[][] {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}})		
-		);
+		int[][] terminal = new int[][] {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}};
+		int[][] initial = new int[][] {{0, 9, 2, 3}, {5, 4, 6, 7}, {12, 1, 10, 11}, {13, 8, 14, 15}};
+		
+		FifteensSolver solver = new FifteensSolver(new Position(terminal));
+		
+		System.out.println("=====Fifteen Puzzle Solver. Initial -> terminal positions.=====");
+		for(int i = 0; i < 4; ++i) {
+			for(int j1 = 0; j1 < 4; ++j1) {
+				String prefix1 = initial[i][j1] < 10 ? "  " : " ";
+				System.out.print(prefix1 + initial[i][j1]);
+			}
+			
+			System.out.print(" -> ");
+			
+			for(int j2 = 0; j2 < 4; ++j2) {
+				String prefix2 = initial[i][j2] < 10 ? "  " : " ";
+				System.out.print(prefix2 + terminal[i][j2]);
+			}
+			
+			System.out.println();
+		}
 		
 		AStarTreeTraversal<Position, AddableInteger> tr =
 			new AStarTreeTraversal<Position, AddableInteger>(
-				new Position(new int[][] {{1, 2, 0, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}}),
+				new Position(initial),
 				new AddableInteger(0),
 				solver, solver, solver
 			);
 		
 		Direct.searchForward(tr);
 		Enumeration<Position> path = tr.getPath();
-		
+
+		System.out.print("Path found (from terminal to initial position): ");
 		while(path.hasMoreElements()) {
 			Position p = path.nextElement();
 			String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();

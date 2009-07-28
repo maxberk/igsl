@@ -10,12 +10,18 @@ public class Position {
 		this.parent = null;
 		this.tiles = tiles;
 		
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 3; ++j) {
+		boolean found = false;
+		
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 4; ++j) {
 				if(tiles[i][j] == 0) {
 					i0 = i;
 					j0 = j;
+					found = true;
+					break;
 				}
+				
+				if(found) break;
 			}
 		}
 	}
@@ -24,8 +30,8 @@ public class Position {
 		this.parent = parent;
 		this.tiles = new int[4][4];
 
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 3; ++j) {
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 4; ++j) {
 				tiles[i][j] = parent.tiles[i][j];
 			}
 		}
@@ -70,8 +76,8 @@ public class Position {
 	}
 	
 	public boolean isTerminal(Position p) {
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 3; ++j) {
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 4; ++j) {
 				if(tiles[i][j] != p.tiles[i][j]) {
 					return false;
 				}
@@ -84,12 +90,12 @@ public class Position {
 	public int manhattanDistance(Position p) {
 		int result = 0;
 		
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 3; ++j) {
+		for(int i = 0; i < 4; ++i) {
+			for(int j = 0; j < 4; ++j) {
 				boolean found = false;
 				
-				for(int i1 = 0; i1 < 3; ++i1) {
-					for(int j1 = 0; j1 < 3; ++j1) {
+				for(int i1 = 0; i1 < 4; ++i1) {
+					for(int j1 = 0; j1 < 4; ++j1) {
 						if(p.tiles[i][j] == tiles[i1][j1]) {
 							result += Math.abs(i1 - i) + Math.abs(j1 - j);
 							found = true;
