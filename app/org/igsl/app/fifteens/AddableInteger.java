@@ -1,6 +1,13 @@
+/**
+ * Implicit Graph Search Library(C), 2009 
+ */
 package org.igsl.app.fifteens;
+
 import org.igsl.cost.Addable;
 
+/**
+ * Implementation of Addable interface for an integer type.
+ */
 public class AddableInteger implements Addable<AddableInteger>, Comparable<AddableInteger>{
 	private int value;
 	
