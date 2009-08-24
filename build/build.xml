@@ -9,6 +9,7 @@
 		org/igsl/traversal/CopyableCostTreeTraversal.java,
 		org/igsl/traversal/linear/DepthFirstTreeTraversal.java,
 		org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java,
+		org/igsl/traversal/linear/RecursiveBestFirstTreeTraversal.java,
 		org/igsl/traversal/exponential/BestFirstCostTreeTraversal.java,
 		org/igsl/traversal/exponential/AStarTreeTraversal.java,
 		org/igsl/functor/NodeGenerator.java,
