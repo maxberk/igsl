@@ -17,6 +17,7 @@ import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
+import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
 
 /**
  * NodeGenerator and CostFunction implementations for Traveling Salesman Problem.
@@ -179,7 +180,7 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			Waypoint waypoint = solver.getWaypoint(waypointName);
 			System.out.println(waypointName + ": x = " + waypoint.x + "; y = " + waypoint.y + ".");
 		}
-
+		
 		// Depth-first search tree traversal using TSPSolver class
 		// both for NodeGenerator and CostFunction implementations
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr =
@@ -226,6 +227,23 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		while(path3.hasMoreElements()) {
 			Route r = path3.nextElement();
 			String toPrint = (path3.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			System.out.print(toPrint);
+		}
+		System.out.println();
+		
+		// Initialize an instance of recursive best-first tree traversal
+		RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
+			new RecursiveBestFirstTreeTraversal<Route,AddableDouble>(
+				new Route(solver.getWaypoints()), new AddableDouble(0),
+				solver, solver);
+
+		// Find an optimal(minimal cost) solution with iterative deepening technique
+		Direct.searchForward(tr4);
+		Enumeration<Route> path4 = tr4.getPath();
+		System.out.print("The optimal path found with recursive best-first search: ");
+		while(path4.hasMoreElements()) {
+			Route r = path4.nextElement();
+			String toPrint = (path4.hasMoreElements()) ? r.toString() + "->" : r.toString();
 			System.out.print(toPrint);
 		}
 		System.out.println();
