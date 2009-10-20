@@ -16,13 +16,10 @@ import java.util.Stack;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
-import org.igsl.traversal.CopyableCostTreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
-import org.igsl.traversal.linear.DepthFirstCostTreeTraversal.TreeNode;
 
 /**
  * Recursive best-first search implementation for a problem graph with edge cost.
- * Implements Copyable interface to enable iterative search schemas 
  */
 public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	implements CostTreeTraversal<T,C>
@@ -50,36 +47,38 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		
 		PriorityQueue<TreeNode> startLevel = new PriorityQueue<TreeNode>(11, new Comparator<TreeNode>() {
 			public int compare(TreeNode n1, TreeNode n2) {
-				return n2.getCost().compareTo(n1.getCost());
+				C max1 = n1.getBound().compareTo(n1.getCost()) > 0 ? n1.getBound() : n1.getCost();
+				C max2 = n2.getBound().compareTo(n2.getCost()) > 0 ? n2.getBound() : n2.getCost();
+				
+				return max1.compareTo(max2);
 			};
 		});
+		
 		startLevel.add(new TreeNode(value, cost));
 		nodes.push(startLevel);
 	}
 
 	/**
-	 * Expands nodes base on "last found - first expanded" technique.
-	 * For an empty traversal returns without any action.
-	 * If the result of node expansion is empty list of nodes then
-	 * searches for other nodes in the tree performing pruning procedure.
+	 * 
 	 */
 	public void moveForward() {
 		if(isEmpty()) return;
-		
-		PriorityQueue<TreeNode> level = nodes.peek(); 
-		TreeNode n = level.peek();
+	
+		TreeNode n = nodes.peek().peek();
 		List<T> result = generator.expand(n.getValue());
 		
 		if(result == null || result.isEmpty()) {
-			backtrack();
+			backtrack(null);
 		} else {
 			PriorityQueue<TreeNode> q = new PriorityQueue<TreeNode>(11, new Comparator<TreeNode>() {
 				public int compare(TreeNode n1, TreeNode n2) {
-					return n2.getCost().compareTo(n1.getCost());
+					C max1 = n1.getBound().compareTo(n1.getCost()) > 0 ? n1.getBound() : n1.getCost();
+					C max2 = n2.getBound().compareTo(n2.getCost()) > 0 ? n2.getBound() : n2.getCost();
+					return max1.compareTo(max2);
 				};
 			});
 			
-			C pb = n.getBound();
+			C b = n.getBound();
 			C minC = null;
 					
 			Iterator<T> i = result.iterator();
@@ -87,25 +86,15 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 				T t = i.next();
 				C c = n.getCost().addTo(function.getTransitionCost(n.getValue(), t));
 				
-				if(pb == null || pb.compareTo(c) > 0) {
-					q.add(new TreeNode(t,c,n));
+				if(b == null || b.compareTo(c) > 0) {
+					q.add(new TreeNode(t, c, n, b));
 				} else if(minC == null || minC.compareTo(c) > 0) {
 					minC = c;
 				}
 			}
 			
 			if(q.isEmpty()) {
-				n.setBound(minC);
-				n = level.peek(); // best level node
-				TreeNode p = n.getParent();
-
-				while(p != null && n.getBound().compareTo(p.getBound()) > 0) {
-					p.setBound(n.getBound()); // set bound for parent
-					nodes.pop(); // removes current level
-					level = nodes.peek();
-					n = level.peek();
-					p = n.getParent();
-				};
+				backtrack(minC);
 			} else {
 				nodes.push(q);
 			}
@@ -113,18 +102,20 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	}
 
 	/**
-	 * Simply prunes the cursor node and its predecessors if necessary
-	 * till a ready-for-expansion node is found.
+	 * 
 	 */	
 	public void backtrack() {
+		backtrack(null);
+	}
+	
+	private void backtrack(C value) {
 		if(isEmpty()) return;
 		
 		PriorityQueue<TreeNode> level = nodes.peek(); 
 		TreeNode n = level.peek();
 		
-		n.setBound(null);
+		n.setBound(value);
 		n = level.peek();
-		
 		TreeNode p = n.getParent();
 
 		while(p != null && n.getBound().compareTo(p.getBound()) > 0) {
@@ -219,7 +210,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	public int getDepth() {
 		return isEmpty() ? -1 : nodes.size();
 	}
-
+	
 	private Stack<PriorityQueue<TreeNode>> nodes = new Stack<PriorityQueue<TreeNode>>();
 	
 	private NodeGenerator<T> generator;
@@ -233,15 +224,15 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		TreeNode(T value, C cost) {
 			this.value = value;
 			this.cost = cost;
-			this.bound = null;
 			this.parent = null;
+			this.bound = cost;
 		}
 		
-		TreeNode(T value, C cost, TreeNode parent) {
+		TreeNode(T value, C cost, TreeNode parent, C bound) {
 			this.value = value;
 			this.cost = cost;
-			this.bound = null;
 			this.parent = parent;
+			this.bound = bound;
 		}
 		
 		T getValue() { return value; }
