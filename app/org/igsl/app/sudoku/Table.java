@@ -1,0 +1,88 @@
+package org.igsl.app.sudoku;
+
+/**
+ * Implicit Graph Search Library(C), 2010 
+ */
+
+/**
+ *  Table of cells for Sudoku. Location of filled cells with values is based on a single cell location and
+ *  a reference to table of cells already filled.
+ */
+public class Table {
+	int i, j; // cell indices
+	int value; // cell value
+	Table parent; // parent cell
+	
+	/**
+	 * Creates an empty Table.
+	 */
+	public Table(int i, int j, int value) {
+		this.i = i;
+		this.j = j;
+		this.value = value;
+		this.parent = null;
+	}
+
+	/**
+	 * Creates Table from a given parent exemplar and a new cell
+	 * 
+	 * @param i vertical index of the cell
+	 * @param j horizontal index of the cell
+	 * @param parent reference to <code>Table</code> with cells 
+	 */
+	public Table(int i, int j, int value, Table parent) {
+		this.i = i;
+		this.j = j;
+		this.value = value;
+		this.parent = parent;
+	}
+	
+	/**
+	 * Checks if a cell could contain a given value
+	 * 
+	 * @param i vertical index
+	 * @param j horizontal index
+	 * @param value value to be placed
+	 * @return true, if a value is valid, false - otherwise
+	 */
+	public boolean isValid(int i, int j, int value) {
+		if((this.i == i) ||	(this.j == j) || (Math.abs(this.i - i) == Math.abs(this.j - j))) {
+			if(this.value == value) {
+				return false;
+			}
+		}
+		
+		if(parent != null) {
+			return parent.isValid(i, j, value);
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Returns horizontal index
+	 * 
+	 * @return horizontal index
+	 */
+	public int getI() {
+		return i;
+	}
+
+	/**
+	 * Returns vertical index
+	 * 
+	 * @return vertical index
+	 */
+	public int getJ() {
+		return j;
+	}
+	
+	/**
+	 * Returns vertical and horizontal indices along with a value in a cell 
+	 */
+	public String toString() {
+		return "(" + i + "," + j + "," + value + ")";
+		//return "" + value;
+	}
+	
+}
