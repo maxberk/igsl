@@ -18,8 +18,8 @@ public class SudokuSolver implements NodeGenerator<Table> {
 	/**
 	 * Constructor for Sudoku solver
 	 */
-	public SudokuSolver() {
-		this.size = 9;
+	public SudokuSolver(int dim) {
+		this.dim = dim;
 	}
 
 	/**
@@ -32,15 +32,21 @@ public class SudokuSolver implements NodeGenerator<Table> {
 		int i = table.getI();
 		int j = table.getJ();
 		
-		if(++j == size + 1) {
-			if(++i == size + 1) return result;
+		if(++j == dim * dim + 1) {
+			if(++i == dim * dim + 1) return result;
 			j = 1;
 		}
 		
-		for(int n = 1; n <= size; ++n) {
-			if(table.isValid(i, j, n)) {
+		for(int n = 1; n <= (dim * dim); ++n) {
+			if(table.isValid(i, j, n, dim)) {
 				result.add(new Table(i, j, n, table));
 			}
+		}
+		
+		++expansions;
+		
+		if((expansions % 10) == 0) {
+			System.out.println("expansions = " + expansions);
 		}
 		
 		return result;
@@ -50,7 +56,7 @@ public class SudokuSolver implements NodeGenerator<Table> {
 	 * Terminal condition - table is filled.
 	 */
 	public boolean isGoal(Table table) {
-		return (table.getI() == table.getJ()) && (table.getI() == size) ;
+		return (table.getI() == table.getJ()) && (table.getI() == (dim * dim)) ;
 	}
 	
 	/**
@@ -66,17 +72,17 @@ public class SudokuSolver implements NodeGenerator<Table> {
 		return new Table(i, j, value);
 	}
 	
-	private int size; // table size
+	private int dim; // problem dim
+	private long expansions = 0;
 	
 	/**
 	 * Sudoku test scenarios based on DepthFirstTreeTraversal. First scenario demonstrates
-	 * how to find all solutions with <code>searchForward</code> method while the second utilizes
-	 * iterative <code>deepenIteratively</code> techniques. 
+	 * how to find all solutions with <code>searchForward</code> method. 
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		SudokuSolver solver = new SudokuSolver();
+		SudokuSolver solver = new SudokuSolver(2);
 		Table table = solver.fillCell(1, 1, 1);
 		
 		System.out.println("=====Sudoku. Direct search.=====");
@@ -96,4 +102,3 @@ public class SudokuSolver implements NodeGenerator<Table> {
 	}
 	
 }
-

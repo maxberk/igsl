@@ -45,15 +45,15 @@ public class Table {
 	 * @param value value to be placed
 	 * @return true, if a value is valid, false - otherwise
 	 */
-	public boolean isValid(int i, int j, int value) {
-		if((this.i == i) ||	(this.j == j) || (Math.abs(this.i - i) == Math.abs(this.j - j))) {
-			if(this.value == value) {
-				return false;
-			}
-		}
-		
-		if(parent != null) {
-			return parent.isValid(i, j, value);
+	public boolean isValid(int i, int j, int value, int dim) {
+		if((this.value == value) && ((this.i == i) || (this.j == j))) {
+			return false;
+		} else if((this.value == value) &&
+			(((this.i - 1) / dim) == ((i - 1) / dim)) &&
+			(((this.j - 1) / dim) == ((j - 1) / dim))) {
+			return false;
+		} else if(parent != null) {
+			return parent.isValid(i, j, value, dim);
 		} else {
 			return true;
 		}
@@ -79,6 +79,8 @@ public class Table {
 	
 	/**
 	 * Returns vertical and horizontal indices along with a value in a cell 
+	 * 
+	 * @return contents of a cell
 	 */
 	public String toString() {
 		return "(" + i + "," + j + "," + value + ")";
