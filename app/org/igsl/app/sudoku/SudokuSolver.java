@@ -29,24 +29,31 @@ public class SudokuSolver implements NodeGenerator<Table> {
 	public List<Table> expand(Table table) {
 		List<Table> result = new LinkedList<Table>();
 		
-		int i = table.getI();
-		int j = table.getJ();
+		int i1 = 0;
+		int j1 = 0;
 		
-		if(++j == dim * dim + 1) {
-			if(++i == dim * dim + 1) return result;
-			j = 1;
-		}
-		
-		for(int n = 1; n <= (dim * dim); ++n) {
-			if(table.isValid(i, j, n, dim)) {
-				result.add(new Table(i, j, n, table));
+		for(int i = 1; i <= (dim * dim); ++i) {
+			for(int j = 1; j <= (dim * dim); ++j) {
+				if(table.isFree(i, j)) {
+					i1 = i;
+					j1 = j;
+					break;
+				}
+			}
+			
+			if(i1 != 0) {
+				break;
 			}
 		}
 		
-		++expansions;
+		if(i1 == 0) {
+			return result;
+		}
 		
-		if((expansions % 10) == 0) {
-			System.out.println("expansions = " + expansions);
+		for(int n = 1; n <= (dim * dim); ++n) {
+			if(table.isValid(i1, j1, n, dim)) {
+				result.add(new Table(i1, j1, n, table));
+			}
 		}
 		
 		return result;
@@ -72,8 +79,21 @@ public class SudokuSolver implements NodeGenerator<Table> {
 		return new Table(i, j, value);
 	}
 	
+	/**
+	 * Generate a cell in Sudoku table with <code>Table</code> as parent
+	 * 
+	 * @param i horizontal index of cell
+	 * @param j vertical index of cell
+	 * @param value cell value
+	 * @param parent parent table
+	 * 
+	 * @return table
+	 */
+	public Table fillCell(int i, int j, int value, Table parent) {
+		return new Table(i, j, value, parent);
+	}
+	
 	private int dim; // problem dim
-	private long expansions = 0;
 	
 	/**
 	 * Sudoku test scenarios based on DepthFirstTreeTraversal. First scenario demonstrates
@@ -84,6 +104,7 @@ public class SudokuSolver implements NodeGenerator<Table> {
 	public static void main(String[] args) {
 		SudokuSolver solver = new SudokuSolver(2);
 		Table table = solver.fillCell(1, 1, 1);
+		table = solver.fillCell(3, 3, 2, table);
 		
 		System.out.println("=====Sudoku. Direct search.=====");
 		

@@ -36,6 +36,23 @@ public class Table {
 		this.value = value;
 		this.parent = parent;
 	}
+
+	/**
+	 * Checks if a cell is free
+	 * 
+	 * @param i vertical index
+	 * @param j horizontal index
+	 * @return true, if a cell is free, false - otherwise
+	 */
+	public boolean isFree(int i, int j) {
+		if((this.i == i) && (this.j == j)) {
+			return false;
+		} else if(parent != null) {
+			return parent.isFree(i, j);
+		} else {
+			return true;
+		}
+	}
 	
 	/**
 	 * Checks if a cell could contain a given value
@@ -83,8 +100,11 @@ public class Table {
 	 * @return contents of a cell
 	 */
 	public String toString() {
-		return "(" + i + "," + j + "," + value + ")";
-		//return "" + value;
+		if(parent != null) {
+			return "(" + i + "," + j + "," + value + ")";
+		} else {
+			return "initial";
+		}
 	}
 	
 }
