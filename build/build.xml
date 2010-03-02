@@ -1,4 +1,4 @@
-<!-- Implicit Graph Search Library(C), 2009 -->
+<!-- Implicit Graph Search Library(C), 2009, 2010 -->
 
 <project name="igsl" default="doc" basedir="..">
 	<filelist id="src.files" dir="src" files="
@@ -23,6 +23,8 @@
 	<filelist id="app.files" dir="app" files="
 		org/igsl/app/eightknights/Board.java,
 		org/igsl/app/eightknights/EKPSolver.java,
+		org/igsl/app/sudoku/Table.java,
+		org/igsl/app/sudoku/SudokuSolver.java,
 		org/igsl/app/tsp/Route.java,
 		org/igsl/app/tsp/AddableDouble.java,
 		org/igsl/app/tsp/TSPSolver.java,
@@ -80,6 +82,12 @@
 	
 	<target name="run.test" depends="compile.test">
 		<java fork="true" classname="org.igsl.app.eightknights.EKPSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<java fork="true" classname="org.igsl.app.sudoku.SudokuSolver">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>

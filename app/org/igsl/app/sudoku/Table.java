@@ -100,11 +100,22 @@ public class Table {
 	 * @return contents of a cell
 	 */
 	public String toString() {
+		return "(" + i + "," + j + "," + value + ")";
+	}
+	
+	/**
+	 * Returns a concatenation of <code>toString()</code> results for all filled cells 
+	 * 
+	 * @return concatenation of <code>toString()</code> triples
+	 */
+	public String toFullString() {
+		String result = toString();
+		
 		if(parent != null) {
-			return "(" + i + "," + j + "," + value + ")";
-		} else {
-			return "initial";
+			result += " " + parent.toString();
 		}
+		
+		return result;
 	}
 	
 }

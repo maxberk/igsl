@@ -115,7 +115,7 @@ public class SudokuSolver implements NodeGenerator<Table> {
 			Enumeration<Table> path = tr.getPath();
 			while(path.hasMoreElements()) {
 				Table r = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
+				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toFullString();
 				System.out.print(toPrint);
 			}
 			System.out.println();
