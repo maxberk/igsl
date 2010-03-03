@@ -12,6 +12,7 @@ public class Table {
 	int i, j; // cell indices
 	int value; // cell value
 	Table parent; // parent cell
+	int size; // number of filled cells
 	
 	/**
 	 * Creates an empty Table.
@@ -21,6 +22,7 @@ public class Table {
 		this.j = j;
 		this.value = value;
 		this.parent = null;
+		this.size = 1;
 	}
 
 	/**
@@ -35,6 +37,7 @@ public class Table {
 		this.j = j;
 		this.value = value;
 		this.parent = parent;
+		this.size = parent.size + 1;
 	}
 
 	/**
@@ -95,6 +98,15 @@ public class Table {
 	}
 	
 	/**
+	 * Returns number of filled cells
+	 * 
+	 * @return number of filled cells
+	 */
+	public int getSize() {
+		return size;
+	}
+	
+	/**
 	 * Returns vertical and horizontal indices along with a value in a cell 
 	 * 
 	 * @return contents of a cell
@@ -112,7 +124,7 @@ public class Table {
 		String result = toString();
 		
 		if(parent != null) {
-			result += " " + parent.toString();
+			result += " " + parent.toFullString();
 		}
 		
 		return result;
