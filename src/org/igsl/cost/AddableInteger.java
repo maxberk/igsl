@@ -1,9 +1,8 @@
 /**
  * Implicit Graph Search Library(C), 2009 
  */
-package org.igsl.app.fifteens;
+package org.igsl.cost;
 
-import org.igsl.cost.Addable;
 
 /**
  * Implementation of Addable interface for an integer type.

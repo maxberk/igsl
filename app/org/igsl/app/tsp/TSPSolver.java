@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
+import org.igsl.cost.AddableDouble;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
@@ -231,6 +232,8 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		}
 		System.out.println();
 		
+		/*
+		
 		// Initialize an instance of recursive best-first tree traversal
 		RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
 			new RecursiveBestFirstTreeTraversal<Route,AddableDouble>(
@@ -247,6 +250,8 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			System.out.print(toPrint);
 		}
 		System.out.println();
+		
+		*/
 		
 	}
 

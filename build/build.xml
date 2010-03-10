@@ -16,6 +16,8 @@
 		org/igsl/functor/CostFunction.java,
 		org/igsl/functor/HeuristicFunction.java,
 		org/igsl/cost/Addable.java,
+		org/igsl/cost/AddableInteger.java,
+		org/igsl/cost/AddableDouble.java,
 		org/igsl/algorithm/Direct.java,
 		org/igsl/algorithm/Iterative.java"
 	/>
@@ -26,10 +28,8 @@
 		org/igsl/app/sudoku/Table.java,
 		org/igsl/app/sudoku/SudokuSolver.java,
 		org/igsl/app/tsp/Route.java,
-		org/igsl/app/tsp/AddableDouble.java,
 		org/igsl/app/tsp/TSPSolver.java,
 		org/igsl/app/fifteens/Position.java,
-		org/igsl/app/fifteens/AddableInteger.java,
 		org/igsl/app/fifteens/FifteensSolver.java"
 	/>
 	

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.igsl.algorithm.Direct;
+import org.igsl.cost.AddableInteger;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.NodeGenerator;
