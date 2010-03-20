@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010 
  */
 package org.igsl.traversal.linear;
 
@@ -47,10 +47,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		
 		PriorityQueue<TreeNode> startLevel = new PriorityQueue<TreeNode>(11, new Comparator<TreeNode>() {
 			public int compare(TreeNode n1, TreeNode n2) {
-				C max1 = n1.getBound().compareTo(n1.getCost()) > 0 ? n1.getBound() : n1.getCost();
-				C max2 = n2.getBound().compareTo(n2.getCost()) > 0 ? n2.getBound() : n2.getCost();
-				
-				return max1.compareTo(max2);
+				return n1.getBound().compareTo(n2.getBound());
 			};
 		});
 		
@@ -72,9 +69,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		} else {
 			PriorityQueue<TreeNode> q = new PriorityQueue<TreeNode>(11, new Comparator<TreeNode>() {
 				public int compare(TreeNode n1, TreeNode n2) {
-					C max1 = n1.getBound().compareTo(n1.getCost()) > 0 ? n1.getBound() : n1.getCost();
-					C max2 = n2.getBound().compareTo(n2.getCost()) > 0 ? n2.getBound() : n2.getCost();
-					return max1.compareTo(max2);
+					return n1.getBound().compareTo(n2.getBound());
 				};
 			});
 			
@@ -100,14 +95,15 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 			}
 		}
 	}
-
+	
 	/**
-	 * 
+	 * Simply prunes the cursor node and its predecessors if necessary
+	 * till a ready-for-expansion node is found.
 	 */	
 	public void backtrack() {
 		backtrack(null);
 	}
-	
+
 	private void backtrack(C value) {
 		if(isEmpty()) return;
 		
@@ -225,7 +221,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 			this.value = value;
 			this.cost = cost;
 			this.parent = null;
-			this.bound = cost;
+			this.bound = null;
 		}
 		
 		TreeNode(T value, C cost, TreeNode parent, C bound) {
@@ -238,7 +234,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		T getValue() { return value; }
 		C getCost() { return cost; }
 		
-		C getBound() { return bound; }
+		C getBound() { return (bound == null) ? cost : bound; }
 		void setBound(C bound) { this.bound = bound; }
 		
 		TreeNode getParent() { return parent; }
