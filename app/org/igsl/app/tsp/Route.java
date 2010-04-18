@@ -94,6 +94,22 @@ public class Route {
 	}
 	
 	/**
+	 * Returns a list of visited waypoints delimited by a specified string
+	 *  
+	 * @return a list of visited waypoints delimited by a specified string 
+	 */
+	public String getFull(String delim) {
+		String result = "";
+		Iterator<String> i = visited.iterator();
+		
+		while(i.hasNext()) {
+			result = result + delim + i.next();
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * Removes a waypoint from a list of not yet visited waypoints and adds it
 	 * to a list of visited. An initial route point is added while it is not
 	 * contained in the not yet visited waypoints' list.
@@ -114,7 +130,7 @@ public class Route {
 	 * Return a name of a last waypoint from a visited list.
 	 */
 	public String toString() {
-		return getLast();
+		return getFull("->");
 	}
 	
 }

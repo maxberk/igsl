@@ -55,6 +55,7 @@
 			fork="yes"
 			srcdir="temp"
 			destdir="bin"
+			debug = "on"
 		/>
 		<delete dir="temp"/>
 
@@ -76,11 +77,23 @@
 			srcdir="temp"
 			destdir="bin"
 			classpath="lib/igsl.jar"
+			debug = "on"
 		/>
 		<delete dir="temp"/>
 	</target>
 	
 	<target name="run.test" depends="compile.test">
+		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<delete dir="bin"/>
+	</target>
+	
+	
+	<target name="run.test.old" depends="compile.test">
 		<java fork="true" classname="org.igsl.app.eightknights.EKPSolver">
 			<classpath>
 				<pathelement path="bin"/>
