@@ -3,12 +3,11 @@
  */
 package org.igsl.traversal.linear;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.PriorityQueue;
 import java.util.Stack;
@@ -19,7 +18,7 @@ import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.CostTreeTraversal;
 
 /**
- * Recursive best-first search implementation for a problem graph with edge cost.
+ * Recursive best-first search implementation for a problem graph with an edge cost function.
  */
 public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	implements CostTreeTraversal<T,C>
@@ -49,7 +48,9 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	}
 
 	/**
-	 * 
+	 * On each level expand a node with a minimal cost and for a subtree with this node as a root set
+	 * a bound value as a minimum of a current bound and a second minimal cost among brothers. If all
+	 * nodes' costs exceeds the level bound or the result of node expansion is empty performs backtracking.
 	 */
 	public void moveForward() {
 		if(isEmpty()) return;
@@ -58,11 +59,9 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		TreeNode n = level.peek(); // extract best node
 		C b = level.getBound();
 		
-		//System.out.println("1: Expanding " + n.getValue() + " with bound " + b);
 		List<T> result = generator.expand(n.getValue()); // expand the node
 		
 		if(result == null || result.isEmpty()) {
-			//System.out.println("1: Result for " + n.getValue() + " is empty.");
 			backtrack(null);
 		} else { // create collection for next level
 			Iterator<T> i = result.iterator();
@@ -73,7 +72,6 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 			while(i.hasNext()) {
 				T t = i.next();
 				C c = n.getCost().addTo(function.getTransitionCost(n.getValue(), t));
-				////System.out.println("1: Node " + t + " with cost " + c + " expanded");
 				
 				newLevel.add(new TreeNode(t, c, n));
 				
@@ -85,7 +83,6 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 			}
 			
 			if(addOk == false) {
-				//System.out.println("1: New nodes costs exceed bound. Backtracking with " + minC + " from " + n.getValue());
 				backtrack(minC);
 			} else {
 				if(level.size() > 1) {
@@ -94,18 +91,11 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 					C newB = level.peek().getBound();
 					if(newB.compareTo(b) < 0) {
 						b = newB;
-						//System.out.println("1: Bound for level is set to " + b + " as a second minimum");
-					} else {
-						//System.out.println("1.1: Bound for level is set to " + b + " from a parent level");
 					}
 					
 					level.add(n);
-				} else {
-					//System.out.println("1.2: Bound for level is set to " + b + " from a parent level");
 				}
 				
-				//System.out.println("1: Add new level with " + newLevel.size()+ " childs for " + n.getValue() 
-						//+ " node");
 				newLevel.setBound(b);
 				levels.push(newLevel);
 			}
@@ -125,14 +115,11 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		
 		Level level = levels.peek();
 		TreeNode n = level.poll(); // extract best node
-		//System.out.println("2: Best node " + n.getValue() + " with bound " + n.getBound() + " extracted.");
 		
 		if(value != null) { // return back if value is not null
-			//System.out.println("2: For node " + n.getValue() + " estimate is set to " + value);
 			n.setEstimate(value);
 			level.add(n);
 		} else if(level.size() == 0) {
-			//System.out.println("2: For node " + n.getValue() + " empty level backtracked with null");
 			levels.pop();
 			backtrack(null);
 			return;
@@ -142,11 +129,8 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		TreeNode p = n.getParent();
 		
 		if(p == null) {
-			//System.out.println("2: For root node " + n.getValue() + " bound is set to " + value);
 			level.setBound(value);
 		} else if(p.getBound().compareTo(n.getBound()) < 0) {
-			//System.out.println("2: For node " + n.getValue() + " parent bound " + p.getBound()
-				//+ " is less than a node bound " + n.getBound());
 			levels.pop();
 			backtrack(n.getBound());
 		}
@@ -201,14 +185,14 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	 * from a cursor to a least "perspective" node
 	 */
 	public Collection<T> getLeafs() {
-		/*
 		ArrayList<T> leafs = new ArrayList<T>();		
 		ArrayList<TreeNode> parents = new ArrayList<TreeNode>();		
 		
-		if(!nodes.isEmpty()) {
-			ListIterator<PriorityQueue<TreeNode>> iq = nodes.listIterator(nodes.size());
-			while(iq.hasPrevious()) {
-				PriorityQueue<TreeNode> q = iq.previous();
+		if(!levels.isEmpty()) {
+			ListIterator<Level> li = levels.listIterator(levels.size());
+			
+			while(li.hasPrevious()) {
+				PriorityQueue<TreeNode> q = li.previous();
 				
 				Iterator<TreeNode> in = q.iterator();
 				
@@ -228,9 +212,6 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		}
 		
 		return leafs;
-		*/
-		
-		return null;
 	}
 
 	/**

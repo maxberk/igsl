@@ -162,34 +162,31 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		TSPSolver solver = new TSPSolver();
+		TSPSolver solver1 = new TSPSolver();
 		
-		solver.addWaypoint("a", 0.3, 0.9);
-		solver.addWaypoint("b", 1.1, 1.1);
-		solver.addWaypoint("c", 1.0, -0.2);
-		solver.addWaypoint("d", 0.1, 0.2);
-		//solver.addWaypoint("e", 1.5, 0.5);
-		//solver.addWaypoint("f", 0.5, 0.5);
-		//solver.addWaypoint("g", -0.8, 0.1);
-		//solver.addWaypoint("h", -0.8, 0.8);
+		solver1.addWaypoint("a", 0.3, 0.9);
+		solver1.addWaypoint("b", 1.1, 1.1);
+		solver1.addWaypoint("c", 1.0, -0.2);
+		solver1.addWaypoint("d", 0.1, 0.2);
+		solver1.addWaypoint("e", 1.5, 0.5);
+		solver1.addWaypoint("f", 0.5, 0.5);
+		solver1.addWaypoint("g", -0.8, 0.1);
+		solver1.addWaypoint("h", -0.8, 0.8);
 		
-		System.out.println("=====Traveling Salesman Problem. Waypoints.=====");
-		Iterator<String> waypointsIterator = solver.getWaypoints().iterator();
-		int id = 0;
-		while(waypointsIterator.hasNext()) {
-			String waypointName = waypointsIterator.next();
-			Waypoint waypoint = solver.getWaypoint(waypointName);
+		System.out.println("=====Traveling Salesman Problem. Waypoints. Variant No. 1=====");
+		Iterator<String> waypointsIterator1 = solver1.getWaypoints().iterator();
+		while(waypointsIterator1.hasNext()) {
+			String waypointName = waypointsIterator1.next();
+			Waypoint waypoint = solver1.getWaypoint(waypointName);
 			System.out.println(waypointName + ": x = " + waypoint.x + "; y = " + waypoint.y + ".");
 		}
-		
-		/*
 		
 		// Depth-first search tree traversal using TSPSolver class
 		// both for NodeGenerator and CostFunction implementations
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
-				new Route(solver.getWaypoints()), new AddableDouble(0),
-				solver, solver);
+				new Route(solver1.getWaypoints()), new AddableDouble(0),
+				solver1, solver1);
 
 		// Find a solution without cost preference
 		Direct.searchForward(tr);
@@ -201,13 +198,12 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			System.out.print(toPrint);
 		}
 		System.out.println();
-		*/
 
 		// Initialize a second instance of depth-first tree traversal
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr2 =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
-				new Route(solver.getWaypoints()), new AddableDouble(0),
-				solver, solver);
+				new Route(solver1.getWaypoints()), new AddableDouble(0),
+				solver1, solver1);
 
 		// Find an optimal(minimal cost) solution with a branch-and-bound technique
 		Enumeration<Route> path2 = Direct.branchAndBound(tr2);
@@ -217,14 +213,14 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			String toPrint = (path2.hasMoreElements()) ? r.toString() + "->" : r.toString();
 			System.out.print(toPrint);
 		}
+		System.out.println("cost is " + tr2.getCost());
 		System.out.println();
 		
-		/*
 		// Initialize a third instance of depth-first tree traversal
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
-				new Route(solver.getWaypoints()), new AddableDouble(0),
-				solver, solver);
+				new Route(solver1.getWaypoints()), new AddableDouble(0),
+				solver1, solver1);
 
 		// Find an optimal(minimal cost) solution with iterative deepening technique
 		Enumeration<Route> path3 = Iterative.deepenIteratively(tr3);
@@ -236,19 +232,30 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 		}
 		System.out.println();
 		
-		*/
+		TSPSolver solver2 = new TSPSolver();
+		
+		solver2.addWaypoint("a", 0.3, 0.9);
+		solver2.addWaypoint("b", 1.1, 1.1);
+		solver2.addWaypoint("c", 1.0, -0.2);
+		solver2.addWaypoint("d", 0.1, 0.2);
+		solver2.addWaypoint("e", 1.5, 0.5);
+		
+		System.out.println("=====Traveling Salesman Problem. Waypoints. Variant No. 2=====");
+		Iterator<String> waypointsIterator2 = solver2.getWaypoints().iterator();
+		while(waypointsIterator2.hasNext()) {
+			String waypointName = waypointsIterator2.next();
+			Waypoint waypoint = solver2.getWaypoint(waypointName);
+			System.out.println(waypointName + ": x = " + waypoint.x + "; y = " + waypoint.y + ".");
+		}
 		
 		// Initialize an instance of recursive best-first tree traversal
 		RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
 			new RecursiveBestFirstTreeTraversal<Route,AddableDouble>(
-				new Route(solver.getWaypoints()), new AddableDouble(0),
-				solver, solver);
+				new Route(solver2.getWaypoints()), new AddableDouble(0),
+				solver2, solver2);
 
-		// Find an optimal(minimal cost) solution with iterative deepening technique
+		// Find an optimal(minimal cost) solution with recursive best-first tree traversal
 		Direct.searchForward(tr4);
-		//for(int i = 0; i < 10; ++i) {
-			//tr4.moveForward();
-		//}
 		
 		Enumeration<Route> path4 = tr4.getPath();
 		System.out.print("The optimal path found with recursive best-first search: ");
@@ -257,7 +264,14 @@ public class TSPSolver implements NodeGenerator<Route>, CostFunction<Route,Addab
 			String toPrint = (path4.hasMoreElements()) ? r.toString() + "->" : r.toString();
 			System.out.print(toPrint);
 		}
-		System.out.println();
+		System.out.println("cost is " + tr4.getCost());
+		
+		while(path2.hasMoreElements()) {
+			Route r = path2.nextElement();
+			String toPrint = (path2.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			System.out.print(toPrint);
+		}
+		System.out.println();		
 		
 	}
 
