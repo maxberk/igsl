@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010 
  */
 package org.igsl.traversal.linear;
 
@@ -25,23 +25,20 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	implements CopyableCostTreeTraversal<T,C>
 {
 	/**
-	 * Constructor based on a start search node, expansion operator and cost function
+	 * Constructor based on a start search node and cost function interface
 	 * 
 	 * @param value root node value
 	 * @param cost root node cost
-	 * @param generator node generator function
 	 * @param function cost function
-	 * @throws NullPointerException thrown if either node generator or cost function is null
-	 * @see NodeGenerator
+	 * @throws NullPointerException thrown if cost function is null
 	 * @see CostFunction
 	 */
-	public DepthFirstCostTreeTraversal(T value, C cost, NodeGenerator<T> generator, CostFunction<T,C> function) 
+	public DepthFirstCostTreeTraversal(T value, C cost, CostFunction<T,C> function) 
 		throws NullPointerException
 	{
-		if(generator == null || function == null) {
+		if(function == null) {
 			throw new NullPointerException();
 		} else {
-			this.generator = generator;
 			this.function = function;
 		}
 		
@@ -58,7 +55,7 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		if(isEmpty()) return;
 		
 		TreeNode n = nodes.peek();
-		List<T> result = generator.expand(n.getValue());
+		List<T> result = function.expand(n.getValue());
 		
 		if(result == null || result.isEmpty()) {
 			TreeNode parent = null;
@@ -108,7 +105,7 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	/**
 	 * Returns a node generator functor.
 	 */
-	public NodeGenerator<T> getNodeGenerator() { return generator; }
+	public NodeGenerator<T> getNodeGenerator() { return function; }
 
 	/**
 	 * Returns a cost function functor.
@@ -193,7 +190,6 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		DepthFirstCostTreeTraversal<T,C> result = 
 			new DepthFirstCostTreeTraversal<T,C>();
 		
-		result.generator = generator;
 		result.function = function;
 		
 		Iterator<TreeNode> iterator = nodes.iterator();
@@ -219,7 +215,6 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	
 	private Stack<TreeNode> nodes = new Stack<TreeNode>();
 	
-	private NodeGenerator<T> generator;
 	private CostFunction<T,C> function;
 	
 	class TreeNode {

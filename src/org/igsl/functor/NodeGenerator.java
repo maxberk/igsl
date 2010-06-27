@@ -6,7 +6,7 @@ package org.igsl.functor;
 import java.util.List;
 
 /**
- * This interface NodeGenerator should be implemented to initialize any tree traversal.
+ * Interface NodeGenerator should be implemented to initialize any tree traversal.
  * It presents two functions that define a process of graph search, namely node expansion
  * procedure and termination on a goal node.
  */

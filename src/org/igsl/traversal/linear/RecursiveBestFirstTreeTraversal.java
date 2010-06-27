@@ -28,19 +28,16 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	 * 
 	 * @param value root node value
 	 * @param cost root node cost
-	 * @param generator node generator function
 	 * @param function cost function
-	 * @throws NullPointerException thrown if either node generator or cost function is null
-	 * @see NodeGenerator
+	 * @throws NullPointerException thrown if cost function is null
 	 * @see CostFunction
 	 */
-	public RecursiveBestFirstTreeTraversal(T value, C cost, NodeGenerator<T> generator, CostFunction<T,C> function) 
+	public RecursiveBestFirstTreeTraversal(T value, C cost, CostFunction<T,C> function) 
 		throws NullPointerException
 	{
-		if(generator == null || function == null) {
+		if(function == null) {
 			throw new NullPointerException();
 		} else {
-			this.generator = generator;
 			this.function = function;
 		}
 		
@@ -59,7 +56,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		TreeNode n = level.peek(); // extract best node
 		C b = level.getBound();
 		
-		List<T> result = generator.expand(n.getValue()); // expand the node
+		List<T> result = function.expand(n.getValue()); // expand the node
 		
 		if(result == null || result.isEmpty()) {
 			backtrack(null);
@@ -149,7 +146,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	/**
 	 * Returns a node generator functor.
 	 */
-	public NodeGenerator<T> getNodeGenerator() { return generator; }
+	public NodeGenerator<T> getNodeGenerator() { return function; }
 
 	/**
 	 * Returns a cost function functor.
@@ -223,7 +220,6 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	
 	private Stack<Level> levels = new Stack<Level>();
 	
-	private NodeGenerator<T> generator;
 	private CostFunction<T,C> function;
 	
 	class TreeNode implements Comparable<TreeNode> {

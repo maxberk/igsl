@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010 
  */
 package org.igsl.traversal.exponential;
 
@@ -28,23 +28,16 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	 * 
 	 * @param value root node value
 	 * @param cost root node cost
-	 * @param generator node generator function
-	 * @param function cost function
 	 * @param heuristics heuristic function
-	 * @throws NullPointerException thrown if either node generator or cost function or heuristics is null
-	 * @see NodeGenerator
-	 * @see CostFunction
+	 * @throws NullPointerException thrown if heuristics is null
 	 * @see HeuristicFunction
 	 */
-	public AStarTreeTraversal(T value, C cost, NodeGenerator<T> generator,
-		CostFunction<T,C> function, HeuristicFunction<T,C> heuristics) 
+	public AStarTreeTraversal(T value, C cost, HeuristicFunction<T,C> heuristics) 
 		throws NullPointerException
 	{
-		if(generator == null || function == null || heuristics == null) {
+		if(heuristics == null) {
 			throw new NullPointerException();
 		} else {
-			this.generator = generator;
-			this.function = function;
 			this.heuristics = heuristics;
 		}
 		
@@ -63,7 +56,7 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	public void moveForward() {
 		if(isEmpty()) return;
 		
-		List<T> result = generator.expand(cursor);
+		List<T> result = heuristics.expand(cursor);
 		TreeNode n = opened.remove(cursor);
 		
 		if(result == null || result.isEmpty()) {
@@ -75,7 +68,7 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 			while(i.hasNext()) {
 				T t = i.next();
 				
-				C c = function.getTransitionCost(cursor, t).addTo(n.getCost());
+				C c = heuristics.getTransitionCost(cursor, t).addTo(n.getCost());
 				C e = heuristics.getEstimatedCost(t);
 				C tc = c.addTo(e);
 
@@ -145,14 +138,14 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	 * Returns a node generator functor.
 	 */
 	public NodeGenerator<T> getNodeGenerator() {
-		return generator;
+		return heuristics;
 	}
 	
 	/**
 	 * Returns a cost function functor.
 	 */
 	public CostFunction<T,C> getCostFunction() { 
-		return function; 
+		return heuristics; 
 	}
 
 	/**
@@ -275,8 +268,6 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	private HashMap<T,TreeNode> closed = new HashMap<T,TreeNode>();
 	private T cursor = null;
 	
-	private NodeGenerator<T> generator;
-	private CostFunction<T,C> function;
 	private HeuristicFunction<T,C> heuristics;
 	
 	class TreeNode {

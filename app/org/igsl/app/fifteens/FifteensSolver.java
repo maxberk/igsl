@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010 
  */
 package org.igsl.app.fifteens;
 
@@ -16,13 +16,10 @@ import org.igsl.traversal.exponential.AStarTreeTraversal;
 
 /**
  * Fifteens Puzzle solver is based <code>AStarTreeTraversal</code> library class which utilizes an A* algorithm.
- * The solver implements <code>NodeGenerator</code>, <code>CostFunction</code> and <code>HeuristicFunction</code>
- * for Fifteens Puzzle. The solver uses a <code>Position</code> and the <code>AddableInteger</code> classes
- * as node and cost instances in the template initialization.
- *
+ * The solver implements <code>HeuristicFunction</code> for Fifteens Puzzle. The solver uses a <code>Position</code>
+ * and the <code>AddableInteger</code> classes as node and cost instances in the template initialization.
  */
-public class FifteensSolver implements NodeGenerator<Position>,
-	CostFunction<Position,AddableInteger>, HeuristicFunction<Position,AddableInteger> {
+public class FifteensSolver implements HeuristicFunction<Position,AddableInteger> {
 	
 	private Position terminal;
 
@@ -107,9 +104,7 @@ public class FifteensSolver implements NodeGenerator<Position>,
 		
 		AStarTreeTraversal<Position, AddableInteger> tr =
 			new AStarTreeTraversal<Position, AddableInteger>(
-				new Position(initial),
-				new AddableInteger(0),
-				solver, solver, solver
+				new Position(initial),	new AddableInteger(0), solver
 			);
 		
 		Direct.searchForward(tr);

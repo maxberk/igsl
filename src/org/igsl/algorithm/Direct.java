@@ -84,8 +84,6 @@ public final class Direct {
 			}
 		}
 		
-		System.out.println("thresh = " + thresh);
-		
 		return result;
 	}
 

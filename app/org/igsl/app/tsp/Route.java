@@ -133,4 +133,11 @@ public class Route {
 		return getFull("->");
 	}
 	
+	/**
+	 * Return a hash code for a visited list.
+	 */
+	public int hashCode() {
+		return visited.hashCode();
+	}
+	
 }

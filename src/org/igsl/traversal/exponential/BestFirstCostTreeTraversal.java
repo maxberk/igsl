@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010 
  */
 package org.igsl.traversal.exponential;
 
@@ -27,19 +27,16 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	 * 
 	 * @param value root node value
 	 * @param cost root node cost
-	 * @param generator node generator function
 	 * @param function cost function
 	 * @throws NullPointerException thrown if either node generator or cost function is null
-	 * @see NodeGenerator
 	 * @see CostFunction
 	 */
-	public BestFirstCostTreeTraversal(T value, C cost, NodeGenerator<T> generator, CostFunction<T,C> function)
+	public BestFirstCostTreeTraversal(T value, C cost, CostFunction<T,C> function)
 		throws NullPointerException
 	{
-		if(generator == null || function == null) {
+		if(function == null) {
 			throw new NullPointerException();
 		} else {
-			this.generator = generator;
 			this.function = function;
 		}
 		
@@ -56,7 +53,7 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	public void moveForward() {
 		if(isEmpty()) return;
 		
-		List<T> result = generator.expand(cursor);
+		List<T> result = function.expand(cursor);
 		TreeNode n = opened.remove(cursor);
 		
 		if(result == null || result.isEmpty()) {
@@ -132,7 +129,7 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	 * Returns a node generator functor.
 	 */
 	public NodeGenerator<T> getNodeGenerator() {
-		return generator;
+		return function;
 	}
 
 	/**
@@ -243,7 +240,6 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	private HashMap<T,TreeNode> closed = new HashMap<T,TreeNode>();
 	private T cursor = null;
 	
-	private NodeGenerator<T> generator;
 	private CostFunction<T,C> function;
 	
 	class TreeNode {

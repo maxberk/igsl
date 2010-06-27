@@ -10,7 +10,7 @@ package org.igsl.functor;
  * @param <T> node type
  * @param <C> cost type
  */
-public interface HeuristicFunction<T,C> {
+public interface HeuristicFunction<T,C> extends CostFunction<T,C>{
 	
 	/**
 	 * Estimates a cost between a node in a search tree and a goal node
