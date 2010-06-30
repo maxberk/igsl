@@ -4,8 +4,13 @@
 
 package org.igsl.functor;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+
 /**
- * Memoizer creates helper classes for all functors to minimize
+ * Memoizer creates helper classes for functors to minimize
  * a calculation time for a functor
  *
  * @param <T> type of node
@@ -30,7 +35,13 @@ public class Memoizer<T,C> {
 	 * @return cost function helper
 	 */
 	public CostFunction<T,C> memoize(CostFunction<T,C> function) {
-		return function;
+		//Handler handler = new Handler(function, new String[] {"expand", "isGoal", "getTransitionCost"});
+		Handler handler = new Handler(function, new String[] { "expand" });
+		
+		return (CostFunction<T,C>) Proxy.newProxyInstance(
+			function.getClass().getClassLoader(),
+			function.getClass().getInterfaces(),
+			handler);
 	}
 	
 	/**
@@ -41,6 +52,55 @@ public class Memoizer<T,C> {
 	 */
 	public HeuristicFunction<T,C> memoize(HeuristicFunction<T,C> heuristics) {
 		return heuristics;
+	}
+	
+	
+	class Handler implements InvocationHandler {
+		
+		Object obj;
+		String[] methodNames;
+		HashMap[] maps = null; 
+		
+		Handler(Object obj, String[] methodNames) {
+			this.obj = obj;
+			this.methodNames = methodNames;
+			
+			maps = new HashMap[methodNames.length];
+			for(int i = 0; i < methodNames.length; ++i) {
+				maps[i] = new HashMap();
+			}
+		}
+		
+		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+			String methodName = method.getName();
+			Object result = null;
+			boolean isFound = false;
+			
+			for(int i = 0; i < methodNames.length; ++i) {
+				if(methodName.equals(methodNames[i])) {
+					result = maps[i].get(args[0]);
+					
+					if(result == null) {
+						result = method.invoke(obj, args);
+						maps[i].put(args[0], result);
+						//System.out.println("Filter: methodName = " + methodName);
+					} else {
+						//System.out.println("Found: methodName = " + methodName);
+					}
+					
+					isFound = true;
+					break;
+				}
+			}
+			
+			if(isFound == false) {
+				result = method.invoke(obj, args);				
+				//System.out.println("Invoked: methodName = " + method.getName());
+			}
+			
+			return result;
+		}
+		
 	}
 
 }

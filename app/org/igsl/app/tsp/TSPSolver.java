@@ -255,7 +255,7 @@ public class TSPSolver implements CostFunction<Route,AddableDouble>
 				new Route(solver2.getWaypoints()), new AddableDouble(0),
 				(new Memoizer<Route,AddableDouble>()).memoize(solver2)
 			);
-
+		
 		// Find an optimal(minimal cost) solution with recursive best-first tree traversal
 		Direct.searchForward(tr4);
 		
