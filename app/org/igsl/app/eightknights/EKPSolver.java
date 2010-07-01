@@ -1,3 +1,7 @@
+/**
+ * Implicit Graph Search Library(C), 2009, 2010 
+ */
+
 package org.igsl.app.eightknights;
 
 import java.util.Enumeration;
@@ -6,6 +10,9 @@ import java.util.List;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
+import org.igsl.app.tsp.Route;
+import org.igsl.cost.AddableDouble;
+import org.igsl.functor.TreeTraversalMemoizer;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
@@ -73,7 +80,9 @@ public class EKPSolver implements NodeGenerator<Board> {
 		
 		System.out.println("=====Eight Knights Problems. Solution for iterative search=====");
 		
-		DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(new Board(), solver);
+		DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(
+				new Board(), (new TreeTraversalMemoizer<Board>()).memoize(solver));
+				
 		Enumeration<Board> path = Iterative.deepenIteratively(tr2);
 		System.out.print("Solution found iteratively: ");
 		while(path.hasMoreElements()) {

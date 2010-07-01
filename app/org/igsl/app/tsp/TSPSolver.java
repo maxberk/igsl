@@ -15,7 +15,7 @@ import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.CostFunction;
-import org.igsl.functor.Memoizer;
+import org.igsl.functor.CostTreeTraversalMemoizer;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
@@ -220,7 +220,8 @@ public class TSPSolver implements CostFunction<Route,AddableDouble>
 		// Initialize a third instance of depth-first tree traversal
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
-				new Route(solver1.getWaypoints()), new AddableDouble(0), solver1
+				new Route(solver1.getWaypoints()), new AddableDouble(0),
+				(new CostTreeTraversalMemoizer<Route,AddableDouble>()).memoize(solver1)
 			);
 
 		// Find an optimal(minimal cost) solution with iterative deepening technique
@@ -253,7 +254,7 @@ public class TSPSolver implements CostFunction<Route,AddableDouble>
 		RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
 			new RecursiveBestFirstTreeTraversal<Route,AddableDouble>(
 				new Route(solver2.getWaypoints()), new AddableDouble(0),
-				(new Memoizer<Route,AddableDouble>()).memoize(solver2)
+				(new CostTreeTraversalMemoizer<Route,AddableDouble>()).memoize(solver2)
 			);
 		
 		// Find an optimal(minimal cost) solution with recursive best-first tree traversal

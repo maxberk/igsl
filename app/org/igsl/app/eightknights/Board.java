@@ -1,6 +1,7 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010 
  */
+
 package org.igsl.app.eightknights;
 
 /**
@@ -69,6 +70,18 @@ public class Board {
 	 */
 	public String toString() {
 		return "(" + i + "," + j + ")";
+	}
+	
+	/**
+	 * Return hashCode
+	 * 
+	 * @return <code>int</code> hashCode
+	 */
+	public int hashCode() {
+		int result = 31 * i + j;
+		result = 31 * result + level;
+		
+		return result;
 	}
 	
 }
