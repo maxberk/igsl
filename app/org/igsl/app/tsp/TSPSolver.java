@@ -5,16 +5,18 @@ package org.igsl.app.tsp;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
 import org.igsl.cost.AddableDouble;
-import org.igsl.functor.CostFunction;
+import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.CostTreeTraversalMemoizer;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
@@ -28,7 +30,7 @@ import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
  * cost instances in the template initialization.
  *
  */
-public class TSPSolver implements CostFunction<Route,AddableDouble>
+public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 {
 	private HashMap<String, Waypoint> waypoints = new HashMap<String, Waypoint>();
 
@@ -147,12 +149,130 @@ public class TSPSolver implements CostFunction<Route,AddableDouble>
 		return new AddableDouble(Math.sqrt(dx * dx + dy * dy));
 	}
 	
+	/**
+	 * Estimates a cost between a node in a search tree and a goal node
+	 * 
+	 * @param t node in a search tree
+	 * @return cost estimated value for a cost
+	 */
+	public AddableDouble getEstimatedCost(Route t) {
+		PriorityQueue<Edge> q = new PriorityQueue<Edge>();
+
+		String sName = t.getFirst();
+		Waypoint s = waypoints.get(sName);
+		Iterator<String> i1 = t.getNotVisited().iterator();
+		while(i1.hasNext()) {
+			String wName = i1.next();
+			Waypoint w = waypoints.get(wName);
+			
+			double dx = w.x - s.x;
+			double dy = w.y - s.y;
+			
+			q.offer(new Edge(sName, wName, Math.sqrt(dx * dx + dy * dy)));
+			//System.out.println("add edge from " + sName + " to " + wName);
+		}
+		
+		if(t.getVisitedNumber() > 1) {
+			String fName = t.getLast();
+			Waypoint f = waypoints.get(fName);
+			Iterator<String> i2 = t.getNotVisited().iterator();
+			while(i2.hasNext()) {
+				String wName = i2.next();
+				Waypoint w = waypoints.get(wName);
+				
+				double dx = w.x - f.x;
+				double dy = w.y - f.y;
+				
+				q.offer(new Edge(fName, wName, Math.sqrt(dx * dx + dy * dy)));
+				//System.out.println("add edge from " + fName + " to " + wName);
+			}
+		}
+
+		int idx = 0;
+		Iterator<String> i3 = t.getNotVisited().iterator();
+		while(i3.hasNext()) {
+			String w1Name = i3.next();
+			Waypoint w1 = waypoints.get(w1Name);
+			
+			ListIterator<String> i4 = t.getNotVisited().listIterator(++idx);
+			while(i4.hasNext()) {
+				String w2Name = i4.next();
+				Waypoint w2 = waypoints.get(w2Name);
+
+				double dx = w1.x - w2.x;
+				double dy = w1.y - w2.y;
+					
+				q.offer(new Edge(w1Name, w2Name, Math.sqrt(dx * dx + dy * dy)));
+				//System.out.println("add edge from " + w1Name + " to " + w2Name);
+			}
+		}
+		
+		if(q.isEmpty()) {
+			return new AddableDouble(0);
+		} else {
+			double result = 0.0;
+			HashSet<String> used = new HashSet<String>();
+			
+			while(used.size() < t.getNotVisited().size() + 2) {
+				Edge e = q.poll();
+				if(e == null) {
+					System.out.println("e is null");
+				}
+				
+				if(e.name1 == null) {
+					System.out.println("e.name1 is null");
+				}
+				
+				if(e.name2 == null) {
+					System.out.println("e.name2 is null");
+				}
+				
+				if(used.contains(e.name1) && used.contains(e.name2)) {
+					continue;
+				}
+				
+				result += e.length;
+				
+				if(!used.contains(e.name1)) {
+					used.add(e.name1);
+				}
+				
+				if(!used.contains(e.name2)) {
+					used.add(e.name2);
+				}
+			}
+			
+			return new AddableDouble(result);
+		}
+	}
+	
 	public class Waypoint {
 		double x, y;
 		
 		Waypoint(double x, double y) {
 			this.x = x;
 			this.y = y;
+		}
+	}
+	
+	class Edge implements Comparable<Edge> {
+		String name1, name2;
+		double length;
+		
+		Edge(String name1, String name2, double length) {
+			this.name1 = name1;
+			this.name2 = name2;
+			this.length = length;
+		}
+		
+		public int compareTo(Edge other) {
+			if(length > other.length) {
+				return 1;
+			} else if(length < other.length) {
+				return -1;
+			} else {
+				return 0;
+			}
 		}
 	}
 	
@@ -257,6 +377,8 @@ public class TSPSolver implements CostFunction<Route,AddableDouble>
 				(new CostTreeTraversalMemoizer<Route,AddableDouble>()).memoize(solver2)
 			);
 		
+		System.out.println("Heuristis = " + solver2.getEstimatedCost(
+			new Route(solver2.getWaypoints())));
 		// Find an optimal(minimal cost) solution with recursive best-first tree traversal
 		Direct.searchForward(tr4);
 		
