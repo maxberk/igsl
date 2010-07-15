@@ -169,7 +169,6 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 			double dy = w.y - s.y;
 			
 			q.offer(new Edge(sName, wName, Math.sqrt(dx * dx + dy * dy)));
-			//System.out.println("add edge from " + sName + " to " + wName);
 		}
 		
 		if(t.getVisitedNumber() > 1) {
@@ -184,7 +183,6 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				double dy = w.y - f.y;
 				
 				q.offer(new Edge(fName, wName, Math.sqrt(dx * dx + dy * dy)));
-				//System.out.println("add edge from " + fName + " to " + wName);
 			}
 		}
 
@@ -203,42 +201,36 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				double dy = w1.y - w2.y;
 					
 				q.offer(new Edge(w1Name, w2Name, Math.sqrt(dx * dx + dy * dy)));
-				//System.out.println("add edge from " + w1Name + " to " + w2Name);
 			}
 		}
 		
 		if(q.isEmpty()) {
 			return new AddableDouble(0);
 		} else {
-			double result = 0.0;
+			Edge e = q.poll();
 			HashSet<String> used = new HashSet<String>();
-			
-			while(used.size() < t.getNotVisited().size() + 2) {
-				Edge e = q.poll();
-				if(e == null) {
-					System.out.println("e is null");
-				}
-				
-				if(e.name1 == null) {
-					System.out.println("e.name1 is null");
-				}
-				
-				if(e.name2 == null) {
-					System.out.println("e.name2 is null");
-				}
+			used.add(e.name1);
+			used.add(e.name2);
+			double result = e.length;
+
+			int numOfWaypoints = t.getNotVisited().size() + (t.getVisitedNumber() > 1 ? 2 : 1);
+			while(used.size() < numOfWaypoints) {
+				e = q.poll();
 				
 				if(used.contains(e.name1) && used.contains(e.name2)) {
 					continue;
 				}
 				
+				if(!used.contains(e.name1) && !used.contains(e.name2)) {
+					continue;
+				}
+
 				result += e.length;
 				
-				if(!used.contains(e.name1)) {
-					used.add(e.name1);
-				}
-				
-				if(!used.contains(e.name2)) {
+				if(used.contains(e.name1)) {
 					used.add(e.name2);
+				} else {
+					used.add(e.name1);
 				}
 			}
 			
@@ -293,7 +285,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		solver1.addWaypoint("f", 0.5, 0.5);
 		solver1.addWaypoint("g", -0.8, 0.1);
 		solver1.addWaypoint("h", -0.8, 0.8);
-		
+
 		System.out.println("=====Traveling Salesman Problem. Waypoints. Variant No. 1=====");
 		Iterator<String> waypointsIterator1 = solver1.getWaypoints().iterator();
 		while(waypointsIterator1.hasNext()) {
@@ -336,7 +328,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		}
 		System.out.println("cost is " + tr2.getCost());
 		System.out.println();
-		
+
 		// Initialize a third instance of depth-first tree traversal
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
@@ -377,8 +369,6 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				(new CostTreeTraversalMemoizer<Route,AddableDouble>()).memoize(solver2)
 			);
 		
-		System.out.println("Heuristis = " + solver2.getEstimatedCost(
-			new Route(solver2.getWaypoints())));
 		// Find an optimal(minimal cost) solution with recursive best-first tree traversal
 		Direct.searchForward(tr4);
 		
