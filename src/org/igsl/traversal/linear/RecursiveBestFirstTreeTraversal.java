@@ -14,6 +14,7 @@ import java.util.Stack;
 
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
+import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.CostTreeTraversal;
 
@@ -24,24 +25,26 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	implements CostTreeTraversal<T,C>
 {
 	/**
-	 * Constructor based on a start search node, expansion operator and cost function
+	 * Constructor based on a start search node, expansion operator and heuristic function
 	 * 
 	 * @param value root node value
 	 * @param cost root node cost
 	 * @param function cost function
-	 * @throws NullPointerException thrown if cost function is null
-	 * @see CostFunction
+	 * @throws NullPointerException thrown if heuristic function is null
+	 * @see HeuristicFunction
 	 */
-	public RecursiveBestFirstTreeTraversal(T value, C cost, CostFunction<T,C> function) 
+	public RecursiveBestFirstTreeTraversal(T value, C cost, HeuristicFunction<T,C> heuristics) 
 		throws NullPointerException
 	{
-		if(function == null) {
+		if(heuristics == null) {
 			throw new NullPointerException();
 		} else {
-			this.function = function;
+			this.heuristics = heuristics;
 		}
 		
-		levels.push(new Level(new TreeNode(value, cost), cost));
+		TreeNode root = new TreeNode(value, cost, this.heuristics.getEstimatedCost(value)); 
+		
+		levels.push(new Level(root, root.getCost()));
 	}
 
 	/**
@@ -56,7 +59,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		TreeNode n = level.peek(); // extract best node
 		C b = level.getBound();
 		
-		List<T> result = function.expand(n.getValue()); // expand the node
+		List<T> result = heuristics.expand(n.getValue()); // expand the node
 		
 		if(result == null || result.isEmpty()) {
 			backtrack(null);
@@ -68,14 +71,17 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 			
 			while(i.hasNext()) {
 				T t = i.next();
-				C c = n.getCost().addTo(function.getTransitionCost(n.getValue(), t));
+				C gcost = n.getGCost().addTo(heuristics.getTransitionCost(n.getValue(), t));
+				C hcost = heuristics.getEstimatedCost(t);
 				
-				newLevel.add(new TreeNode(t, c, n));
+				TreeNode ancestor = new TreeNode(t, gcost, hcost, n);
+				C fcost = ancestor.getCost();
+				newLevel.add(ancestor);
 				
-				if(c.compareTo(b) <= 0) {
+				if(fcost.compareTo(b) <= 0) {
 					addOk = true;
-				} else if(minC == null || minC.compareTo(c) > 0) {
-					minC = c;
+				} else if(minC == null || minC.compareTo(fcost) > 0) {
+					minC = fcost;
 				}
 			}
 			
@@ -127,6 +133,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		
 		if(p == null) {
 			level.setBound(value);
+			System.out.println("Root bound = " + value);
 		} else if(p.getBound().compareTo(n.getBound()) < 0) {
 			levels.pop();
 			backtrack(n.getBound());
@@ -146,12 +153,12 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	/**
 	 * Returns a node generator functor.
 	 */
-	public NodeGenerator<T> getNodeGenerator() { return function; }
+	public NodeGenerator<T> getNodeGenerator() { return heuristics; }
 
 	/**
 	 * Returns a cost function functor.
 	 */
-	public CostFunction<T,C> getCostFunction() { return function; }
+	public CostFunction<T,C> getCostFunction() { return heuristics; }
 
 	/**
 	 * Check if traversal has no nodes to expand
@@ -220,35 +227,38 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	
 	private Stack<Level> levels = new Stack<Level>();
 	
-	private CostFunction<T,C> function;
+	private HeuristicFunction<T,C> heuristics;
 	
 	class TreeNode implements Comparable<TreeNode> {
 		T value;
-		C cost, estimate;
+		C gcost, hcost, estimate;
 		TreeNode parent;
 		
-		TreeNode(T value, C cost) {
+		TreeNode(T value, C gcost, C hcost) {
 			this.value = value;
-			this.cost = cost;
+			this.gcost = gcost;
+			this.hcost = hcost;
 			this.estimate = null;
 			this.parent = null;
 		}
 		
-		TreeNode(T value, C cost, TreeNode parent) {
-			this(value, cost);
+		TreeNode(T value, C gcost, C hcost, TreeNode parent) {
+			this(value, gcost, hcost);
 			this.parent = parent;
 		}
 		
-		
 		T getValue() { return value; }
-		C getCost() { return cost; }
+		
+		C getGCost() { return gcost; }
+		C getHCost() { return hcost; }
+		C getCost() { return gcost.addTo(hcost); }
 		
 		C getEstimate() { return estimate; }
 		void setEstimate(C value) {
 			this.estimate = value;
 		}
 		
-		C getBound() { return (estimate == null) ? cost : estimate; } 
+		C getBound() { return (estimate == null) ? getCost() : estimate; } 
 		
 		TreeNode getParent() { return parent; }
 		
