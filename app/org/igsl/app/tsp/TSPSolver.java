@@ -3,6 +3,7 @@
  */
 package org.igsl.app.tsp;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -150,7 +151,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 	}
 	
 	/**
-	 * Estimates a cost between a node in a search tree and a goal node
+	 * Heuristics based on a 1-tree estimation.
 	 * 
 	 * @param t node in a search tree
 	 * @return cost estimated value for a cost
@@ -171,6 +172,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 			q.offer(new Edge(sName, wName, Math.sqrt(dx * dx + dy * dy)));
 		}
 		
+		double delta = 0;
 		if(t.getVisitedNumber() > 1) {
 			String fName = t.getLast();
 			Waypoint f = waypoints.get(fName);
@@ -182,8 +184,15 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				double dx = w.x - f.x;
 				double dy = w.y - f.y;
 				
-				q.offer(new Edge(fName, wName, Math.sqrt(dx * dx + dy * dy)));
+				delta = Math.sqrt(dx * dx + dy * dy); 
+				
+				q.offer(new Edge(fName, wName, delta));
 			}
+			
+			double dx = s.x - f.x;
+			double dy = s.y - f.y;
+
+			q.offer(new Edge(sName, fName, Math.sqrt(dx * dx + dy * dy)));
 		}
 
 		int idx = 0;
@@ -208,10 +217,36 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 			return new AddableDouble(0);
 		} else {
 			Edge e = q.poll();
+
+			String eName = e.name1;
+			double eLength = e.length;
+			
+			Edge e2 = null;
+			double minLength = 100;
+			ArrayList<Edge> removed = new ArrayList<Edge>();
+			
+			Iterator<Edge> i = q.iterator();
+			while(i.hasNext()) {
+				e = i.next();
+				
+				if(e.name1.equalsIgnoreCase(eName) || e.name2.equalsIgnoreCase(eName)) {
+					if(e.length < minLength) {
+						minLength = e.length;
+						e2 = e;
+					}
+					
+					removed.add(e);
+				}
+			}
+			
+			q.removeAll(removed);
+			double result = eLength + minLength;
+			
+			e = q.poll();
 			HashSet<String> used = new HashSet<String>();
 			used.add(e.name1);
 			used.add(e.name2);
-			double result = e.length;
+			result += e.length;
 
 			int numOfWaypoints = t.getNotVisited().size() + (t.getVisitedNumber() > 1 ? 2 : 1);
 			while(used.size() < numOfWaypoints) {
@@ -234,7 +269,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				}
 			}
 			
-			return new AddableDouble(result);
+			return new AddableDouble(result - delta);
 		}
 	}
 	
