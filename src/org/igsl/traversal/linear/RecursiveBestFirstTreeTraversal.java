@@ -133,7 +133,6 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		
 		if(p == null) {
 			level.setBound(value);
-			System.out.println("Root bound = " + value);
 		} else if(p.getBound().compareTo(n.getBound()) < 0) {
 			levels.pop();
 			backtrack(n.getBound());

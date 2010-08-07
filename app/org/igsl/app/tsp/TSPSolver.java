@@ -172,10 +172,15 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 			q.offer(new Edge(sName, wName, Math.sqrt(dx * dx + dy * dy)));
 		}
 		
-		double delta = 0;
+		double delta = 0.0;
 		if(t.getVisitedNumber() > 1) {
 			String fName = t.getLast();
 			Waypoint f = waypoints.get(fName);
+			
+			double dx1 = f.x - s.x;
+			double dy1 = f.y - s.y;
+			delta = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+			
 			Iterator<String> i2 = t.getNotVisited().iterator();
 			while(i2.hasNext()) {
 				String wName = i2.next();
@@ -184,9 +189,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				double dx = w.x - f.x;
 				double dy = w.y - f.y;
 				
-				delta = Math.sqrt(dx * dx + dy * dy); 
-				
-				q.offer(new Edge(fName, wName, delta));
+				q.offer(new Edge(fName, wName, Math.sqrt(dx * dx + dy * dy)));
 			}
 			
 			double dx = s.x - f.x;
@@ -216,13 +219,15 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		if(q.isEmpty()) {
 			return new AddableDouble(0);
 		} else {
+			// code extracting a vertex with a minimum cost in a tree
+			// two of edge cost values accumulated in the result
 			Edge e = q.poll();
 
 			String eName = e.name1;
-			double eLength = e.length;
+			double result = e.length;
 			
-			Edge e2 = null;
-			double minLength = 100;
+			boolean nextMinLengthFound = false;
+			double nextMinLength = 100;
 			ArrayList<Edge> removed = new ArrayList<Edge>();
 			
 			Iterator<Edge> i = q.iterator();
@@ -230,9 +235,9 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 				e = i.next();
 				
 				if(e.name1.equalsIgnoreCase(eName) || e.name2.equalsIgnoreCase(eName)) {
-					if(e.length < minLength) {
-						minLength = e.length;
-						e2 = e;
+					if(e.length < nextMinLength) {
+						nextMinLengthFound = true;
+						nextMinLength = e.length;
 					}
 					
 					removed.add(e);
@@ -240,32 +245,38 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 			}
 			
 			q.removeAll(removed);
-			double result = eLength + minLength;
 			
-			e = q.poll();
-			HashSet<String> used = new HashSet<String>();
-			used.add(e.name1);
-			used.add(e.name2);
-			result += e.length;
-
-			int numOfWaypoints = t.getNotVisited().size() + (t.getVisitedNumber() > 1 ? 2 : 1);
-			while(used.size() < numOfWaypoints) {
+			if(nextMinLengthFound) {
+				result += nextMinLength;
+			}
+			//...
+			
+			if(!q.isEmpty()) {
 				e = q.poll();
-				
-				if(used.contains(e.name1) && used.contains(e.name2)) {
-					continue;
-				}
-				
-				if(!used.contains(e.name1) && !used.contains(e.name2)) {
-					continue;
-				}
-
+				HashSet<String> used = new HashSet<String>();
+				used.add(e.name1);
+				used.add(e.name2);
 				result += e.length;
-				
-				if(used.contains(e.name1)) {
-					used.add(e.name2);
-				} else {
-					used.add(e.name1);
+	
+				int numOfWaypoints = t.getNotVisited().size() + (t.getVisitedNumber() > 1 ? 2 : 1) - 1;
+				while(used.size() < numOfWaypoints) {
+					e = q.poll();
+					
+					if(used.contains(e.name1) && used.contains(e.name2)) {
+						continue;
+					} 
+					
+					if(!used.contains(e.name1) && !used.contains(e.name2)) {
+						continue;
+					}
+	
+					if(used.contains(e.name1)) {
+						used.add(e.name2);
+					} else {
+						used.add(e.name1);
+					}
+					
+					result += e.length;
 				}
 			}
 			
