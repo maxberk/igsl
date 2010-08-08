@@ -12,8 +12,8 @@ import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
 import org.igsl.app.tsp.Route;
 import org.igsl.cost.AddableDouble;
-import org.igsl.functor.TreeTraversalMemoizer;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.memoize.TreeTraversalMemoizer;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 /**

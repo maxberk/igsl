@@ -18,8 +18,8 @@ import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.HeuristicFunction;
-import org.igsl.functor.CostTreeTraversalMemoizer;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
@@ -394,7 +394,8 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		// Initialize an instance of recursive best-first tree traversal
 		RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
 			new RecursiveBestFirstTreeTraversal<Route,AddableDouble>(
-				new Route(solver.getWaypoints()), new AddableDouble(0), solver
+				new Route(solver.getWaypoints()), new AddableDouble(0),
+				(new CostTreeTraversalMemoizer<Route,AddableDouble>()).memoize(solver)
 			);
 		
 		// Find an optimal(minimal cost) solution with recursive best-first tree traversal

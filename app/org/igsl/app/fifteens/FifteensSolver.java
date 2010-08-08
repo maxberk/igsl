@@ -8,10 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.igsl.algorithm.Direct;
+import org.igsl.app.eightknights.Board;
 import org.igsl.cost.AddableInteger;
-import org.igsl.functor.CostFunction;
 import org.igsl.functor.HeuristicFunction;
-import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
 import org.igsl.traversal.exponential.AStarTreeTraversal;
 
 /**
@@ -104,7 +104,8 @@ public class FifteensSolver implements HeuristicFunction<Position,AddableInteger
 		
 		AStarTreeTraversal<Position, AddableInteger> tr =
 			new AStarTreeTraversal<Position, AddableInteger>(
-				new Position(initial),	new AddableInteger(0), solver
+				new Position(initial),	new AddableInteger(0), 
+				(new CostTreeTraversalMemoizer<Position, AddableInteger>()).memoize(solver)
 			);
 		
 		Direct.searchForward(tr);
