@@ -26,7 +26,6 @@ public class TreeTraversalMemoizer<T> {
 	 */
 	public NodeGenerator<T> memoize(NodeGenerator<T> generator) {
 		Handler handler = new Handler(generator, new String[] {"expand", "isGoal"});
-		//Handler handler = new Handler(generator, new String[] {"expand"});
 		
 		return (NodeGenerator<T>) Proxy.newProxyInstance(
 			generator.getClass().getClassLoader(),

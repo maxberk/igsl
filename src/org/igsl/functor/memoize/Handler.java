@@ -27,11 +27,14 @@ class Handler implements InvocationHandler {
 		
 		for(int i = 0; i < methodNames.length; ++i) {
 			if(methodName.equals(methodNames[i])) {
-				result = maps[i].get(args[0]);
+				Object arg = methodName.equalsIgnoreCase("getTransitionCost") ?
+					new Pair(args[0], args[1]) : args[0];
+				
+				result = maps[i].get(arg);
 				
 				if(result == null) {
 					result = method.invoke(obj, args);
-					maps[i].put(args[0], result);
+					maps[i].put(arg, result);
 					//System.out.println("Filter: methodName = " + methodName);
 				} else {
 					//System.out.println("Found: methodName = " + methodName);
@@ -48,6 +51,23 @@ class Handler implements InvocationHandler {
 		}
 		
 		return result;
+	}
+	
+	class Pair {
+		Object o1, o2;
+		
+		Pair(Object o1, Object o2) {
+			this.o1 = o1;
+			this.o2 = o2;
+		}
+		
+		public boolean equals(Pair p) {
+			return o1.equals(p.o1) && o2.equals(p.o2);
+		}
+		
+		public int hashCode() {
+			return 31 * (31 + o1.hashCode()) + o2.hashCode() ;
+		}
 	}
 
 }
