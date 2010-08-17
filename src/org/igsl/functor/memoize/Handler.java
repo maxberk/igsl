@@ -2,20 +2,41 @@ package org.igsl.functor.memoize;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 class Handler implements InvocationHandler {
 	
 	Object obj;
+	HashMap[] maps;
 	String[] methodNames;
-	HashMap[] maps = null; 
 	
 	Handler(Object obj, String[] methodNames) {
 		this.obj = obj;
-		this.methodNames = methodNames;
+
+		ArrayList<String> methodsMemoized = new ArrayList<String>();
+		Method[] methods = obj.getClass().getMethods();
 		
-		maps = new HashMap[methodNames.length];
 		for(int i = 0; i < methodNames.length; ++i) {
+			for(int j = 0; j < methods.length; ++j) {
+				if(methodNames[i].equalsIgnoreCase(methods[j].getName())) {
+					if(methods[j].getAnnotation(Memoize.class) != null) {
+						methodsMemoized.add(methodNames[j]);
+					}
+					break;
+				}
+			}
+		}
+		
+		// in the case of no method memoized all handler methods are treated as memoized
+		if(methodsMemoized.size() == 0) {
+			this.methodNames = methodNames;
+		} else {
+			this.methodNames = methodsMemoized.toArray(this.methodNames);
+		}
+			
+		maps = new HashMap[this.methodNames.length];
+		for(int i = 0; i < maps.length; ++i) {
 			maps[i] = new HashMap();
 		}
 	}

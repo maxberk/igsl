@@ -15,6 +15,7 @@
 		org/igsl/functor/NodeGenerator.java,
 		org/igsl/functor/CostFunction.java,
 		org/igsl/functor/HeuristicFunction.java,
+		org/igsl/functor/memoize/Memoize.java,
 		org/igsl/functor/memoize/Handler.java,
 		org/igsl/functor/memoize/TreeTraversalMemoizer.java,
 		org/igsl/functor/memoize/CostTreeTraversalMemoizer.java,
