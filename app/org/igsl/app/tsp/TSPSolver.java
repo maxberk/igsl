@@ -20,6 +20,7 @@ import org.igsl.cost.AddableDouble;
 import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
+import org.igsl.functor.memoize.Memoize;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
@@ -65,6 +66,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 	 * waypoints.
 	 * 
 	 */
+	@Memoize
 	public List<Route> expand(Route r) {
 		List<Route> result = new LinkedList<Route>();
 		
@@ -156,6 +158,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 	 * @param t node in a search tree
 	 * @return cost estimated value for a cost
 	 */
+	@Memoize
 	public AddableDouble getEstimatedCost(Route t) {
 		PriorityQueue<Edge> q = new PriorityQueue<Edge>();
 
