@@ -2,26 +2,23 @@ package org.igsl.functor.memoize;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 class Handler implements InvocationHandler {
 	
 	Object obj;
-	HashMap[] maps;
-	String[] methodNames;
+	HashMap maps;
 	
 	Handler(Object obj, String[] methodNames) {
 		this.obj = obj;
+		this.maps = new HashMap<String, HashMap<Object, Object>>();
 
-		ArrayList<String> methodsMemoized = new ArrayList<String>();
-		Method[] methods = obj.getClass().getMethods();
-		
-		for(int i = 0; i < methodNames.length; ++i) {
-			for(int j = 0; j < methods.length; ++j) {
-				if(methodNames[i].equalsIgnoreCase(methods[j].getName())) {
-					if(methods[j].getAnnotation(Memoize.class) != null) {
-						methodsMemoized.add(methodNames[j]);
+		for(String methodName : methodNames) {
+			for(Method method : obj.getClass().getMethods()) {
+				if(methodName.equalsIgnoreCase(method.getName())) {
+					if(method.getAnnotation(Memoize.class) != null) {
+						System.out.println("annotation found");
+						maps.put(methodName, new HashMap<Object, Object>());
 					}
 					break;
 				}
@@ -29,46 +26,31 @@ class Handler implements InvocationHandler {
 		}
 		
 		// in the case of no method memoized all handler methods are treated as memoized
-		if(methodsMemoized.size() == 0) {
-			this.methodNames = methodNames;
-		} else {
-			this.methodNames = methodsMemoized.toArray(this.methodNames);
-		}
+		if(maps.size() == 0) {
+			System.out.println("maps.size() == 0");
 			
-		maps = new HashMap[this.methodNames.length];
-		for(int i = 0; i < maps.length; ++i) {
-			maps[i] = new HashMap();
+			for(String methodName : methodNames) {
+				maps.put(methodName, new HashMap<Object, Object>());
+			}
 		}
 	}
 	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		String methodName = method.getName();
 		Object result = null;
-		boolean isFound = false;
 		
-		for(int i = 0; i < methodNames.length; ++i) {
-			if(methodName.equals(methodNames[i])) {
-				Object arg = methodName.equalsIgnoreCase("getTransitionCost") ?
+		HashMap<Object, Object> map = (HashMap<Object, Object>) maps.get(method.getName());
+		if(map != null) {
+			Object arg = method.getName().equalsIgnoreCase("getTransitionCost") ?
 					new Pair(args[0], args[1]) : args[0];
 				
-				result = maps[i].get(arg);
+			result = map.get(arg);
 				
-				if(result == null) {
-					result = method.invoke(obj, args);
-					maps[i].put(arg, result);
-					//System.out.println("Filter: methodName = " + methodName);
-				} else {
-					//System.out.println("Found: methodName = " + methodName);
-				}
-				
-				isFound = true;
-				break;
+			if(result == null) {
+				result = method.invoke(obj, args);
+				map.put(arg, result);
 			}
-		}
-		
-		if(isFound == false) {
+		} else {
 			result = method.invoke(obj, args);				
-			//System.out.println("Invoked: methodName = " + method.getName());
 		}
 		
 		return result;
