@@ -29,7 +29,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	 * 
 	 * @param value root node value
 	 * @param cost root node cost
-	 * @param function cost function
+	 * @param heuristics cost function
 	 * @throws NullPointerException thrown if heuristic function is null
 	 * @see HeuristicFunction
 	 */
