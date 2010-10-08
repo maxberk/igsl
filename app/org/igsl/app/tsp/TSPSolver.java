@@ -3,6 +3,8 @@
  */
 package org.igsl.app.tsp;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -66,7 +68,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 	 * waypoints.
 	 * 
 	 */
-	@Memoize
+	@Memoize()
 	public List<Route> expand(Route r) {
 		List<Route> result = new LinkedList<Route>();
 		
@@ -334,7 +336,7 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		solver.addWaypoint("f", 0.5, 0.5);
 		solver.addWaypoint("g", -0.8, 0.1);
 		solver.addWaypoint("h", -0.8, 0.8);
-
+		
 		System.out.println("=====Traveling Salesman Problem. Waypoints. Variant No. 1=====");
 		Iterator<String> waypointsIterator1 = solver.getWaypoints().iterator();
 		while(waypointsIterator1.hasNext()) {

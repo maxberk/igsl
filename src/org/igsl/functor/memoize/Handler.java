@@ -1,5 +1,6 @@
 package org.igsl.functor.memoize;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -12,26 +13,24 @@ class Handler implements InvocationHandler {
 	Handler(Object obj, String[] methodNames) {
 		this.obj = obj;
 		this.maps = new HashMap<String, HashMap<Object, Object>>();
-
+		
 		for(String methodName : methodNames) {
 			for(Method method : obj.getClass().getMethods()) {
 				if(methodName.equalsIgnoreCase(method.getName())) {
 					if(method.getAnnotation(Memoize.class) != null) {
-						System.out.println("annotation found");
+						System.out.println("Memoizing " + method.getName() + " method...");
 						maps.put(methodName, new HashMap<Object, Object>());
 					}
-					break;
 				}
 			}
 		}
 		
 		// in the case of no method memoized all handler methods are treated as memoized
 		if(maps.size() == 0) {
-			System.out.println("maps.size() == 0");
-			
 			for(String methodName : methodNames) {
 				maps.put(methodName, new HashMap<Object, Object>());
 			}
+			System.out.println("Memoizing all methods...");
 		}
 	}
 	
