@@ -1,47 +1,14 @@
 <!-- Implicit Graph Search Library(C), 2009, 2010 -->
 
 <project name="igsl" default="doc" basedir="..">
-	<filelist id="src.files" dir="src" files="
-		org/igsl/traversal/TreeTraversal.java,
-		org/igsl/traversal/CostTreeTraversal.java,
-		org/igsl/traversal/Copyable.java,
-		org/igsl/traversal/CopyableTreeTraversal.java,
-		org/igsl/traversal/CopyableCostTreeTraversal.java,
-		org/igsl/traversal/linear/DepthFirstTreeTraversal.java,
-		org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java,
-		org/igsl/traversal/linear/RecursiveBestFirstTreeTraversal.java,
-		org/igsl/traversal/exponential/BestFirstCostTreeTraversal.java,
-		org/igsl/traversal/exponential/AStarTreeTraversal.java,
-		org/igsl/functor/NodeGenerator.java,
-		org/igsl/functor/CostFunction.java,
-		org/igsl/functor/HeuristicFunction.java,
-		org/igsl/functor/memoize/Memoize.java,
-		org/igsl/functor/memoize/Handler.java,
-		org/igsl/functor/memoize/TreeTraversalMemoizer.java,
-		org/igsl/functor/memoize/CostTreeTraversalMemoizer.java,
-		org/igsl/cost/Addable.java,
-		org/igsl/cost/AddableInteger.java,
-		org/igsl/cost/AddableDouble.java,
-		org/igsl/algorithm/Direct.java,
-		org/igsl/algorithm/Iterative.java"
-	/>
-	
-	<filelist id="app.files" dir="app" files="
-		org/igsl/app/eightknights/Board.java,
-		org/igsl/app/eightknights/EKPSolver.java,
-		org/igsl/app/sudoku/Table.java,
-		org/igsl/app/sudoku/SudokuSolver.java,
-		org/igsl/app/tsp/Route.java,
-		org/igsl/app/tsp/TSPSolver.java,
-		org/igsl/app/fifteens/Position.java,
-		org/igsl/app/fifteens/FifteensSolver.java"
-	/>
+	<fileset id="src.files" dir="src" includesfile="build/classes.promoted"/>
+	<fileset id="app.files" dir="app" includesfile="build/applications.promoted"/>
 	
 	<target name="doc">
 		<javadoc destdir="doc/javadoc">
 			<sourcefiles>
-				<filelist refid="src.files"/>
-				<filelist refid="app.files"/>
+				<fileset refid="src.files"/>
+				<fileset refid="app.files"/>
 			</sourcefiles>
 		</javadoc>
 	</target>
@@ -49,7 +16,7 @@
 	<target name="make.jar">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
-			<filelist refid="src.files"/>
+			<fileset refid="src.files"/>
 		</copy>
 		
 		<mkdir dir="bin"/>
@@ -71,7 +38,7 @@
 	<target name="compile.test" depends="make.jar">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
-			<filelist refid="app.files"/>
+			<fileset refid="app.files"/>
 		</copy>
 
 		<mkdir dir="bin"/>
