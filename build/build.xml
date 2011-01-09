@@ -1,22 +1,36 @@
-<!-- Implicit Graph Search Library(C), 2009, 2010 -->
+<!-- Implicit Graph Search Library(C), 2009, 2010, 2011 -->
 
-<project name="igsl" default="doc" basedir="..">
-	<fileset id="src.files" dir="src" includesfile="build/classes.promoted"/>
-	<fileset id="app.files" dir="app" includesfile="build/applications.promoted"/>
+<project name="igsl" default="doc.promoted" basedir="..">
+	<fileset id="src.files.promoted" dir="src" includesfile="build/classes.promoted"/>
+	<fileset id="app.files.promoted" dir="app" includesfile="build/applications.promoted"/>
 	
-	<target name="doc">
+	<fileset id="src.files.not.promoted" dir="src" includesfile="build/classes.not.promoted"/>
+	<fileset id="app.files.not.promoted" dir="app" includesfile="build/applications.not.promoted"/>
+	
+	<target name="doc.promoted">
 		<javadoc destdir="doc/javadoc">
 			<sourcefiles>
-				<fileset refid="src.files"/>
-				<fileset refid="app.files"/>
+				<fileset refid="src.files.promoted"/>
+				<fileset refid="app.files.promoted"/>
 			</sourcefiles>
 		</javadoc>
 	</target>
 	
-	<target name="make.jar">
+	<target name="doc.all">
+		<javadoc destdir="doc/javadoc">
+			<sourcefiles>
+				<fileset refid="src.files.promoted"/>
+				<fileset refid="app.files.promoted"/>
+				<fileset refid="src.files.not.promoted"/>
+				<fileset refid="app.files.not.promoted"/>
+			</sourcefiles>
+		</javadoc>
+	</target>
+	
+	<target name="make.jar.promoted">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
-			<fileset refid="src.files"/>
+			<fileset refid="src.files.promoted"/>
 		</copy>
 		
 		<mkdir dir="bin"/>
@@ -35,10 +49,33 @@
 		<delete dir="bin"/>
 	</target>
 	
-	<target name="compile.test" depends="make.jar">
+	<target name="make.jar.all">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
-			<fileset refid="app.files"/>
+			<fileset refid="src.files.promoted"/>
+			<fileset refid="src.files.not.promoted"/>
+		</copy>
+		
+		<mkdir dir="bin"/>
+		<javac 
+			nowarn="on"
+			listfiles="yes"
+			fork="yes"
+			srcdir="temp"
+			destdir="bin"
+			debug = "on"
+		/>
+		<delete dir="temp"/>
+
+		<mkdir dir="lib"/>
+		<jar basedir="bin" destfile="lib/igsl.jar"/>
+		<delete dir="bin"/>
+	</target>
+	
+	<target name="compile.test.promoted" depends="make.jar.promoted">
+		<mkdir dir="temp"/>
+		<copy todir="temp">
+			<fileset refid="app.files.promoted"/>
 		</copy>
 
 		<mkdir dir="bin"/>
@@ -53,7 +90,26 @@
 		<delete dir="temp"/>
 	</target>
 	
-	<target name="run.test" depends="compile.test">
+	<target name="compile.test.all" depends="make.jar.all">
+		<mkdir dir="temp"/>
+		<copy todir="temp">
+			<fileset refid="app.files.promoted"/>
+			<fileset refid="app.files.not.promoted"/>
+		</copy>
+
+		<mkdir dir="bin"/>
+		<javac
+			listfiles="yes"
+			fork="yes"
+			srcdir="temp"
+			destdir="bin"
+			classpath="lib/igsl.jar"
+			debug = "on"
+		/>
+		<delete dir="temp"/>
+	</target>
+	
+	<target name="run.test.promoted" depends="compile.test.promoted">
 		<java fork="true" classname="org.igsl.app.eightknights.EKPSolver">
 			<classpath>
 				<pathelement path="bin"/>
@@ -81,7 +137,35 @@
 		<delete dir="bin"/>
 	</target>
 	
-	<target name="make.release" depends="compile.test,doc">
+	<target name="run.test.all" depends="compile.test.all">
+		<java fork="true" classname="org.igsl.app.eightknights.EKPSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<java fork="true" classname="org.igsl.app.sudoku.SudokuSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<java fork="true" classname="org.igsl.app.fifteens.FifteensSolver">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<delete dir="bin"/>
+	</target>
+	
+	<target name="make.release" depends="compile.test.promoted,doc.promoted">
 		<mkdir dir="release"/>
 		<zip destfile="release/igsl-${os.arch}-win32.zip">
 			<fileset dir="./doc"/>
