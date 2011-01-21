@@ -5,7 +5,7 @@ package org.igsl.traversal;
  *  
  * @param <O> type of object
  */
-public interface Copyable<O> {
+public interface Copyable<O extends Copyable<O>> {
 	
 	/**
 	 * Creates a duplicated object

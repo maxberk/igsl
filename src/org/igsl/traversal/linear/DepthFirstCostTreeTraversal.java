@@ -1,11 +1,10 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
 package org.igsl.traversal.linear;
 
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -14,15 +13,13 @@ import java.util.Stack;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
-import org.igsl.traversal.CopyableCostTreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
 
 /**
  * Depth-first search implementation for a problem graph with edge cost.
- * Implements Copyable interface to enable iterative search schemas 
  */
 public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
-	implements CopyableCostTreeTraversal<T,C>
+	implements CostTreeTraversal<T,C>
 {
 	/**
 	 * Constructor based on a start search node and cost function interface
@@ -182,40 +179,10 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		return result;
 	}
 
-	/**
-	 * Implementation details of Copyable interface.
-	 * Returns a CostTreeTraversal with a copy of a cursor node
-	 */
-	public CostTreeTraversal<T,C> getCopyOf() {
-		DepthFirstCostTreeTraversal<T,C> result = 
-			new DepthFirstCostTreeTraversal<T,C>();
-		
-		result.function = function;
-		
-		Iterator<TreeNode> iterator = nodes.iterator();
-		while(iterator.hasNext()) {
-			TreeNode node = iterator.next();
-
-			T value = node.getValue();
-			C cost = node.getCost();
-			TreeNode parent = node.getParent();
-			
-			if(parent != null) {
-				int idx = nodes.indexOf(parent);
-				parent = result.nodes.elementAt(idx);
-			}
-			
-			result.nodes.push(new TreeNode(value, cost, parent));
-		}
-		
-		return result;
-	}
+	protected DepthFirstCostTreeTraversal() {}
 	
-	private DepthFirstCostTreeTraversal() {}
-	
-	private Stack<TreeNode> nodes = new Stack<TreeNode>();
-	
-	private CostFunction<T,C> function;
+	protected Stack<TreeNode> nodes = new Stack<TreeNode>();
+	protected CostFunction<T,C> function;
 	
 	class TreeNode {
 		T value;

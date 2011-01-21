@@ -23,8 +23,9 @@ import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
 import org.igsl.functor.memoize.Memoize;
-import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
+import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
+import org.igsl.traversal.linear.CopyableDepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
 
 /**
@@ -380,8 +381,8 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		System.out.println();
 
 		// Initialize a third instance of depth-first tree traversal
-		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
-			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
+		CopyableDepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
+			new CopyableDepthFirstCostTreeTraversal<Route,AddableDouble>(
 				new Route(solver.getWaypoints()), new AddableDouble(0),
 				(new CostTreeTraversalMemoizer<Route,AddableDouble>()).memoize(solver)
 			);
