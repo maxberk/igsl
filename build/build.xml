@@ -49,26 +49,26 @@
 		<delete dir="bin"/>
 	</target>
 	
-	<target name="make.jar.all">
+	<target name="make.jar.all" depends="make.jar.promoted">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
-			<fileset refid="src.files.promoted"/>
 			<fileset refid="src.files.not.promoted"/>
 		</copy>
 		
 		<mkdir dir="bin"/>
-		<javac 
-			nowarn="on"
+		<javac
+			nowarn="on" 
 			listfiles="yes"
 			fork="yes"
-			srcdir="temp"
 			destdir="bin"
 			debug = "on"
+			srcdir="temp"
+			classpath="lib/igsl.jar"
 		/>
 		<delete dir="temp"/>
 
 		<mkdir dir="lib"/>
-		<jar basedir="bin" destfile="lib/igsl.jar"/>
+		<jar basedir="bin" destfile="lib/igsl-not-promoted.jar"/>
 		<delete dir="bin"/>
 	</target>
 	
@@ -93,7 +93,6 @@
 	<target name="compile.test.all" depends="make.jar.all">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
-			<fileset refid="app.files.promoted"/>
 			<fileset refid="app.files.not.promoted"/>
 		</copy>
 
@@ -103,7 +102,7 @@
 			fork="yes"
 			srcdir="temp"
 			destdir="bin"
-			classpath="lib/igsl.jar"
+			classpath="lib/igsl.jar;lib/igsl-not-promoted.jar"
 			debug = "on"
 		/>
 		<delete dir="temp"/>
@@ -142,24 +141,28 @@
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
 			</classpath>
 		</java>
 		<java fork="true" classname="org.igsl.app.sudoku.SudokuSolver">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
 			</classpath>
 		</java>
 		<java fork="true" classname="org.igsl.app.tsp.TSPSolver">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
 			</classpath>
 		</java>
 		<java fork="true" classname="org.igsl.app.fifteens.FifteensSolver">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
 			</classpath>
 		</java>
 		<delete dir="bin"/>
@@ -178,6 +181,7 @@
 	<target name="clean">
 		<delete dir="bin"/>
 		<delete dir="lib"/>
+		<delete dir="temp"/>
 	</target>
 	
 	<target name="clean.javadoc">
