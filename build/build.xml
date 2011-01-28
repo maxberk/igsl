@@ -65,6 +65,7 @@
 			debug = "on"
 			srcdir="temp"
 			classpath="lib/igsl.jar"
+			tempdir="temp"
 		/>
 		<delete dir="temp"/>
 
