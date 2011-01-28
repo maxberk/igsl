@@ -41,6 +41,7 @@
 			srcdir="temp"
 			destdir="bin"
 			debug = "on"
+			tempdir="temp"
 		/>
 		<delete dir="temp"/>
 
@@ -90,7 +91,7 @@
 		<delete dir="temp"/>
 	</target>
 	
-	<target name="compile.test.all" depends="make.jar.all">
+	<target name="compile.test.all" depends="make.jar.all,compile.test.promoted">
 		<mkdir dir="temp"/>
 		<copy todir="temp">
 			<fileset refid="app.files.not.promoted"/>
