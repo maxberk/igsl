@@ -93,10 +93,10 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 		if(!nodes.isEmpty()) {
 			TreeNode n = nodes.peek();
 			
-			while(n != null) {
+			do {
 				result.push(n.getValue());
 				n = n.getParent();
-			}
+			} while(n != null);
 		}
 		
 		return result.elements();
@@ -108,10 +108,11 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 	 * from a cursor to a least "perspective" node
 	 */
 	public Collection<T> getLeafs() {
-		ArrayList<T> leafs = new ArrayList<T>();		
+		ArrayList<T> leafs = new ArrayList<T>();
 		
 		if(!nodes.isEmpty()) {
 			Enumeration<TreeNode> e = nodes.asEnumeration();
+			
 			while(e.hasMoreElements()) {
 				leafs.add(e.nextElement().getValue());
 			}
@@ -140,7 +141,8 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 	}
 	
 	protected BreadthFirstTreeTraversal() {}
-	
+
+	protected TreeNode cursor;
 	protected Deque<TreeNode> nodes = new Deque<TreeNode>();
 	protected ArrayList<TreeNode> parents = new ArrayList<TreeNode>();
 	
@@ -164,20 +166,18 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 		TreeNode getParent() { return parent; }
 	}
 	
+	// FIFO deque implemented as a structure with two stacks
 	class Deque<N> {
-		boolean processed;
 		Stack<N> a1;
 		Stack<N> a2;
 		
 		Deque() {
-			processed = false;
 			a1 = new Stack<N>();
 			a2 = new Stack<N>();
 		}
 		
 		void enqueue(N n) {
 			a1.push(n);
-			processed = false;
 		}
 		
 		N dequeue() {
@@ -191,23 +191,7 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 		}
 		
 		boolean isEmpty() {
-			process();
-			return a2.isEmpty();
-		}
-		
-		private void process() {
-			if(!processed) {
-				if(a2.isEmpty()) {
-					if(a1.isEmpty()) {
-						throw new EmptyStackException();
-					} else {
-						while(!a1.isEmpty()) {
-							a2.push(a1.pop());
-						}
-					}
-				}
-				processed = true;
-			}
+			return a1.isEmpty() && a2.isEmpty();
 		}
 		
 		Enumeration<N> asEnumeration() {
@@ -215,6 +199,16 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 			return a2.elements();
 		}
 		
+		void process() {
+			if(a2.isEmpty()) {
+				if(a1.isEmpty()) {
+					throw new EmptyStackException();
+				} else {
+					while(!a1.isEmpty()) {
+						a2.push(a1.pop());
+					}
+				}
+			}
+		}
 	}
-
 }

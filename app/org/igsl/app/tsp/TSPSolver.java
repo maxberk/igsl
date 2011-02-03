@@ -23,6 +23,8 @@ import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
 import org.igsl.functor.memoize.Memoize;
+import org.igsl.functor.memoize.TreeTraversalMemoizer;
+import org.igsl.traversal.exponential.BreadthFirstTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.CopyableDepthFirstCostTreeTraversal;
@@ -416,6 +418,23 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 		}
 		System.out.println("cost is " + tr4.getCost());
 		
+		// Initialize an instance of breadth-first tree traversal
+		BreadthFirstTreeTraversal<Route> tr5 =
+			new BreadthFirstTreeTraversal<Route>(
+				new Route(solver.getWaypoints()),
+				(new TreeTraversalMemoizer<Route>()).memoize(solver)
+			);
+		
+		// Find an admissible solution with breadth-first tree traversal
+		Direct.searchForward(tr5);
+		
+		Enumeration<Route> path5 = tr5.getPath();
+		System.out.print("The path found with breadth-first search: ");
+		while(path5.hasMoreElements()) {
+			Route r = path5.nextElement();
+			String toPrint = (path5.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			System.out.print(toPrint);
+		}
 	}
 
 }
