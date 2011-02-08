@@ -1,6 +1,6 @@
-(C) Implicit Graph Search Library, 2009, 2010
+(C) Implicit Graph Search Library, 2009, 2010, 2011
 
-=== RELEASE NOTES, version 0.1.6 ===
+=== RELEASE NOTES, version 0.1.7 ===
 
 Release contains IGSL classes packed into igsl.jar which could be found in lib directory.
 Generated IGSL core interfaces' and traversal's implementations' documentation could be
@@ -32,6 +32,7 @@ What does the release contain?
 - A depth-first traversal with/without cost implementations.
 - A best-first traversal along with A* implementation.
 - A recursive best-first tree traversal.
+- A breadth-first tree traversal.
 - A set of well-known direct and iterative algorithms, such as depth-first search, branch-and-bound
 technique, iterative deepening. Two classes - org.igsl.algorithm.Direct and org.igsl.algorithm.Iterative are
 the best as a start point to understand IGSL idea.

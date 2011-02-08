@@ -1,3 +1,6 @@
+/**
+ * Implicit Graph Search Library(C), 2011 
+ */
 package org.igsl.traversal.linear;
 
 import java.util.Iterator;
@@ -6,6 +9,10 @@ import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal.TreeNode;
 
+/**
+ * Depth-first search implementation for a problem graph without edge cost.
+ * Also provides a <code>Copyable</code> functionality.
+ */
 public class CopyableDepthFirstTreeTraversal<T> extends DepthFirstTreeTraversal<T>
 	implements Copyable<CopyableDepthFirstTreeTraversal<T>>
 {

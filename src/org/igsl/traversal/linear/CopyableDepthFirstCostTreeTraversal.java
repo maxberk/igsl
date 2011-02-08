@@ -10,6 +10,10 @@ import org.igsl.functor.CostFunction;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal.TreeNode;
 
+/**
+ * Depth-first search implementation for a problem graph with edge cost.
+ * Also provides a <code>Copyable</code> functionality.
+ */
 public class CopyableDepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	extends DepthFirstCostTreeTraversal<T,C> implements Copyable<CopyableDepthFirstCostTreeTraversal<T,C>>
 {
