@@ -1,36 +1,61 @@
+/**
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
+ */
+
 package org.igsl.functor.memoize;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 class Handler implements InvocationHandler {
 	
 	Object obj;
-	HashMap maps;
+	HashMap maps; // a map with a method name and a result hash map with "argument-result" pairs
 	
-	Handler(Object obj, String[] methodNames) {
+	Handler(Object obj, Class theInterface) {
 		this.obj = obj;
 		this.maps = new HashMap<String, HashMap<Object, Object>>();
 		
-		for(String methodName : methodNames) {
-			for(Method method : obj.getClass().getMethods()) {
-				if(methodName.equalsIgnoreCase(method.getName())) {
-					if(method.getAnnotation(Memoize.class) != null) {
-						System.out.println("Memoizing " + method.getName() + " method...");
-						maps.put(methodName, new HashMap<Object, Object>());
+		for(Method intMethod : theInterface.getMethods()) {
+			for(Method objMethod : obj.getClass().getMethods()) {
+				if(objMethod.getAnnotation(Memoize.class) == null) {
+					continue;
+				}
+				
+				if(intMethod.getName().equals(objMethod.getName())) {
+					Class<?> intReturnClass = intMethod.getReturnType();
+					Class<?> objReturnClass = objMethod.getReturnType();
+					
+					if(intReturnClass != null && objReturnClass != null &&
+						intReturnClass.isAssignableFrom(objReturnClass)) {
+
+						Class<?>[] intParameterClasses = intMethod.getParameterTypes();
+						Class<?>[] objParameterClasses = objMethod.getParameterTypes();
+						if(intParameterClasses.length == objParameterClasses.length) {
+							boolean mismatched = false;
+							for(int i = 0; i < intParameterClasses.length; ++i) {
+								if(!intParameterClasses[i].isAssignableFrom(objParameterClasses[i])) {
+									mismatched = true;
+									break;
+								}
+							}
+							
+							if(!mismatched) {
+								maps.put(objMethod.getName(), new HashMap<Object, Object>());
+							}
+						}
 					}
 				}
 			}
 		}
 		
-		// in the case of no method memoized all handler methods are treated as memoized
+		// in the case of no method memoized all interface methods are treated as memoized
 		if(maps.size() == 0) {
-			for(String methodName : methodNames) {
-				maps.put(methodName, new HashMap<Object, Object>());
+			for(Method intMethod : theInterface.getMethods()) {
+				maps.put(intMethod.getName(), new HashMap<Object, Object>());
 			}
-			System.out.println("Memoizing all methods...");
 		}
 	}
 	

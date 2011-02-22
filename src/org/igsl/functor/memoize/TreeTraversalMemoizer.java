@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
 
 package org.igsl.functor.memoize;
@@ -25,8 +25,8 @@ public class TreeTraversalMemoizer<T> {
 	 * @return generator helper
 	 */
 	public NodeGenerator<T> memoize(NodeGenerator<T> generator) {
-		Handler handler = new Handler(generator, new String[] {"expand", "isGoal"});
-		
+		Handler handler = new Handler(generator, NodeGenerator.class);
+				
 		return (NodeGenerator<T>) Proxy.newProxyInstance(
 			generator.getClass().getClassLoader(),
 			generator.getClass().getInterfaces(),

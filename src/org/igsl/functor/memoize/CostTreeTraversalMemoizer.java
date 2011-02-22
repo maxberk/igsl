@@ -1,3 +1,7 @@
+/**
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
+ */
+
 package org.igsl.functor.memoize;
 
 import java.lang.reflect.Proxy;
@@ -22,7 +26,7 @@ public class CostTreeTraversalMemoizer<T,C> extends TreeTraversalMemoizer<T> {
 	 * @return cost function helper
 	 */
 	public CostFunction<T,C> memoize(CostFunction<T,C> function) {
-		Handler handler = new Handler(function, new String[] {"expand", "isGoal", "getTransitionCost"});
+		Handler handler = new Handler(function, CostFunction.class);
 		
 		return (CostFunction<T,C>) Proxy.newProxyInstance(
 			function.getClass().getClassLoader(),
@@ -37,8 +41,7 @@ public class CostTreeTraversalMemoizer<T,C> extends TreeTraversalMemoizer<T> {
 	 * @return heuristic function helper
 	 */
 	public HeuristicFunction<T,C> memoize(HeuristicFunction<T,C> heuristics) {
-		Handler handler = new Handler(heuristics, new String[] {
-			"expand", "isGoal", "getTransitionCost", "getEstimatedCost"});
+		Handler handler = new Handler(heuristics, HeuristicFunction.class);
 		
 		return (HeuristicFunction<T,C>) Proxy.newProxyInstance(
 			heuristics.getClass().getClassLoader(),
