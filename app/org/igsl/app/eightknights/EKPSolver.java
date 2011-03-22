@@ -15,7 +15,6 @@ import org.igsl.cost.AddableDouble;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.memoize.TreeTraversalMemoizer;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
-import org.igsl.traversal.linear.CopyableDepthFirstTreeTraversal;
 
 /**
  * Eight Knights problem solver presented to demonstrate constraint-satisfaction techniques. The problem
@@ -81,7 +80,7 @@ public class EKPSolver implements NodeGenerator<Board> {
 		
 		System.out.println("=====Eight Knights Problems. Solution for iterative search=====");
 		
-		CopyableDepthFirstTreeTraversal<Board> tr2 = new CopyableDepthFirstTreeTraversal<Board>(
+		DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(
 				new Board(), (new TreeTraversalMemoizer<Board>()).memoize(solver));
 				
 		Enumeration<Board> path = Iterative.deepenIteratively(tr2);

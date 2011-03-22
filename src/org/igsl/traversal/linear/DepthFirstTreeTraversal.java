@@ -6,18 +6,21 @@ package org.igsl.traversal.linear;
 
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Stack;
 
 import org.igsl.functor.NodeGenerator;
+import org.igsl.traversal.Copyable;
 import org.igsl.traversal.TreeTraversal;
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
  */
-public class DepthFirstTreeTraversal<T>	implements TreeTraversal<T>
+public class DepthFirstTreeTraversal<T>
+	implements TreeTraversal<T>, Copyable<DepthFirstTreeTraversal<T>>
 {
 	/**
 	 * Constructor based on a start search node and expansion operator
@@ -164,7 +167,34 @@ public class DepthFirstTreeTraversal<T>	implements TreeTraversal<T>
 		return result;
 	}
 	
-	protected DepthFirstTreeTraversal() {}
+	/**
+	 * Implementation details of Copyable interface.
+	 * Returns a TreeTraversal with a copy of a cursor node
+	 */
+	public DepthFirstTreeTraversal<T> getCopyOf() {
+		DepthFirstTreeTraversal<T> result =	new DepthFirstTreeTraversal<T>();
+		
+		result.generator = generator;
+		
+		Iterator<TreeNode> iterator = nodes.iterator();
+		while(iterator.hasNext()) {
+			TreeNode node = iterator.next();
+
+			T value = node.getValue();
+			TreeNode parent = node.getParent();
+			
+			if(parent != null) {
+				int idx = nodes.indexOf(parent);
+				parent = result.nodes.elementAt(idx);
+			}
+			
+			result.nodes.push(new TreeNode(value, parent));
+		}
+		
+		return result;
+	}
+	
+	private DepthFirstTreeTraversal() {}
 	
 	protected Stack<TreeNode> nodes = new Stack<TreeNode>();
 	protected NodeGenerator<T> generator;
