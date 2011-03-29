@@ -11,17 +11,20 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Stack;
 
+import org.igsl.algorithm.auxiliary.Pair;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.CostTreeTraversal;
+import org.igsl.traversal.Splitable;
 
 /**
  * Depth-first search implementation for a problem graph with edge cost.
  */
 public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
-	implements CostTreeTraversal<T,C>, Copyable<DepthFirstCostTreeTraversal<T,C>>
+	implements CostTreeTraversal<T,C>, Copyable<DepthFirstCostTreeTraversal<T,C>>,
+		Splitable<DepthFirstCostTreeTraversal<T,C>>
 {
 	/**
 	 * Constructor based on a start search node and cost function interface
@@ -207,6 +210,35 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Implementation details of Splittable interface.
+	 * Returns a DepthFirstCostTreeTraversal with a copy of a cursor node
+	 */
+	public DepthFirstCostTreeTraversal<T,C> split() {
+		DepthFirstCostTreeTraversal<T,C> result = 
+			new DepthFirstCostTreeTraversal<T,C>(getCursor(), getCost(), function);
+		backtrack();
+		return result;
+	}
+	
+	/**
+	 * Returns a list of nodes packed as <code>Pair</code>s from a root to a cursor node
+	 */
+	public Enumeration<Pair<T,C>> getPathWithCosts() {
+		Stack<Pair<T,C>> result = new Stack<Pair<T,C>>();
+		
+		if(!nodes.isEmpty()) {
+			TreeNode n = nodes.peek();
+			
+			while(n != null) {
+				result.push(new Pair<T,C>(n.getValue(),n.getCost()));
+				n = n.getParent();
+			}
+		}
+		
+		return result.elements();
 	}
 
 	private DepthFirstCostTreeTraversal() {}

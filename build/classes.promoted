@@ -1,6 +1,7 @@
 org/igsl/traversal/TreeTraversal.java
 org/igsl/traversal/CostTreeTraversal.java
 org/igsl/traversal/Copyable.java
+org/igsl/traversal/Splitable.java
 org/igsl/traversal/linear/DepthFirstTreeTraversal.java
 org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java
 org/igsl/traversal/linear/RecursiveBestFirstTreeTraversal.java
@@ -17,3 +18,4 @@ org/igsl/functor/memoize/CostTreeTraversalMemoizer.java
 org/igsl/cost/*.java
 org/igsl/algorithm/Direct.java
 org/igsl/algorithm/Iterative.java
+org/igsl/algorithm/auxiliary/Pair.java
