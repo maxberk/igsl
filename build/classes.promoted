@@ -13,8 +13,7 @@ org/igsl/functor/CostFunction.java
 org/igsl/functor/HeuristicFunction.java
 org/igsl/functor/memoize/Memoize.java
 org/igsl/functor/memoize/Handler.java
-org/igsl/functor/memoize/TreeTraversalMemoizer.java
-org/igsl/functor/memoize/CostTreeTraversalMemoizer.java
+org/igsl/functor/memoize/Memoizer.java
 org/igsl/cost/*.java
 org/igsl/algorithm/Direct.java
 org/igsl/algorithm/Iterative.java

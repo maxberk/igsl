@@ -1,12 +1,9 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
 package org.igsl.app.tsp;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,18 +13,9 @@ import java.util.ListIterator;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import org.igsl.algorithm.Direct;
-import org.igsl.algorithm.Iterative;
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.HeuristicFunction;
-import org.igsl.functor.NodeGenerator;
-import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
 import org.igsl.functor.memoize.Memoize;
-import org.igsl.functor.memoize.TreeTraversalMemoizer;
-import org.igsl.traversal.exponential.BreadthFirstTreeTraversal;
-import org.igsl.traversal.linear.DepthFirstTreeTraversal;
-import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
-import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
 
 /**
  * NodeGenerator and CostFunction implementations for Traveling Salesman Problem.

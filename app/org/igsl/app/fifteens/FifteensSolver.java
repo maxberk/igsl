@@ -3,16 +3,11 @@
  */
 package org.igsl.app.fifteens;
 
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.igsl.algorithm.Direct;
-import org.igsl.app.eightknights.Board;
 import org.igsl.cost.AddableInteger;
 import org.igsl.functor.HeuristicFunction;
-import org.igsl.functor.memoize.CostTreeTraversalMemoizer;
-import org.igsl.traversal.exponential.AStarTreeTraversal;
 
 /**
  * Fifteens Puzzle solver is based <code>AStarTreeTraversal</code> library class which utilizes an A* algorithm.

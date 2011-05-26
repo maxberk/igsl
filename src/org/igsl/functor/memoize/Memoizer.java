@@ -6,18 +6,29 @@ package org.igsl.functor.memoize;
 
 import java.lang.reflect.Proxy;
 
+import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.HeuristicFunction;
 
-/**
- * CostTreeTraversalMemoizer creates helper classes for functors implementing
- * <code>CostFunction</code> or descendant interface to minimize
- * a calculation time for corresponding functors
- *
- * @param <T> type of node
- * @param <C> type of cost
+/** Memoizer class
  */
-public class CostTreeTraversalMemoizer<T,C> extends TreeTraversalMemoizer<T> {
+public class Memoizer {
+
+	/**
+	 * Create a memoizer for an object implementing <interface>NodeGenerator</interface>
+	 * interface
+	 * 
+	 * @param generator generator to be memoized
+	 * @return generator helper
+	 */
+	public static <T> NodeGenerator<T> memoize(NodeGenerator<T> generator) {
+		Handler handler = new Handler(generator, NodeGenerator.class);
+		
+		return (NodeGenerator<T>) Proxy.newProxyInstance(
+			generator.getClass().getClassLoader(),
+			generator.getClass().getInterfaces(),
+			handler);
+	}
 	
 	/**
 	 * Create a memoizer for a class implementing <class>CostFunction</class> interface
@@ -25,7 +36,7 @@ public class CostTreeTraversalMemoizer<T,C> extends TreeTraversalMemoizer<T> {
 	 * @param function cost function to be memoized
 	 * @return cost function helper
 	 */
-	public CostFunction<T,C> memoize(CostFunction<T,C> function) {
+	public static <T,C> CostFunction<T,C> memoize(CostFunction<T,C> function) {
 		Handler handler = new Handler(function, CostFunction.class);
 		
 		return (CostFunction<T,C>) Proxy.newProxyInstance(
@@ -40,7 +51,7 @@ public class CostTreeTraversalMemoizer<T,C> extends TreeTraversalMemoizer<T> {
 	 * @param heuristics heuristic function to be memoized
 	 * @return heuristic function helper
 	 */
-	public HeuristicFunction<T,C> memoize(HeuristicFunction<T,C> heuristics) {
+	public static <T,C> HeuristicFunction<T,C> memoize(HeuristicFunction<T,C> heuristics) {
 		Handler handler = new Handler(heuristics, HeuristicFunction.class);
 		
 		return (HeuristicFunction<T,C>) Proxy.newProxyInstance(

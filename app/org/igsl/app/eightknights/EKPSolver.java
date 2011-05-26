@@ -4,17 +4,10 @@
 
 package org.igsl.app.eightknights;
 
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.igsl.algorithm.Direct;
-import org.igsl.algorithm.Iterative;
-import org.igsl.app.tsp.Route;
-import org.igsl.cost.AddableDouble;
 import org.igsl.functor.NodeGenerator;
-import org.igsl.functor.memoize.TreeTraversalMemoizer;
-import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 /**
  * Eight Knights problem solver presented to demonstrate constraint-satisfaction techniques. The problem
