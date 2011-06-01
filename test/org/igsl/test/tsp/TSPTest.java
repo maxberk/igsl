@@ -13,10 +13,11 @@ import org.igsl.app.tsp.Route;
 import org.igsl.app.tsp.TSPSolver;
 import org.igsl.app.tsp.TSPSolver.Waypoint;
 import org.igsl.cost.AddableDouble;
-import org.igsl.functor.memoize.Memoizer;
 import org.igsl.traversal.exponential.BreadthFirstTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
+
+import static org.igsl.functor.memoize.Memoizer.*;
 
 public class TSPTest {
 	
@@ -84,7 +85,7 @@ public class TSPTest {
 		DepthFirstCostTreeTraversal<Route,AddableDouble> tr3 =
 			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
 				new Route(solver.getWaypoints()), new AddableDouble(0),
-				Memoizer.memoize(solver)
+				memoize(solver)
 			);
 
 		// Find an optimal(minimal cost) solution with iterative deepening technique
@@ -101,7 +102,7 @@ public class TSPTest {
 		RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
 			new RecursiveBestFirstTreeTraversal<Route,AddableDouble>(
 				new Route(solver.getWaypoints()), new AddableDouble(0),
-				Memoizer.memoize(solver)
+				memoize(solver)
 			);
 		
 		// Find an optimal(minimal cost) solution with recursive best-first tree traversal
@@ -120,7 +121,7 @@ public class TSPTest {
 		BreadthFirstTreeTraversal<Route> tr5 =
 			new BreadthFirstTreeTraversal<Route>(
 				new Route(solver.getWaypoints()),
-				Memoizer.memoize(solver)
+				memoize(solver)
 			);
 		
 		// Find an admissible solution with breadth-first tree traversal

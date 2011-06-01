@@ -10,8 +10,9 @@ import org.igsl.algorithm.Direct;
 import org.igsl.app.fifteens.FifteensSolver;
 import org.igsl.app.fifteens.Position;
 import org.igsl.cost.AddableInteger;
-import org.igsl.functor.memoize.Memoizer;
 import org.igsl.traversal.exponential.AStarTreeTraversal;
+
+import static org.igsl.functor.memoize.Memoizer.*;
 
 public class FifteensTest {
 	
@@ -41,7 +42,7 @@ public class FifteensTest {
 		AStarTreeTraversal<Position, AddableInteger> tr =
 			new AStarTreeTraversal<Position, AddableInteger>(
 				new Position(initial),	new AddableInteger(0), 
-				Memoizer.memoize(solver)
+				memoize(solver)
 			);
 		
 		Direct.searchForward(tr);

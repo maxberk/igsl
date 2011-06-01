@@ -10,8 +10,9 @@ import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
 import org.igsl.app.eightknights.Board;
 import org.igsl.app.eightknights.EKPSolver;
-import org.igsl.functor.memoize.Memoizer;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
+
+import static org.igsl.functor.memoize.Memoizer.*;
 
 public class EightKnightsTest {
 	
@@ -49,7 +50,7 @@ public class EightKnightsTest {
 		System.out.println("=====Eight Knights Problems. Solution for iterative search=====");
 		
 		DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(
-				new Board(), Memoizer.memoize(solver));
+				new Board(), memoize(solver));
 				
 		Enumeration<Board> path = Iterative.deepenIteratively(tr2);
 		System.out.print("Solution found iteratively: ");
