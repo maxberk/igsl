@@ -5,6 +5,7 @@
 package org.igsl.functor.memoize;
 
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
 
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.CostFunction;
@@ -13,6 +14,8 @@ import org.igsl.functor.HeuristicFunction;
 /** Memoizer class
  */
 public class Memoizer {
+	
+	private static HashMap<Object, Object> proxies = new HashMap<Object, Object>();
 
 	/**
 	 * Create a memoizer for an object implementing <interface>NodeGenerator</interface>
@@ -22,12 +25,18 @@ public class Memoizer {
 	 * @return generator helper
 	 */
 	public static <T> NodeGenerator<T> memoize(NodeGenerator<T> generator) {
-		Handler handler = new Handler(generator, NodeGenerator.class);
+		NodeGenerator<T> proxy = (NodeGenerator<T>) proxies.get(generator);
 		
-		return (NodeGenerator<T>) Proxy.newProxyInstance(
-			generator.getClass().getClassLoader(),
-			generator.getClass().getInterfaces(),
-			handler);
+		if(proxy == null) {
+			proxy = (NodeGenerator<T>) Proxy.newProxyInstance(
+				generator.getClass().getClassLoader(),
+				generator.getClass().getInterfaces(),
+				new Handler(generator, NodeGenerator.class));
+			
+			proxies.put(generator, proxy);
+		}
+		
+		return proxy;
 	}
 	
 	/**
@@ -37,12 +46,18 @@ public class Memoizer {
 	 * @return cost function helper
 	 */
 	public static <T,C> CostFunction<T,C> memoize(CostFunction<T,C> function) {
-		Handler handler = new Handler(function, CostFunction.class);
+		CostFunction<T,C> proxy = (CostFunction<T,C>) proxies.get(function);
 		
-		return (CostFunction<T,C>) Proxy.newProxyInstance(
-			function.getClass().getClassLoader(),
-			function.getClass().getInterfaces(),
-			handler);
+		if(proxy == null) {
+			proxy = (CostFunction<T,C>) Proxy.newProxyInstance(
+				function.getClass().getClassLoader(),
+				function.getClass().getInterfaces(),
+				new Handler(function, CostFunction.class));
+			
+			proxies.put(function, proxy);
+		}
+		
+		return proxy;
 	}
 	
 	/**
@@ -52,12 +67,18 @@ public class Memoizer {
 	 * @return heuristic function helper
 	 */
 	public static <T,C> HeuristicFunction<T,C> memoize(HeuristicFunction<T,C> heuristics) {
-		Handler handler = new Handler(heuristics, HeuristicFunction.class);
+		HeuristicFunction<T,C> proxy = (HeuristicFunction<T,C>) proxies.get(heuristics);
 		
-		return (HeuristicFunction<T,C>) Proxy.newProxyInstance(
-			heuristics.getClass().getClassLoader(),
-			heuristics.getClass().getInterfaces(),
-			handler);
+		if(proxy == null) {
+			proxy = (HeuristicFunction<T,C>) Proxy.newProxyInstance(
+				heuristics.getClass().getClassLoader(),
+				heuristics.getClass().getInterfaces(),
+				new Handler(heuristics, CostFunction.class));
+			
+			proxies.put(heuristics, proxy);
+		}
+		
+		return proxy;
 	}
 
 }
