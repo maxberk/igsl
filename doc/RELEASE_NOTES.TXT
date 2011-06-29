@@ -1,6 +1,6 @@
 (C) Implicit Graph Search Library, 2009, 2010, 2011
 
-=== RELEASE NOTES, version 0.1.7 ===
+=== RELEASE NOTES, version 0.1.8 ===
 
 Release contains IGSL classes packed into igsl.jar which could be found in lib directory.
 Generated IGSL core interfaces' and traversal's implementations' documentation could be
@@ -10,19 +10,19 @@ For A* demo a Fifteens Puzzle solver is presented in app directory.
 
 To run the Traveling Salesman Person sample please try
 
-java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.app.tsp.TSPSolver
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.tsp.TSPTest
 
 For Eight Knights problem:
 
-java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.app.eightknights.EKPSolver.
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightknights.EightKnightsTest
 
 For Sudoku problem:
 
-java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.app.sudoku.SudokuSolver.
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.sudoku.SudokuTest
 
 For Fifteens Puzzle solver:
 
-java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.app.fifteens.FifteensSolver.
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.fifteens.FifteensTest
 
 Samples' classes are already compiled into bin directory.
 
