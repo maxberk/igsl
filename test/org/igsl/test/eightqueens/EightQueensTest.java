@@ -2,31 +2,31 @@
  * Implicit Graph Search Library(C), 2011 
  */
 
-package org.igsl.test.eightknights;
+package org.igsl.test.eightqueens;
 
 import java.util.Enumeration;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
-import org.igsl.app.eightknights.Board;
-import org.igsl.app.eightknights.EKPSolver;
+import org.igsl.app.eightqueens.Board;
+import org.igsl.app.eightqueens.EQPSolver;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 import static org.igsl.functor.memoize.Memoizer.*;
 
-public class EightKnightsTest {
+public class EightQueensTest {
 	
 	/**
-	 * Eight Knights problem test scenarios based on DepthFirstTreeTraversal. First scenario demonstrates
+	 * Eight Queens problem test scenarios based on DepthFirstTreeTraversal. First scenario demonstrates
 	 * how to find all solutions with <code>searchForward</code> method while the second utilizes
 	 * iterative <code>deepenIteratively</code> techniques. 
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		EKPSolver solver = new EKPSolver();
+		EQPSolver solver = new EQPSolver();
 		
-		System.out.println("=====Eight Knights Problems. Direct search. All solutions=====");
+		System.out.println("=====Eight Queens Problems. Direct search. All solutions=====");
 		
 		DepthFirstTreeTraversal<Board> tr = new DepthFirstTreeTraversal<Board>(new Board(), solver);
 		int id = 0;
@@ -47,7 +47,7 @@ public class EightKnightsTest {
 			}
 		}
 		
-		System.out.println("=====Eight Knights Problems. Solution for iterative search=====");
+		System.out.println("=====Eight Queens Problems. Solution for iterative search=====");
 		
 		DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(
 				new Board(), memoize(solver));
