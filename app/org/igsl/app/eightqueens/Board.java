@@ -2,7 +2,7 @@
  * Implicit Graph Search Library(C), 2009, 2010 
  */
 
-package org.igsl.app.eightknights;
+package org.igsl.app.eightqueens;
 
 /**
  *  Chess board for Eight Knights problem. Location of knights' is based on a single knight location and

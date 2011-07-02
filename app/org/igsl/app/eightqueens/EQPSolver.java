@@ -2,7 +2,7 @@
  * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
 
-package org.igsl.app.eightknights;
+package org.igsl.app.eightqueens;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,15 +10,15 @@ import java.util.List;
 import org.igsl.functor.NodeGenerator;
 
 /**
- * Eight Knights problem solver presented to demonstrate constraint-satisfaction techniques. The problem
- * is formulated as follows: eight knights should be placed on a chess board and should not attack each other.
+ * Eight Queens problem solver presented to demonstrate constraint-satisfaction techniques. The problem
+ * is formulated as follows: eight queens should be placed on a chess board and should not attack each other.
  * The class uses a <code>Board</code> class as node instance in template initialization.
  */
-public class EKPSolver implements NodeGenerator<Board> {
+public class EQPSolver implements NodeGenerator<Board> {
 
 	/**
 	 * Node expansion algorithm. It uses <code>isValid</code> method of <code>Board</code> to check
-	 * if a new position for a knight is admissable.
+	 * if a new position for a queen is admissable.
 	 */
 	public List<Board> expand(Board board) {
 		List<Board> result = new LinkedList<Board>();
