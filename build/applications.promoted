@@ -1,5 +1,5 @@
-org/igsl/app/eightknights/Board.java
-org/igsl/app/eightknights/EKPSolver.java
+org/igsl/app/eightqueens/Board.java
+org/igsl/app/eightqueens/EQPSolver.java
 org/igsl/app/sudoku/Table.java
 org/igsl/app/sudoku/SudokuSolver.java
 org/igsl/app/tsp/Route.java

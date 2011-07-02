@@ -12,9 +12,9 @@ To run the Traveling Salesman Person sample please try
 
 java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.tsp.TSPTest
 
-For Eight Knights problem:
+For Eight Queens problem:
 
-java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightknights.EightKnightsTest
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightqueens.EightQueensTest
 
 For Sudoku problem:
 
@@ -37,7 +37,7 @@ What does the release contain?
 technique, iterative deepening. Two classes - org.igsl.algorithm.Direct and org.igsl.algorithm.Iterative are
 the best as a start point to understand IGSL idea.
 - Techniques to enhance traversals' performance by memoizing basic interfaces' functions.
-- A traveling salesman person problem and eight knights problem solver as IGSL application samples' for
+- A traveling salesman person problem and eight queens problem solver as IGSL application samples' for
 search on a graph with costs and constraint-satisfaction programming correspondingly. For traveling
 salesman problem a minimum 1-tree heuristics presented.
 - A Fifteens Puzzle solver as IGSL application utilizing A* implementation.

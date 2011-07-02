@@ -118,7 +118,7 @@
 	</target>
 	
 	<target name="run.test.promoted" depends="compile.test.promoted">
-		<java fork="true" classname="org.igsl.test.eightknights.EightKnightsTest">
+		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
@@ -146,7 +146,7 @@
 	</target>
 	
 	<target name="run.test.all" depends="compile.test.all">
-		<java fork="true" classname="org.igsl.test.eightknights.EightKnightsTest">
+		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
