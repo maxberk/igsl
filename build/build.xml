@@ -136,6 +136,13 @@
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
+		<java fork="true" classname="org.igsl.test.knighttour.KnightTourTest">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
+			</classpath>
+		</java>
 		<java fork="true" classname="org.igsl.test.tsp.TSPTest">
 			<classpath>
 				<pathelement path="bin"/>
@@ -154,6 +161,13 @@
 			</classpath>
 		</java>
 		<java fork="true" classname="org.igsl.test.sudoku.SudokuTest">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
+			</classpath>
+		</java>
+		<java fork="true" classname="org.igsl.test.knighttour.KnightTourTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
