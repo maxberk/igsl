@@ -20,27 +20,34 @@ public class KnightTourTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		KnightTourSolver solver = new KnightTourSolver(4);
+		KnightTourSolver solver = new KnightTourSolver(5);
 		
 		System.out.println("=====Knight Tour. Direct search.=====");
 		DepthFirstTreeTraversal<Position> tr = new DepthFirstTreeTraversal<Position>(
 			new Position(2,2), solver);
 		
-		Direct.searchForward(tr);
-		if(!tr.isEmpty()) {
-			Enumeration<Position> path = tr.getPath();
-			while(path.hasMoreElements()) {
-				Position p = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();
-				System.out.print(toPrint);
-			}
-			
-			System.out.println();
-		} else {
-			System.out.println("No path found");
-		}
+		int solutionId = 0;
 		
+		while(!tr.isEmpty()) {
+			Direct.searchForward(tr);
+			
+			if(!tr.isEmpty()) {
+				Enumeration<Position> path = tr.getPath();
+				
+				System.out.print("Solution " + (++solutionId) + ": ");
+				
+				while(path.hasMoreElements()) {
+					Position p = path.nextElement();
+					String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();
+					System.out.print(toPrint);
+				}
+				
+				System.out.println();
+				tr.backtrack();
+			} else {
+				System.out.println("No more solutions found");
+			}
+		}
 	}
-
-
+	
 }

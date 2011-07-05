@@ -1,12 +1,13 @@
 (C) Implicit Graph Search Library, 2009, 2010, 2011
 
-=== RELEASE NOTES, version 0.1.8 ===
+=== RELEASE NOTES, version 0.1.9 ===
 
 Release contains IGSL classes packed into igsl.jar which could be found in lib directory.
 Generated IGSL core interfaces' and traversal's implementations' documentation could be
-found in javadoc directory. A sample dedicated to Sudoku, Eight Knights and Traveling Salesman
-Person in planar statement problems are presented with source files located in app directory.
-For A* demo a Fifteens Puzzle solver is presented in app directory.
+found in javadoc directory. Illustrative IGSL demos - Sudoku, Eight Queens, Knight's Tour
+and Traveling Salesman Person problem in planar statement are presented with source files
+located in app directory. For A* demo a Fifteens Puzzle solver is presented in app
+directory.
 
 To run the Traveling Salesman Person sample please try
 
@@ -15,6 +16,10 @@ java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.t
 For Eight Queens problem:
 
 java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightqueens.EightQueensTest
+
+For Knight's Tour problem:
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.knighttour.KnightTourTest
 
 For Sudoku problem:
 
@@ -37,8 +42,8 @@ What does the release contain?
 technique, iterative deepening. Two classes - org.igsl.algorithm.Direct and org.igsl.algorithm.Iterative are
 the best as a start point to understand IGSL idea.
 - Techniques to enhance traversals' performance by memoizing basic interfaces' functions.
-- A traveling salesman person problem and eight queens problem solver as IGSL application samples' for
-search on a graph with costs and constraint-satisfaction programming correspondingly. For traveling
-salesman problem a minimum 1-tree heuristics presented.
+- A traveling salesman person problem and eight queens problem solvers as IGSL demos for searching
+on a graph with costs and constraint-satisfaction programming correspondingly. For traveling salesman problem
+a minimum 1-tree heuristics presented.
 - A Fifteens Puzzle solver as IGSL application utilizing A* implementation.
-- A Sudoku solver as IGSL application utilizing constraint-satisfaction programming techniques.
+- A Sudoku and Knight's Tour solvers as IGSL demos utilizing constraint-satisfaction programming techniques.

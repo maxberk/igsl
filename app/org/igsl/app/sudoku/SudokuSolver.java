@@ -23,7 +23,7 @@ public class SudokuSolver implements NodeGenerator<Table> {
 
 	/**
 	 * Node expansion algorithm. It uses <code>isValid</code> method of <code>Table</code> to check
-	 * if a number is admissable for a given cell.
+	 * if a number is admissible for a given cell.
 	 */
 	public List<Table> expand(Table table) {
 		List<Table> result = new LinkedList<Table>();
