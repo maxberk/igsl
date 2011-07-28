@@ -5,6 +5,7 @@
 package org.igsl.test.eightqueens;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
@@ -29,22 +30,19 @@ public class EightQueensTest {
 		System.out.println("=====Eight Queens Problems. Direct search. All solutions=====");
 		
 		DepthFirstTreeTraversal<Board> tr = new DepthFirstTreeTraversal<Board>(new Board(), solver);
+		
+		Iterator<Enumeration<Board>> iterator = Direct.findAllSolutions(tr);
 		int id = 0;
 		
-		while(!tr.isEmpty()) {
-			Direct.searchForward(tr);
-			if(!tr.isEmpty()) {
-				System.out.print("Solution " + (++id) + ": ");
-				Enumeration<Board> path = tr.getPath();
-				while(path.hasMoreElements()) {
-					Board r = path.nextElement();
-					String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
-					System.out.print(toPrint);
-				}
-				System.out.println();
-			
-				tr.backtrack();
+		while(iterator.hasNext()) {
+			System.out.print("Solution " + (++id) + ": ");
+			Enumeration<Board> path = iterator.next();
+			while(path.hasMoreElements()) {
+				Board r = path.nextElement();
+				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
+				System.out.print(toPrint);
 			}
+			System.out.println();
 		}
 		
 		System.out.println("=====Eight Queens Problems. Solution for iterative search=====");

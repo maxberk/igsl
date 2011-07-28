@@ -1,9 +1,11 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
 package org.igsl.algorithm;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.igsl.cost.Addable;
 import org.igsl.traversal.CostTreeTraversal;
@@ -28,6 +30,27 @@ public final class Direct {
 		while(!tr.isEmpty() && !tr.getNodeGenerator().isGoal(tr.getCursor())) {
 			tr.moveForward();
 		}
+	}
+
+	/**
+	 * Search for all possible solutions based on <code>searchForward</code> call.
+	 * 
+	 * @param <T> type of the node
+	 * @param tr search tree traversal
+	 * @return an iterator to a list of solutions
+	 */
+	public static <T> Iterator<Enumeration<T>> findAllSolutions(TreeTraversal<T> tr) {
+		ArrayList<Enumeration<T>> result = new ArrayList<Enumeration<T>>();
+		
+		while(!tr.isEmpty()) {
+			searchForward(tr);
+			if(!tr.isEmpty()) {
+				result.add(tr.getPath());
+			}
+			tr.backtrack();
+		}
+		
+		return result.iterator();
 	}
 
 	/**

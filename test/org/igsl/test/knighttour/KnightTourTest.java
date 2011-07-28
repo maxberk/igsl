@@ -5,6 +5,7 @@
 package org.igsl.test.knighttour;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
@@ -26,27 +27,18 @@ public class KnightTourTest {
 		DepthFirstTreeTraversal<Position> tr = new DepthFirstTreeTraversal<Position>(
 			new Position(2,2), solver);
 		
-		int solutionId = 0;
+		Iterator<Enumeration<Position>> iterator = Direct.findAllSolutions(tr);
+		int id = 0;
 		
-		while(!tr.isEmpty()) {
-			Direct.searchForward(tr);
-			
-			if(!tr.isEmpty()) {
-				Enumeration<Position> path = tr.getPath();
-				
-				System.out.print("Solution " + (++solutionId) + ": ");
-				
-				while(path.hasMoreElements()) {
-					Position p = path.nextElement();
-					String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();
-					System.out.print(toPrint);
-				}
-				
-				System.out.println();
-				tr.backtrack();
-			} else {
-				System.out.println("No more solutions found");
+		while(iterator.hasNext()) {
+			System.out.print("Solution " + (++id) + ": ");
+			Enumeration<Position> path = iterator.next();
+			while(path.hasMoreElements()) {
+				Position r = path.nextElement();
+				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
+				System.out.print(toPrint);
 			}
+			System.out.println();
 		}
 	}
 	
