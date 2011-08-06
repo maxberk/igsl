@@ -134,6 +134,30 @@ public class TSPTest {
 			String toPrint = (path5.hasMoreElements()) ? r.toString() + "->" : r.toString();
 			System.out.print(toPrint);
 		}
+		System.out.println();
+		
+		// Initialize a sexth instance of depth-first tree traversal
+		DepthFirstCostTreeTraversal<Route,AddableDouble> tr6 =
+			new DepthFirstCostTreeTraversal<Route,AddableDouble>(
+				new Route(solver.getWaypoints()), new AddableDouble(0), solver
+			);
+
+		// Find all optimal solutions
+		Iterator<Enumeration<Route>> iterator = Direct.findAllSolutions(tr6);
+		System.out.println("All of optimal paths: ");
+		int idx6 = 0;
+		while(iterator.hasNext()) {
+			System.out.print("Path No. " + (++idx6) + ": ");
+			
+			Enumeration<Route> path6 = iterator.next();
+			while(path6.hasMoreElements()) {
+				Route r = path6.nextElement();
+				String toPrint = (path6.hasMoreElements()) ? r.toString() + "->" : r.toString();
+				System.out.print(toPrint);
+			}
+		}
+		System.out.println();
+		
 	}
 
 }

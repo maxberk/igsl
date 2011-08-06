@@ -109,5 +109,51 @@ public final class Direct {
 		
 		return result;
 	}
+	
+	/**
+	 * Search for all optimal solutions based on <code>branchAndBound</code> techniques.
+	 * 
+	 * @param <T> type of the node
+	 * @param <C> type of the cost
+	 * @param tr search tree traversal
+	 * @return an iterator to a list of solutions
+	 */
+	public static <T,C extends Addable<C> & Comparable<C>> Iterator<Enumeration<T>> findAllSolutions(CostTreeTraversal<T,C> tr) {
+		ArrayList<Enumeration<T>> result = new ArrayList<Enumeration<T>>();
+		
+		searchForward(tr);
+		
+		if(tr.isEmpty()) {
+			return result.iterator();
+		}
+		
+		Enumeration<T> path = tr.getPath();
+		C thresh = tr.getCost();
+		result.add(path);
+		
+		tr.backtrack();
+		
+		while(!tr.isEmpty()) {
+			if(tr.getNodeGenerator().isGoal(tr.getCursor())) {
+				int compareResult = tr.getCost().compareTo(thresh);
+				
+				if(compareResult < 0)	{
+					path = tr.getPath();
+					thresh = tr.getCost();
+	
+					result.clear();
+					result.add(path);
+				} else if(compareResult == 0) {
+					result.add(path);
+				}
+				
+				tr.backtrack();
+			} else {
+				tr.moveForward();
+			}
+		}
+		
+		return result.iterator();
+	}
 
 }
