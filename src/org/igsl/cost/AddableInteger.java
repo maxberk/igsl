@@ -7,7 +7,7 @@ package org.igsl.cost;
 /**
  * Implementation of Addable interface for an integer type.
  */
-public class AddableInteger implements Addable<AddableInteger>, Comparable<AddableInteger>{
+public class AddableInteger implements Addable<AddableInteger>, Comparable<AddableInteger>, Assignable<AddableInteger> {
 	private int value;
 	
 	/**
@@ -36,6 +36,10 @@ public class AddableInteger implements Addable<AddableInteger>, Comparable<Addab
 		} else {
 			return 0;
 		}
+	}
+	
+	public void assign(AddableInteger other) {
+		this.value = other.value;
 	}
 	
 	public String toString() {
