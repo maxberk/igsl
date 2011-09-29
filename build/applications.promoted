@@ -8,3 +8,4 @@ org/igsl/app/tsp/Route.java
 org/igsl/app/tsp/TSPSolver.java
 org/igsl/app/fifteens/Position.java
 org/igsl/app/fifteens/FifteensSolver.java
+org/igsl/app/coinproblem/CoinProblemSolver.java
