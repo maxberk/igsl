@@ -12,7 +12,7 @@ import org.igsl.functor.CostFunction;
 
 /**
  * Coin Problem is a problem of collecting coins of different denominations to meet
- * predefined value. The problem is to find a minimal number of coins.	
+ * predefined money value. The problem is to find a minimal number of coins.	
  */
 public class CoinProblemSolver implements CostFunction<int[],AddableInteger>{
 	
@@ -33,14 +33,15 @@ public class CoinProblemSolver implements CostFunction<int[],AddableInteger>{
 		List<int[]> result = new LinkedList<int[]>();
 		
 		for(int i = coins.length - 1; i < denominations.length; ++i) {
-			int[] newarr = new int[coins.length + 1];
+			int[] newarr = new int[i + 1];
 			
 			for(int j : coins) {
 				newarr[j] = coins[j];
 			}
-			newarr[newarr.length - 1] = 1;
+			
+			newarr[i]++;
 
-			if(getSum(newarr) <= value ) {
+			if(sum(newarr) <= value ) {
 				result.add(newarr);
 			}
 		}
@@ -49,21 +50,21 @@ public class CoinProblemSolver implements CostFunction<int[],AddableInteger>{
 	}
 	
 	public boolean isGoal(int[] coins) {
-		return (getSum(coins) == value);
+		return (sum(coins) == value);
 	}
 	
 	public AddableInteger getTransitionCost(int[] from, int[] to) {
 		return new AddableInteger(1);
 	}
 	
-	private int getSum(int[] coins) {
-		int sum = 0;
+	private int sum(int[] coins) {
+		int result = 0;
 		
-		for(int i = 0; i < coins.length; ++i) {
-			sum += coins[i] * denominations[i];
+		for(int i = 0; i < coins.length - 1; ++i) {
+			result += coins[i] * denominations[i];
 		}
 		
-		return sum;
+		return result;
 	}
 
 }
