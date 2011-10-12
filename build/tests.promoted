@@ -1,5 +1,6 @@
 org/igsl/test/eightqueens/EightQueensTest.java
 org/igsl/test/fifteens/FifteensTest.java
 org/igsl/test/sudoku/SudokuTest.java
+org/igsl/test/coinproblem/CoinProblemTest.java
 org/igsl/test/knighttour/KnightTourTest.java
 org/igsl/test/tsp/TSPTest.java
