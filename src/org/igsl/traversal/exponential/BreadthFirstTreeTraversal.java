@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.TreeTraversal;
 
 /**
@@ -38,6 +39,26 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 		}
 		
 		nodes.enqueue(new TreeNode(value));
+	}
+	
+	/**
+	 * Constructor based on an expansion operator and default root node value
+	 * 
+	 * @param generator node generator function
+	 * @throws NullPointerException thrown if node generator is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root node value does not exist
+	 * @see NodeGenerator
+	 */
+	public BreadthFirstTreeTraversal(NodeGenerator<T> generator) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		if(generator == null) {
+			throw new NullPointerException();
+		} else {
+			this.generator = generator;
+		}
+		
+		nodes.enqueue(new TreeNode(this.generator.getDefaultRootNode()));
 	}
 
 	/**

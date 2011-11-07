@@ -8,11 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
  * Eight Queens problem solver presented to demonstrate constraint-satisfaction techniques. The problem
- * is formulated as follows: eight queens should be placed on a chess board and should not attack each other.
- * The class uses a <code>Board</code> class as node instance in template initialization.
+ * is formulated as follows: eight queens should be placed on a chess board with a condition not to attack
+ * each other. The class uses a <code>Board</code> class as node instance in template initialization.
  */
 public class EQPSolver implements NodeGenerator<Board> {
 
@@ -38,6 +39,15 @@ public class EQPSolver implements NodeGenerator<Board> {
 	 */
 	public boolean isGoal(Board board) {
 		return (board.getLevel() == 8);
+	}
+	
+	/**
+	 * Defines default root node value
+	 * @throws DefaultValuesUnsupportedException is not thrown here
+	 * @return default start node value
+	 */
+	public Board getDefaultRootNode() throws DefaultValuesUnsupportedException {
+		return new Board();
 	}
 	
 }

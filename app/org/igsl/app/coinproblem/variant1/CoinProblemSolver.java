@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import org.igsl.cost.AddableInteger;
 import org.igsl.functor.CostFunction;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
  * Coin Problem is a problem of collecting coins of different denominations to meet
@@ -59,6 +60,24 @@ public class CoinProblemSolver implements CostFunction<int[],AddableInteger>{
 		return new AddableInteger(1);
 	}
 	
+	/**
+	 * Defines default root node value
+	 * @throws DefaultValuesUnsupportedException is not thrown here
+	 * @return default root node value
+	 */
+	public int[] getDefaultRootNode() throws DefaultValuesUnsupportedException {
+		return new int[]{};
+	}
+	
+	/**
+	 * Defines zero root(start) node cost 
+	 * @throws DefaultValuesUnsupportedException is not thrown here
+	 * @return default start node cost
+	 */
+	public AddableInteger getDefaultRootCost() throws DefaultValuesUnsupportedException {
+		return new AddableInteger(0);
+	}
+	
 	private int sum(int[] coins) {
 		int result = 0;
 		
@@ -67,16 +86,6 @@ public class CoinProblemSolver implements CostFunction<int[],AddableInteger>{
 		}
 		
 		return result;
-	}
-	
-	public void printArray(int[] a) {
-		System.out.print("Values: ");
-		
-		for(int v : a) {
-			System.out.print(v + ">");
-		}
-		
-		System.out.println();
 	}
 
 }

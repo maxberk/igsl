@@ -16,6 +16,7 @@ import org.igsl.cost.Addable;
 import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.CostTreeTraversal;
 
 /**
@@ -42,6 +43,32 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 		}
 		
 		opened.put(value, new TreeNode(value, cost, heuristics.getEstimatedCost(value)));
+		cursor = value;
+	}
+	
+	/**
+	 * Constructor based on a default root node and cost values and heuristic function
+	 * 
+	 * @param heuristics heuristic function
+	 * @throws NullPointerException thrown if heuristics is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root node and/or cost value does not exist
+	 * @see HeuristicFunction
+	 */
+	public AStarTreeTraversal(HeuristicFunction<T,C> heuristics) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		if(heuristics == null) {
+			throw new NullPointerException();
+		} else {
+			this.heuristics = heuristics;
+		}
+		
+		T value = this.heuristics.getDefaultRootNode();
+		
+		opened.put(value, new TreeNode(value,
+			this.heuristics.getDefaultRootCost(), heuristics.getEstimatedCost(value)
+		));
+		
 		cursor = value;
 	}
 

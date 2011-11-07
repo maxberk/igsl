@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.CostTreeTraversal;
 
 /**
@@ -41,6 +42,28 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 		}
 		
 		opened.put(value, new TreeNode(value, cost));
+		cursor = value;
+	}
+	
+	/**
+	 * Constructor based on a default root node and cost values and cost function.
+	 * 
+	 * @param function cost function
+	 * @throws NullPointerException thrown if either node generator or cost function is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root node and/or cost value does not exist
+	 * @see CostFunction
+	 */
+	public BestFirstCostTreeTraversal(CostFunction<T,C> function)
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		if(function == null) {
+			throw new NullPointerException();
+		} else {
+			this.function = function;
+		}
+		
+		T value = function.getDefaultRootNode();
+		opened.put(value, new TreeNode(value, function.getDefaultRootCost()));
 		cursor = value;
 	}
 

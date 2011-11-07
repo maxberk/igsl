@@ -16,6 +16,7 @@ import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.HeuristicFunction;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.CostTreeTraversal;
 
 /**
@@ -43,6 +44,31 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 		}
 		
 		TreeNode root = new TreeNode(value, cost, this.heuristics.getEstimatedCost(value)); 
+		
+		levels.push(new Level(root, root.getCost()));
+	}
+	
+	/**
+	 * Constructor based on a heuristic function and default root node and cost values
+	 * 
+	 * @param heuristics cost function
+	 * @throws NullPointerException thrown if heuristic function is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root node and/or cost value does not exist
+	 * @see HeuristicFunction
+	 */
+	public RecursiveBestFirstTreeTraversal(HeuristicFunction<T,C> heuristics) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		if(heuristics == null) {
+			throw new NullPointerException();
+		} else {
+			this.heuristics = heuristics;
+		}
+		
+		T value = this.heuristics.getDefaultRootNode();
+		
+		TreeNode root = new TreeNode(value, this.heuristics.getDefaultRootCost(),
+			this.heuristics.getEstimatedCost(value)); 
 		
 		levels.push(new Level(root, root.getCost()));
 	}

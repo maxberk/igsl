@@ -15,6 +15,7 @@ import org.igsl.algorithm.auxiliary.Pair;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.Splitable;
@@ -45,6 +46,26 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		}
 		
 		nodes.push(new TreeNode(value, cost));
+	}
+	
+	/**
+	 * Constructor based on a cost function interface and default root node and cost values
+	 * 
+	 * @param function cost function
+	 * @throws NullPointerException thrown if cost function is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root node and/or cost value does not exist
+	 * @see CostFunction
+	 */
+	public DepthFirstCostTreeTraversal(CostFunction<T,C> function) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		if(function == null) {
+			throw new NullPointerException();
+		} else {
+			this.function = function;
+		}
+		
+		nodes.push(new TreeNode(function.getDefaultRootNode(), function.getDefaultRootCost()));
 	}
 
 	/**

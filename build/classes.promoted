@@ -11,6 +11,7 @@ org/igsl/traversal/exponential/BreadthFirstTreeTraversal.java
 org/igsl/functor/NodeGenerator.java
 org/igsl/functor/CostFunction.java
 org/igsl/functor/HeuristicFunction.java
+org/igsl/functor/exception/DefaultValuesUnsupportedException.java
 org/igsl/functor/memoize/Memoize.java
 org/igsl/functor/memoize/Handler.java
 org/igsl/functor/memoize/Memoizer.java

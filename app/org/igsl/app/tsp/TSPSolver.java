@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.HeuristicFunction;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.functor.memoize.Memoize;
 
 /**
@@ -129,6 +130,24 @@ public class TSPSolver implements HeuristicFunction<Route,AddableDouble>
 	 */
 	public boolean isGoal(Route t) {
 		return (t.getVisitedNumber() > 1) && t.getFirst().equalsIgnoreCase(t.getLast());
+	}
+	
+	/**
+	 * Defines root(start) node value with all waypoints set as not-visited
+	 * @throws DefaultValuesUnsupportedException is not thrown here
+	 * @return default start node value
+	 */
+	public Route getDefaultRootNode() throws DefaultValuesUnsupportedException {
+		return new Route(getWaypoints());
+	}
+	
+	/**
+	 * Defines zero root(start) node cost 
+	 * @throws DefaultValuesUnsupportedException is not thrown here
+	 * @return default start node cost
+	 */
+	public AddableDouble getDefaultRootCost() throws DefaultValuesUnsupportedException {
+		return new AddableDouble(0);
 	}
 
 	/**

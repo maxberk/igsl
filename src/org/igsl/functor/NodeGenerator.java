@@ -1,9 +1,12 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
+
 package org.igsl.functor;
 
 import java.util.List;
+
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
  * Interface NodeGenerator should be implemented to initialize any tree traversal.
@@ -28,5 +31,12 @@ public interface NodeGenerator<T> {
 	 * @return true if the node is a goal
 	 */
 	boolean isGoal(T t);
+	
+	/**
+	 * Defines root(start) node value 
+	 * @return default start node value
+	 * @throws DefaultValuesUnsupportedException if no default root node value exist
+	 */
+	T getDefaultRootNode() throws DefaultValuesUnsupportedException;
 
 }

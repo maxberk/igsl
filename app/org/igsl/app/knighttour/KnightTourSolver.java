@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
  * Knight Tour solver presented to demonstrate constraint-satisfaction techniques.
@@ -48,6 +49,15 @@ public class KnightTourSolver implements NodeGenerator<Position> {
 	 */
 	public boolean isGoal(Position position) {
 		return position.getSize() == (dim * dim) ;
+	}
+	
+	/**
+	 * Defines default root(start) node value
+	 * @throws DefaultValuesUnsupportedException is thrown here
+	 * @return default root node value
+	 */
+	public Position getDefaultRootNode() throws DefaultValuesUnsupportedException {
+		throw new DefaultValuesUnsupportedException();
 	}
 	
 	private int dim; // problem dim

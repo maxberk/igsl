@@ -1,6 +1,7 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011
  */
+
 package org.igsl.app.fifteens;
 
 import java.util.LinkedList;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import org.igsl.cost.AddableInteger;
 import org.igsl.functor.HeuristicFunction;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
  * Fifteens Puzzle solver is based <code>AStarTreeTraversal</code> library class which utilizes an A* algorithm.
@@ -57,6 +59,24 @@ public class FifteensSolver implements HeuristicFunction<Position,AddableInteger
 	 */
 	public boolean isGoal(Position position) {
 		return position.equals(terminal);
+	}
+	
+	/**
+	 * Defines root(start) node value with all waypoints set as not-visited
+	 * @throws DefaultValuesUnsupportedException is thrown here
+	 * @return default root value
+	 */
+	public Position getDefaultRootNode() throws DefaultValuesUnsupportedException {
+		throw new DefaultValuesUnsupportedException();
+	}
+	
+	/**
+	 * Defines zero root(start) node cost 
+	 * @throws DefaultValuesUnsupportedException is not thrown here
+	 * @return default start node cost
+	 */
+	public AddableInteger getDefaultRootCost() throws DefaultValuesUnsupportedException {
+		return new AddableInteger(0);
 	}
 	
 	/**

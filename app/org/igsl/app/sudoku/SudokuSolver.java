@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 /**
@@ -63,6 +64,15 @@ public class SudokuSolver implements NodeGenerator<Table> {
 	 */
 	public boolean isGoal(Table table) {
 		return table.getSize() == (dim * dim * dim * dim) ;
+	}
+	
+	/**
+	 * Defines default root(start) node value
+	 * @throws DefaultValuesUnsupportedException is thrown here
+	 * @return default root node value
+	 */
+	public Table getDefaultRootNode() throws DefaultValuesUnsupportedException {
+		throw new DefaultValuesUnsupportedException();
 	}
 	
 	/**
