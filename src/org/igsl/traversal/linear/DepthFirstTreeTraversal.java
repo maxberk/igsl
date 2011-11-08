@@ -54,13 +54,7 @@ public class DepthFirstTreeTraversal<T>
 	public DepthFirstTreeTraversal(NodeGenerator<T> generator) 
 		throws NullPointerException, DefaultValuesUnsupportedException
 	{
-		if(generator == null) {
-			throw new NullPointerException();
-		} else {
-			this.generator = generator;
-		}
-		
-		nodes.push(new TreeNode(generator.getDefaultRootNode()));
+		this(generator.getDefaultRootNode(), generator);
 	}
 	
 	/**

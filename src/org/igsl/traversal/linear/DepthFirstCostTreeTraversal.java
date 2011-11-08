@@ -49,6 +49,21 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	}
 	
 	/**
+	 * Constructor based on a start search node with cost function and default root cost value
+	 * 
+	 * @param value root node value
+	 * @param function cost function
+	 * @throws NullPointerException thrown if cost function is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root cost value does not exist
+	 * @see CostFunction
+	 */
+	public DepthFirstCostTreeTraversal(T value, CostFunction<T,C> function) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		this(value, function.getDefaultRootCost(), function);
+	}
+	
+	/**
 	 * Constructor based on a cost function interface and default root node and cost values
 	 * 
 	 * @param function cost function
@@ -59,13 +74,7 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	public DepthFirstCostTreeTraversal(CostFunction<T,C> function) 
 		throws NullPointerException, DefaultValuesUnsupportedException
 	{
-		if(function == null) {
-			throw new NullPointerException();
-		} else {
-			this.function = function;
-		}
-		
-		nodes.push(new TreeNode(function.getDefaultRootNode(), function.getDefaultRootCost()));
+		this(function.getDefaultRootNode(), function.getDefaultRootCost(), function);
 	}
 
 	/**

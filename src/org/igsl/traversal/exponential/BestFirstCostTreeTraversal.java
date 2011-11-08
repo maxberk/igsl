@@ -46,6 +46,21 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	}
 	
 	/**
+	 * Constructor based on a root node and cost function along with default root cost value
+	 * 
+	 * @param value root node value
+	 * @param function cost function
+	 * @throws NullPointerException thrown if either node generator or cost function is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root cost value does not exist
+	 * @see CostFunction
+	 */
+	public BestFirstCostTreeTraversal(T value, CostFunction<T,C> function)
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		this(value, function.getDefaultRootCost(), function);
+	}
+	
+	/**
 	 * Constructor based on a default root node and cost values and cost function.
 	 * 
 	 * @param function cost function
@@ -56,15 +71,7 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	public BestFirstCostTreeTraversal(CostFunction<T,C> function)
 		throws NullPointerException, DefaultValuesUnsupportedException
 	{
-		if(function == null) {
-			throw new NullPointerException();
-		} else {
-			this.function = function;
-		}
-		
-		T value = function.getDefaultRootNode();
-		opened.put(value, new TreeNode(value, function.getDefaultRootCost()));
-		cursor = value;
+		this(function.getDefaultRootNode(), function.getDefaultRootCost(), function);
 	}
 
 	/**

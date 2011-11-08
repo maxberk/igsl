@@ -1,6 +1,7 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011 
  */
+
 package org.igsl.traversal.exponential;
 
 import java.util.Collection;
@@ -47,6 +48,21 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	}
 	
 	/**
+	 * Constructor based on a root node value and heuristic function along with default root cost value
+	 * 
+	 * @param value root node value
+	 * @param heuristics heuristic function
+	 * @throws NullPointerException thrown if heuristics is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root cost value does not exist
+	 * @see HeuristicFunction
+	 */
+	public AStarTreeTraversal(T value, HeuristicFunction<T,C> heuristics) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		this(value, heuristics.getDefaultRootCost(), heuristics);
+	}
+	
+	/**
 	 * Constructor based on a default root node and cost values and heuristic function
 	 * 
 	 * @param heuristics heuristic function
@@ -57,19 +73,7 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	public AStarTreeTraversal(HeuristicFunction<T,C> heuristics) 
 		throws NullPointerException, DefaultValuesUnsupportedException
 	{
-		if(heuristics == null) {
-			throw new NullPointerException();
-		} else {
-			this.heuristics = heuristics;
-		}
-		
-		T value = this.heuristics.getDefaultRootNode();
-		
-		opened.put(value, new TreeNode(value,
-			this.heuristics.getDefaultRootCost(), heuristics.getEstimatedCost(value)
-		));
-		
-		cursor = value;
+		this(heuristics.getDefaultRootNode(), heuristics.getDefaultRootCost(), heuristics);
 	}
 
 	/**

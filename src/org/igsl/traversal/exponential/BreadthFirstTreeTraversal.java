@@ -52,13 +52,7 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 	public BreadthFirstTreeTraversal(NodeGenerator<T> generator) 
 		throws NullPointerException, DefaultValuesUnsupportedException
 	{
-		if(generator == null) {
-			throw new NullPointerException();
-		} else {
-			this.generator = generator;
-		}
-		
-		nodes.enqueue(new TreeNode(this.generator.getDefaultRootNode()));
+		this(generator.getDefaultRootNode(), generator);
 	}
 
 	/**

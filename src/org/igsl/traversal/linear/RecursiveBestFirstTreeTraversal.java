@@ -1,6 +1,7 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011
  */
+
 package org.igsl.traversal.linear;
 
 import java.util.ArrayList;
@@ -49,6 +50,21 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	}
 	
 	/**
+	 * Constructor based on a heuristic function and root node value along with default root cost value
+	 * 
+	 * @param value root node value
+	 * @param heuristics cost function
+	 * @throws NullPointerException thrown if heuristic function is null
+	 * @throws DefaultValuesUnsupportedException thrown if default root cost value does not exist
+	 * @see HeuristicFunction
+	 */
+	public RecursiveBestFirstTreeTraversal(T value, HeuristicFunction<T,C> heuristics) 
+		throws NullPointerException, DefaultValuesUnsupportedException
+	{
+		this(value, heuristics.getDefaultRootCost(), heuristics);
+	}
+	
+	/**
 	 * Constructor based on a heuristic function and default root node and cost values
 	 * 
 	 * @param heuristics cost function
@@ -59,18 +75,7 @@ public class RecursiveBestFirstTreeTraversal<T,C extends Addable<C> & Comparable
 	public RecursiveBestFirstTreeTraversal(HeuristicFunction<T,C> heuristics) 
 		throws NullPointerException, DefaultValuesUnsupportedException
 	{
-		if(heuristics == null) {
-			throw new NullPointerException();
-		} else {
-			this.heuristics = heuristics;
-		}
-		
-		T value = this.heuristics.getDefaultRootNode();
-		
-		TreeNode root = new TreeNode(value, this.heuristics.getDefaultRootCost(),
-			this.heuristics.getEstimatedCost(value)); 
-		
-		levels.push(new Level(root, root.getCost()));
+		this(heuristics.getDefaultRootNode(), heuristics.getDefaultRootCost(), heuristics);
 	}
 
 	/**
