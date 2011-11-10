@@ -50,13 +50,6 @@ class Handler implements InvocationHandler {
 				}
 			}
 		}
-		
-		// in the case of no method memoized all interface methods are treated as memoized
-		if(maps.size() == 0) {
-			for(Method intMethod : theInterface.getMethods()) {
-				maps.put(intMethod.getName(), new HashMap<Object, Object>());
-			}
-		}
 	}
 	
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

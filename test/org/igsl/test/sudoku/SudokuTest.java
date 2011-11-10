@@ -21,6 +21,7 @@ public class SudokuTest {
 	 */
 	public static void main(String[] args) {
 		SudokuSolver solver = new SudokuSolver(3);
+		/*
 		Table table = solver.fillCell(1, 1, 5);
 		table = solver.fillCell(1, 2, 3, table);
 		table = solver.fillCell(1, 5, 7, table);
@@ -59,6 +60,44 @@ public class SudokuTest {
 		table = solver.fillCell(9, 5, 8, table);
 		table = solver.fillCell(9, 8, 7, table);
 		table = solver.fillCell(9, 9, 9, table);
+		*/
+		
+		Table table = solver.fillCell(1, 5, 8);
+	
+		table = solver.fillCell(2, 3, 4, table);
+		table = solver.fillCell(2, 4, 9, table);
+		table = solver.fillCell(2, 6, 5, table);
+		table = solver.fillCell(2, 7, 3, table);
+		
+		table = solver.fillCell(3, 2, 6, table);
+		table = solver.fillCell(3, 4, 3, table);
+		table = solver.fillCell(3, 6, 7, table);
+		table = solver.fillCell(3, 8, 2, table);
+		
+		table = solver.fillCell(4, 2, 4, table);
+		table = solver.fillCell(4, 3, 1, table);
+		table = solver.fillCell(4, 7, 2, table);
+		table = solver.fillCell(4, 8, 9, table);
+		
+		table = solver.fillCell(5, 1, 9, table);
+		table = solver.fillCell(5, 9, 7, table);
+		
+		table = solver.fillCell(6, 2, 7, table);
+		table = solver.fillCell(6, 3, 2, table);
+		table = solver.fillCell(6, 7, 4, table);
+		table = solver.fillCell(6, 8, 6, table);
+		
+		table = solver.fillCell(7, 2, 5, table);
+		table = solver.fillCell(7, 4, 2, table);
+		table = solver.fillCell(7, 6, 9, table);
+		table = solver.fillCell(7, 8, 1, table);
+		
+		table = solver.fillCell(8, 3, 9, table);
+		table = solver.fillCell(8, 4, 1, table);
+		table = solver.fillCell(8, 6, 4, table);
+		table = solver.fillCell(8, 7, 8, table);
+		
+		table = solver.fillCell(9, 5, 7, table);
 		
 		System.out.println("=====Sudoku. Direct search.=====");
 		

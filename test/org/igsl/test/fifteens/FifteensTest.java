@@ -10,6 +10,7 @@ import org.igsl.algorithm.Direct;
 import org.igsl.app.fifteens.FifteensSolver;
 import org.igsl.app.fifteens.Position;
 import org.igsl.cost.AddableInteger;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.exponential.AStarTreeTraversal;
 
 import static org.igsl.functor.memoize.Memoizer.*;
@@ -39,20 +40,20 @@ public class FifteensTest {
 			System.out.println();
 		}
 		
-		AStarTreeTraversal<Position, AddableInteger> tr =
-			new AStarTreeTraversal<Position, AddableInteger>(
-				new Position(initial),	new AddableInteger(0), 
-				memoize(solver)
-			);
-		
-		Direct.searchForward(tr);
-		Enumeration<Position> path = tr.getPath();
-
-		System.out.print("Path found (from terminal to initial position): ");
-		while(path.hasMoreElements()) {
-			Position p = path.nextElement();
-			String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();
-			System.out.print(toPrint);
+		try {
+			AStarTreeTraversal<Position, AddableInteger> tr =
+				new AStarTreeTraversal<Position, AddableInteger>(new Position(initial), memoize(solver));
+			
+			Direct.searchForward(tr);
+			Enumeration<Position> path = tr.getPath();
+	
+			System.out.print("Path found (from terminal to initial position): ");
+			while(path.hasMoreElements()) {
+				Position p = path.nextElement();
+				String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();
+				System.out.print(toPrint);
+			}
+		} catch (DefaultValuesUnsupportedException e) {
 		}
 	}
 

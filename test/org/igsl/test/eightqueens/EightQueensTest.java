@@ -11,6 +11,7 @@ import org.igsl.algorithm.Direct;
 import org.igsl.algorithm.Iterative;
 import org.igsl.app.eightqueens.Board;
 import org.igsl.app.eightqueens.EQPSolver;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 import static org.igsl.functor.memoize.Memoizer.*;
@@ -47,17 +48,19 @@ public class EightQueensTest {
 		
 		System.out.println("=====Eight Queens Problems. Solution for iterative search=====");
 		
-		DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(
-				new Board(), memoize(solver));
-				
-		Enumeration<Board> path = Iterative.deepenIteratively(tr2);
-		System.out.print("Solution found iteratively: ");
-		while(path.hasMoreElements()) {
-			Board r = path.nextElement();
-			String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
-			System.out.print(toPrint);
+		try {
+			DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(memoize(solver));
+					
+			Enumeration<Board> path = Iterative.deepenIteratively(tr2);
+			System.out.print("Solution found iteratively: ");
+			while(path.hasMoreElements()) {
+				Board r = path.nextElement();
+				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
+				System.out.print(toPrint);
+			}
+			System.out.println();
+		} catch(DefaultValuesUnsupportedException e) {
 		}
-		System.out.println();
 	}
 
 }
