@@ -9,3 +9,5 @@ org/igsl/app/tsp/TSPSolver.java
 org/igsl/app/fifteens/Position.java
 org/igsl/app/fifteens/FifteensSolver.java
 org/igsl/app/coinproblem/variant1/CoinProblemSolver.java
+org/igsl/app/coinproblem/variant2/Coin.java
+org/igsl/app/coinproblem/variant2/CoinProblemSolver.java
