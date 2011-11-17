@@ -30,11 +30,15 @@ public class CoinProblemSolver implements CostFunction<Coin,AddableInteger>{
 		this.value = value;
 	}
 	
+	public int getDenomination(int index) {
+		return denominations[index];
+	}
+	
 	public List<Coin> expand(Coin coin) {
 		LinkedList<Coin> result = new LinkedList<Coin>();
 		int coinSum = sum(coin);
 		
-		for(int i = coin.getIndex(); i < denominations.length; ++i) {
+		for(int i = Math.max(coin.getIndex(), 0); i < denominations.length; ++i) {
 			if(coinSum + denominations[i] <= value) {
 				result.add(new Coin(i, coin));
 			}
@@ -57,7 +61,7 @@ public class CoinProblemSolver implements CostFunction<Coin,AddableInteger>{
 	 * @return default root node value
 	 */
 	public Coin getDefaultRootNode() throws DefaultValuesUnsupportedException {
-		return new Coin(0);
+		return new Coin();
 	}
 	
 	/**
@@ -72,10 +76,10 @@ public class CoinProblemSolver implements CostFunction<Coin,AddableInteger>{
 	private int sum(Coin coin) {
 		int result = 0;
 		
-		do {
+		while(coin != null && coin.getIndex() >= 0) {
 			result += denominations[coin.getIndex()];
 			coin = coin.getParent();
-		} while(coin != null);
+		}
 		
 		return result;
 	}

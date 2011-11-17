@@ -9,11 +9,10 @@ public class Coin {
 	private int denominationIndex;
 	private Coin coin;
 	
-	public Coin(int denominationIndex) {
-		this.denominationIndex = denominationIndex;
+	public Coin() {
+		this.denominationIndex = -1;
 		this.coin = null;
 	}
-	
 	
 	public Coin(int denominationIndex, Coin coin) {
 		this.denominationIndex = denominationIndex;
@@ -26,6 +25,10 @@ public class Coin {
 	
 	public Coin getParent() {
 		return coin;
+	}
+	
+	public String toString() {
+		return "" + denominationIndex;
 	}
 	
 }
