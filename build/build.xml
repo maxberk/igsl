@@ -10,7 +10,7 @@
 	<fileset id="test.files.not.promoted" dir="test" includesfile="build/tests.not.promoted"/>
 	
 	<target name="doc.promoted">
-		<javadoc destdir="doc/javadoc">
+		<javadoc destdir="javadoc">
 			<sourcefiles>
 				<fileset refid="src.files.promoted"/>
 				<fileset refid="app.files.promoted"/>
@@ -20,7 +20,7 @@
 	</target>
 	
 	<target name="doc.all">
-		<javadoc destdir="doc/javadoc">
+		<javadoc destdir="javadoc">
 			<sourcefiles>
 				<fileset refid="src.files.promoted"/>
 				<fileset refid="app.files.promoted"/>
@@ -220,11 +220,12 @@
 	<target name="make.release" depends="compile.test.promoted,doc.promoted">
 		<mkdir dir="release"/>
 		<zip destfile="release/igsl-${os.arch}-win32.zip">
-			<fileset dir="./doc"/>
+			<fileset dir="." includes="javadoc/**"/>
 			<fileset dir="." includes="lib/**"/>
 			<fileset dir="." includes="bin/**"/>
-			<fileset refid="app.files.promoted"/>
-			<fileset refid="test.files.promoted"/>
+			<zipfileset refid="app.files.promoted" prefix="app"/>
+			<zipfileset refid="test.files.promoted" prefix="app"/>
+			<fileset dir="." file="RELEASE_NOTES.TXT"/>
 		</zip>
 	</target>
 	
@@ -235,7 +236,7 @@
 	</target>
 	
 	<target name="clean.javadoc">
-		<delete dir="doc/javadoc"/>
+		<delete dir="javadoc"/>
 	</target>
 	
 </project>
