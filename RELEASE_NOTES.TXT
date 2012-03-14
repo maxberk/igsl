@@ -1,0 +1,54 @@
+(C) Implicit Graph Search Library, 2009, 2010, 2011
+
+=== RELEASE NOTES, version 0.1.10 ===
+
+Release contains IGSL classes packed into igsl.jar which could be found in lib directory.
+Generated IGSL core interfaces' and traversal's implementations' documentation could be
+found in javadoc directory. Compiled IGSL demo applications for Sudoku, Eight Queens, Coin Problem,
+Knight's Tour and Traveling Salesman Person problem in planar statement along with tests using
+them are presented in bin directory. Java code for demo applications and tests is presented
+in app directory.
+
+To run the Traveling Salesman Person sample please try
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.tsp.TSPTest
+
+For Eight Queens problem:
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightqueens.EightQueensTest
+
+For Coin problem two solvers are available:
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.coinproblem.variant1.CoinProblemTest
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.coinproblem.variant2.CoinProblemTest
+
+For Knight's Tour problem:
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.knighttour.KnightTourTest
+
+For Sudoku problem:
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.sudoku.SudokuTest
+
+For Fifteens Puzzle solver:
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.fifteens.FifteensTest
+
+Samples' classes are already compiled into bin directory.
+
+What does the release contain?
+
+- A basic interfaces with TreeTraversal as a cornerstone of IGSL.
+- A depth-first traversal with/without cost implementations.
+- A best-first traversal along with A* implementation.
+- A recursive best-first tree traversal.
+- A breadth-first tree traversal.
+- A set of well-known direct and iterative algorithms, such as depth-first search, branch-and-bound
+technique, iterative deepening. Two classes - org.igsl.algorithm.Direct and org.igsl.algorithm.Iterative are
+the best as a start point to understand IGSL idea.
+- Techniques to enhance traversals' performance by memoizing basic interfaces' functions.
+- A traveling salesman person problem, coin problem and eight queens problem solvers as IGSL demos for searching
+on a graph with costs and constraint-satisfaction programming correspondingly. For traveling salesman problem
+a minimum 1-tree heuristics presented. For coin problem two typical IGSL programming techniques are demonstrated.
+- A Fifteens Puzzle solver as IGSL application utilizing A* implementation.
+- A Sudoku and Knight's Tour solvers as IGSL demos utilizing constraint-satisfaction programming techniques.
