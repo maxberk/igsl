@@ -103,6 +103,7 @@ public class TSPTest {
 		} catch(DefaultValuesUnsupportedException e) {
 		}
 		
+		/*
 		try {
 			// Initialize an instance of recursive best-first tree traversal
 			RecursiveBestFirstTreeTraversal<Route,AddableDouble> tr4 =
@@ -121,6 +122,7 @@ public class TSPTest {
 			System.out.println("cost is " + tr4.getCost());
 		} catch (DefaultValuesUnsupportedException e) {
 		}
+		*/
 		
 		try {
 			// Initialize an instance of breadth-first tree traversal
