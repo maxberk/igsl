@@ -1,15 +1,19 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010, 2011 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
  */
 package org.igsl.algorithm;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 import org.igsl.cost.Addable;
 import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 
 /**
  * Class containing direct graph search methods. All these methods return <code>void</code> and usually modify
@@ -45,7 +49,7 @@ public final class Direct {
 		while(!tr.isEmpty()) {
 			searchForward(tr);
 			if(!tr.isEmpty()) {
-				result.add(tr.getPath());
+				result.add(convertTo(tr.getPath()));
 			}
 			tr.backtrack();
 		}
@@ -80,16 +84,16 @@ public final class Direct {
 	 * @param <T> type of the node
 	 * @param <C> type of the cost
 	 * @param tr search tree traversal
-	 * @return an enumeration containing nodes on an optimal path from beginning to end
+	 * @return a <code>PathIterator</code> pointing to nodes on an optimal path from end to a root
 	 */
 	public static <T,C extends Addable<C> & Comparable<C>> Enumeration<T> branchAndBound(CostTreeTraversal<T,C> tr) {
 		searchForward(tr);
 		
 		if(tr.isEmpty()) {
-			return tr.getPath();
+			return convertTo(tr.getPath());
 		}
 		
-		Enumeration<T> result = tr.getPath();
+		PathIterator<T> result = tr.getPath();
 		C thresh = tr.getCost();
 		tr.backtrack();
 		
@@ -107,7 +111,7 @@ public final class Direct {
 			}
 		}
 		
-		return result;
+		return convertTo(result);
 	}
 	
 	/**
@@ -127,7 +131,7 @@ public final class Direct {
 			return result.iterator();
 		}
 		
-		Enumeration<T> path = tr.getPath();
+		Enumeration<T> path = convertTo(tr.getPath());
 		C thresh = tr.getCost();
 		result.add(path);
 		
@@ -138,7 +142,7 @@ public final class Direct {
 				int compareResult = tr.getCost().compareTo(thresh);
 				
 				if(compareResult < 0)	{
-					path = tr.getPath();
+					path = convertTo(tr.getPath());
 					thresh = tr.getCost();
 	
 					result.clear();
@@ -155,5 +159,15 @@ public final class Direct {
 		
 		return result.iterator();
 	}
-
+	
+	private static<T> Enumeration<T> convertTo(PathIterator<T> pi) {
+		Stack<T> result = new Stack<T>();
+		
+		while(pi.hasPreviousNode()) {
+			result.add(pi.previousNode());
+		}
+		
+		return result.elements();	
+	}
+	
 }

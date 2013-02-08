@@ -14,6 +14,8 @@ import org.igsl.app.tsp.TSPSolver;
 import org.igsl.app.tsp.TSPSolver.Waypoint;
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
+import org.igsl.traversal.TreeTraversal;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 import org.igsl.traversal.exponential.BreadthFirstTreeTraversal;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 import org.igsl.traversal.linear.RecursiveBestFirstTreeTraversal;
@@ -57,10 +59,10 @@ public class TSPTest {
 			// Find a solution without cost preference
 			Direct.searchForward(tr);
 			System.out.print("Admissable(non-optimal) path found while searching forward: ");
-			Enumeration<Route> path = tr.getPath();
-			while(path.hasMoreElements()) {
-				Route r = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			TreeTraversal.PathIterator<Route> path = tr.getPath();
+			while(path.hasPreviousNode()) {
+				Route r = path.previousNode();
+				String toPrint = (path.hasPreviousNode()) ? r.toString() + "->" : r.toString();
 				System.out.print(toPrint);
 			}
 			System.out.println();
@@ -132,11 +134,11 @@ public class TSPTest {
 			// Find an admissible solution with breadth-first tree traversal
 			Direct.searchForward(tr5);
 			
-			Enumeration<Route> path5 = tr5.getPath();
+			PathIterator<Route> path5 = tr5.getPath();
 			System.out.print("The path found with breadth-first search: ");
-			while(path5.hasMoreElements()) {
-				Route r = path5.nextElement();
-				String toPrint = (path5.hasMoreElements()) ? r.toString() + "->" : r.toString();
+			while(path5.hasPreviousNode()) {
+				Route r = path5.previousNode();
+				String toPrint = (path5.hasPreviousNode()) ? r.toString() + "->" : r.toString();
 				System.out.print(toPrint);
 			}
 			System.out.println();

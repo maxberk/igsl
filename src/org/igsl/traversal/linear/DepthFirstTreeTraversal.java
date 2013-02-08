@@ -5,7 +5,6 @@
 package org.igsl.traversal.linear;
 
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -119,21 +118,10 @@ public class DepthFirstTreeTraversal<T>
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public Enumeration<T> getPath() {
-		Stack<T> result = new Stack<T>();
-		
-		if(!nodes.isEmpty()) {
-			TreeNode n = nodes.peek();
-			
-			while(n != null) {
-				result.push(n.getValue());
-				n = n.getParent();
-			}
-		}
-		
-		return result.elements();
+	public PathIterator<T> getPath() {
+		return new PathIteratorImpl(nodes.peek());
 	}
-	
+
 	/**
 	 * Returns a list of nodes to be expanded.
 	 * Nodes are ordered by expansion priority in the tree:
@@ -231,5 +219,26 @@ public class DepthFirstTreeTraversal<T>
 		T getValue() { return value; }
 		TreeNode getParent() { return parent; }
 	}
+	
+	private class PathIteratorImpl implements PathIterator<T> {
+		
+		private TreeNode cursor;
+
+		public PathIteratorImpl(TreeNode node) {
+			this.cursor = node;
+		}
+
+		public boolean hasPreviousNode() {
+			return cursor != null;		
+		}
+
+		public T previousNode() {
+			T result = cursor.getValue();
+			cursor = cursor.getParent();
+			return result;
+		}
+		
+	}
+	
 
 }

@@ -152,19 +152,8 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	/**
 	 * Returns a list of node values from a root node to cursor including both
 	 */	
-	public Enumeration<T> getPath() {
-		Stack<T> result = new Stack<T>();
-		
-		if(!nodes.isEmpty()) {
-			TreeNode n = nodes.peek();
-			
-			while(n != null) {
-				result.push(n.getValue());
-				n = n.getParent();
-			}
-		}
-		
-		return result.elements();
+	public PathIterator<T> getPath() {
+		return new PathIteratorImpl(nodes.peek());
 	}
 	
 	/**
@@ -296,5 +285,25 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		C getCost() { return cost; }
 		TreeNode getParent() { return parent; }
 	}
+	
+	private class PathIteratorImpl implements PathIterator<T> {
+		
+		private TreeNode cursor;
+
+		public PathIteratorImpl(TreeNode node) {
+			this.cursor = node;
+		}
+
+		public boolean hasPreviousNode() {
+			return cursor != null;
+		}
+
+		public T previousNode() {
+			T result = cursor.getValue();
+			cursor = cursor.getParent();
+			return result;
+		}
+		
+	}	
 
 }
