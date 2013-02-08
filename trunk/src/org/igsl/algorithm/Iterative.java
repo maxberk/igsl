@@ -4,11 +4,13 @@
 package org.igsl.algorithm;
 
 import java.util.Enumeration;
+import java.util.Stack;
 
 import org.igsl.cost.Addable;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.CostTreeTraversal;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 
 /**
  * Class containing iterative graph search methods. Iterative schemas return a path found while a traversal
@@ -45,7 +47,7 @@ public final class Iterative {
 			}
 			
 			if(!tr1.isEmpty()) {
-				return tr1.getPath();
+				return convertTo(tr1.getPath());
 			}
 			
 			++depth;
@@ -88,7 +90,7 @@ public final class Iterative {
 			}
 			
 			if(!tr1.isEmpty()) {
-				return tr1.getPath();
+				return convertTo(tr1.getPath());
 			} else if(nextThresh == null){
 				return null;
 			}
@@ -96,5 +98,15 @@ public final class Iterative {
 			thresh = nextThresh;
 		} while(true);
 	}
+	
+	private static<T> Enumeration<T> convertTo(PathIterator<T> pi) {
+		Stack<T> result = new Stack<T>();
+		
+		while(pi.hasPreviousNode()) {
+			result.add(pi.previousNode());
+		}
+		
+		return result.elements();	
+	}	
 
 }

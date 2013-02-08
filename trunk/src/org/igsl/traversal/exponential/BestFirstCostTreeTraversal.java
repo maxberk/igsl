@@ -17,6 +17,7 @@ import org.igsl.functor.CostFunction;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.CostTreeTraversal;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 
 /**
  * Best-first search implementation for a problem graph with edge cost.
@@ -172,24 +173,29 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 	/**
 	 * Returns a list of node values from a root node to cursor including both
 	 */	
-	public Enumeration<T> getPath() {
-		Stack<T> result = new Stack<T>();
+	public PathIterator<T> getPath() {
+		TreeNode node = null;
 		
-		if(cursor != null) {
-			T t = cursor;
-			TreeNode n = opened.get(t);
+		Iterator<Entry<T,TreeNode>> i = opened.entrySet().iterator();
+		
+		if(i.hasNext()) {
+			Entry<T,TreeNode> e = i.next();
 			
-			do {
-				result.push(t);
+			node = e.getValue();
+			C minC = node.getCost();
+			
+			while(i.hasNext()) {
+				e = i.next();
 				
-				t = n.getParent();
-				if(t != null) {
-					n = closed.get(t);
+				C currC = e.getValue().getCost();
+				if(currC.compareTo(minC) == -1) {
+					node = e.getValue();
+					minC = currC;
 				}
-			} while(t != null);
-		}
+			}
+		}		
 		
-		return result.elements();
+		return new PathIteratorImpl(node);	
 	}
 
 	/**
@@ -291,14 +297,36 @@ public class BestFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>> 
 				this.parent.addChild(this.value);
 			}
 		}
-		
+
+		T getValue() { return value; }
 		C getCost() { return cost; }
 
 		void addChild(T child) { childs.add(child); }
 		void removeChild(T child) { childs.remove(child); }
 		
 		T getParent() { return (parent == null) ? null : parent.value; }
+		TreeNode getPrevious()  { return (parent == null) ? null : parent; }
 		boolean isLeaf() { return childs.isEmpty(); }
 	}
+	
+	private class PathIteratorImpl implements PathIterator<T> {
+		
+		private TreeNode node;
+
+		public PathIteratorImpl(TreeNode node) {
+			this.node = node;
+		}
+
+		public boolean hasPreviousNode() {
+			return node != null;
+		}
+
+		public T previousNode() {
+			T result = node.getValue();
+			node = node.getPrevious();
+			return result;
+		}
+		
+	}	
 	
 }

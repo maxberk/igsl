@@ -51,11 +51,10 @@ public interface TreeTraversal<T> {
 	public boolean isEmpty();
 
 	/**
-	 * Provides a path in a search tree from the cursor node to the root of a search tree.
-	 * For an empty search tree returns an empty enumeration.
-	 * @return - enumeration of nodes
+	 * Provides a path iterator in a search tree from the cursor node to the root of a search tree.
+	 * @return - <code>PathIterator</code>>
 	 */
-	public Enumeration<T> getPath();
+	public PathIterator<T> getPath();
 
 	/**
 	 * Returns a collection of frontier nodes in a search tree.
@@ -69,5 +68,22 @@ public interface TreeTraversal<T> {
 	 * @see #isEmpty()
 	 */
 	public int getDepth();
+	
+	/**
+	 * Interface to iterate over a current path in a search tree, namely from
+	 * a cursor leaf node to a root node.
+	 * 
+	 * @param <T> - type of value in a search tree
+	 */
+	public interface PathIterator<T> {
+		
+		/**
+		 * Means a node is not a search tree root
+		 * @return true - if it is not a root node, false - if it is a root node.
+		 */
+		public boolean hasPreviousNode();
+		
+		public T previousNode();
+	}
 
 }

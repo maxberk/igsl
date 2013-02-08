@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import org.igsl.algorithm.Direct;
 import org.igsl.app.sudoku.SudokuSolver;
 import org.igsl.app.sudoku.Table;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 import org.igsl.traversal.linear.DepthFirstTreeTraversal;
 
 public class SudokuTest {
@@ -105,10 +106,10 @@ public class SudokuTest {
 		
 		Direct.searchForward(tr);
 		if(!tr.isEmpty()) {
-			Enumeration<Table> path = tr.getPath();
-			while(path.hasMoreElements()) {
-				Table r = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toFullString();
+			PathIterator<Table> path = tr.getPath();
+			while(path.hasPreviousNode()) {
+				Table r = path.previousNode();
+				String toPrint = (path.hasPreviousNode()) ? r.toString() + "->" : r.toFullString();
 				System.out.print(toPrint);
 			}
 			System.out.println();

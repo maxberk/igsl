@@ -11,6 +11,7 @@ import org.igsl.app.fifteens.FifteensSolver;
 import org.igsl.app.fifteens.Position;
 import org.igsl.cost.AddableInteger;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 import org.igsl.traversal.exponential.AStarTreeTraversal;
 
 import static org.igsl.functor.memoize.Memoizer.*;
@@ -45,12 +46,12 @@ public class FifteensTest {
 				new AStarTreeTraversal<Position, AddableInteger>(new Position(initial), memoize(solver));
 			
 			Direct.searchForward(tr);
-			Enumeration<Position> path = tr.getPath();
+			PathIterator<Position> path = tr.getPath();
 	
 			System.out.print("Path found (from terminal to initial position): ");
-			while(path.hasMoreElements()) {
-				Position p = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? p.toString() + "->" : p.toString();
+			while(path.hasPreviousNode()) {
+				Position p = path.previousNode();
+				String toPrint = (path.hasPreviousNode()) ? p.toString() + "->" : p.toString();
 				System.out.print(toPrint);
 			}
 		} catch (DefaultValuesUnsupportedException e) {

@@ -15,6 +15,7 @@ import java.util.Stack;
 import org.igsl.functor.NodeGenerator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.TreeTraversal;
+import org.igsl.traversal.TreeTraversal.PathIterator;
 
 /**
  * Breadth-first search implementation for a problem graph without edge cost.
@@ -102,19 +103,8 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public Enumeration<T> getPath() {
-		Stack<T> result = new Stack<T>();
-		
-		if(!nodes.isEmpty()) {
-			TreeNode n = nodes.peek();
-			
-			do {
-				result.push(n.getValue());
-				n = n.getParent();
-			} while(n != null);
-		}
-		
-		return result.elements();
+	public PathIterator<T> getPath() {
+		return new PathIteratorImpl(nodes.peek());
 	}
 	
 	/**
@@ -226,4 +216,24 @@ public class BreadthFirstTreeTraversal<T> implements TreeTraversal<T> {
 			}
 		}
 	}
+	
+	private class PathIteratorImpl implements PathIterator<T> {
+		
+		private TreeNode cursor;
+
+		public PathIteratorImpl(TreeNode node) {
+			this.cursor = node;
+		}
+
+		public boolean hasPreviousNode() {
+			return cursor != null;
+		}
+
+		public T previousNode() {
+			T result = cursor.getValue();
+			cursor = cursor.getParent();
+			return result;
+		}
+		
+	}		
 }

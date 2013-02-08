@@ -5,11 +5,9 @@
 package org.igsl.traversal.exponential;
 
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 import java.util.Vector;
 import java.util.Map.Entry;
 
@@ -182,25 +180,29 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 	/**
 	 * Returns a list of node values from a root node to cursor including both
 	 */	
-	public Enumeration<T> getPath() {
-		Stack<T> result = new Stack<T>();
+	public PathIterator<T> getPath() {
+		TreeNode node = null;
 		
-		if(cursor != null) {
-			T t = cursor;
-			TreeNode n = opened.get(t);
+		Iterator<Entry<T,TreeNode>> i = opened.entrySet().iterator();
+		
+		if(i.hasNext()) {
+			Entry<T,TreeNode> e = i.next();
 			
-			do {
-				result.push(t);
+			node = e.getValue();
+			C minC = node.getCost();
+			
+			while(i.hasNext()) {
+				e = i.next();
 				
-				t = n.getParent();
-				if(t != null) {
-					n = closed.get(t);
+				C currC = e.getValue().getCost();
+				if(currC.compareTo(minC) == -1) {
+					node = e.getValue();
+					minC = currC;
 				}
-			} while(t != null);
-			
-		}
+			}
+		}		
 		
-		return result.elements();
+		return new PathIteratorImpl(node);	
 	}
 
 	/**
@@ -321,7 +323,8 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 				this.parent.addChild(this.value);
 			}
 		}
-		
+
+		T getValue() { return value; }
 		C getCost() { return cost; }
 		C getEstimation() { return estimation; }
 		C getTotalCost() { return cost.addTo(estimation); }
@@ -332,7 +335,28 @@ public class AStarTreeTraversal<T,C extends Addable<C> & Comparable<C>> implemen
 		void removeChilds() { childs.clear(); }
 		
 		T getParent() { return (parent == null) ? null : parent.value; }
+		TreeNode getPrevious()  { return (parent == null) ? null : parent; }
 		boolean isLeaf() { return childs.isEmpty(); }
 	}
+	
+	private class PathIteratorImpl implements PathIterator<T> {
+		
+		private TreeNode node;
+
+		public PathIteratorImpl(TreeNode node) {
+			this.node = node;
+		}
+
+		public boolean hasPreviousNode() {
+			return node != null;
+		}
+
+		public T previousNode() {
+			T result = node.getValue();
+			node = node.getPrevious();
+			return result;
+		}
+		
+	}	
 	
 }
