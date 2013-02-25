@@ -1,4 +1,4 @@
-<!-- Implicit Graph Search Library(C), 2009, 2010, 2011 -->
+<!-- Implicit Graph Search Library(C), 2009, 2010, 2011, 2013 -->
 
 <project name="igsl" default="doc.promoted" basedir="..">
 	<fileset id="src.files.promoted" dir="src" includesfile="build/classes.promoted"/>
