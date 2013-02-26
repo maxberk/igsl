@@ -1,21 +1,20 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010, 2011 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
  */
+
 package org.igsl.traversal.linear;
 
-import java.util.Collection;
-import java.util.Enumeration;
+import java.util.EmptyStackException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Stack;
 
-import org.igsl.algorithm.auxiliary.Pair;
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
-import org.igsl.functor.NodeGenerator;
+import org.igsl.functor.PathIterator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
+import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.Splitable;
@@ -83,29 +82,35 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	 * If the result of node expansion is empty list of nodes then
 	 * searches for other nodes in the tree performing pruning procedure.
 	 */
-	public void moveForward() {
-		if(isEmpty()) return;
+	public boolean moveForward() throws EmptyTraversalException {
+		TreeNode n = null;
 		
-		TreeNode n = nodes.peek();
-		List<T> result = function.expand(n.getValue());
+		try {
+			n = nodes.peek();
+		} catch (EmptyStackException ese) {
+			throw new EmptyTraversalException();
+		}		
 		
-		if(result == null || result.isEmpty()) {
-			TreeNode parent = null;
-			
-			do {
-				n = nodes.pop();
-				parent = n.getParent();
-			} while(parent != null && parent == nodes.peek());
+		List<T> result = function.expand(getPathIterator());
+		
+		if(result == null) {
+			return false;
 		} else {
-			ListIterator<T> li = result.listIterator(result.size());
+			if(result.isEmpty()) {
+				prune();
+			} else {
+				ListIterator<T> li = result.listIterator(result.size());
 			
-			do {
-				T t = li.previous();
+				do {
+					T t = li.previous();
 				
-				nodes.push(new TreeNode(
-					t, n.getCost().addTo(function.getTransitionCost(n.getValue(),t)), n
-				));
-			} while(li.hasPrevious());
+					nodes.push(new TreeNode(
+							t, n.getCost().addTo(function.getTransitionCost(n.getValue(),t)), n
+							));
+				} while(li.hasPrevious());
+			}
+			
+			return true;
 		}
 	}
 
@@ -113,21 +118,13 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	 * Simply prunes the cursor node and its predecessors if necessary
 	 * till a ready-for-expansion node is found.
 	 */	
-	public void backtrack() {
-		if(isEmpty()) return;
-		
-		TreeNode parent = null;
-		
-		do {
-			TreeNode n = nodes.pop();
-			parent = n.getParent();
-		} while(parent != null && parent == nodes.peek());
+	public void backtrack() throws EmptyTraversalException {
+		try {
+			prune();
+		} catch(EmptyStackException ese) {
+			throw new EmptyTraversalException();
+		}
 	}
-	
-	/**
-	 * Returns value for cursor node, null - if traversal is empty
-	 */
-	public T getCursor() { return isEmpty() ? null : nodes.peek().getValue(); }
 	
 	/**
 	 * Returns cost for cursor node, null - if traversal is empty
@@ -135,74 +132,24 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	public C getCost() { return isEmpty() ? null : nodes.peek().getCost(); }
 
 	/**
-	 * Returns a node generator functor.
-	 */
-	public NodeGenerator<T> getNodeGenerator() { return function; }
-
-	/**
-	 * Returns a cost function functor.
-	 */
-	public CostFunction<T,C> getCostFunction() { return function; }
-
-	/**
 	 * Check if traversal has no nodes to expand
 	 */
 	public boolean isEmpty() { return nodes.empty(); }
 	
 	/**
-	 * Returns a list of node values from a root node to cursor including both
-	 */	
-	public PathIterator<T> getPath() {
-		return new PathIteratorImpl(nodes.peek());
+	 * Returns a list of traversal from a root node to cursor including both
+	 */
+	public PathIterator<T> getPathIterator() {
+		return pathIterator.reset(nodes.peek());
 	}
 	
 	/**
-	 * Returns a list of nodes to be expanded.
-	 * Nodes are ordered by expansion priority in the tree:
-	 * from a cursor to a least "perspective" node
+	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public Collection<T> getLeafs() {
-		ArrayList<T> leafs = new ArrayList<T>();		
-		ArrayList<TreeNode> parents = new ArrayList<TreeNode>();		
-		
-		if(!nodes.isEmpty()) {
-			ListIterator<TreeNode> i = nodes.listIterator(nodes.size());
-			while(i.hasPrevious()) {
-				TreeNode n = i.previous();
-				
-				if(!parents.contains(n)) {
-					leafs.add(n.getValue());
-				}
-	
-				TreeNode parent = n.getParent();
-				if((parent != null) && (!parents.contains(parent))) {
-					parents.add(parent);
-				}
-			}
-		}
-		
-		return leafs;
+	public PathIterator<T> getPath() {
+		return new NodeIteratorImpl(nodes.peek());
 	}
 
-	/**
-	 * Depth is a number of edges from a root node to cursor.
-	 */
-	public int getDepth() {
-		if(isEmpty()) {
-			return -1;
-		}
-		
-		int result = 0;
-		
-		TreeNode n = nodes.peek();
-		while(n.getParent() != null) {
-			++result;
-			n = n.getParent();
-		}
-		
-		return result;
-	}
-	
 	/**
 	 * Implementation details of Copyable interface.
 	 * Returns a DepthFirstCostTreeTraversal with a copy of a cursor node
@@ -235,35 +182,32 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	 * Implementation details of Splittable interface.
 	 * Returns a DepthFirstCostTreeTraversal with a copy of a cursor node
 	 */
-	public DepthFirstCostTreeTraversal<T,C> split() {
-		DepthFirstCostTreeTraversal<T,C> result = 
-			new DepthFirstCostTreeTraversal<T,C>(getCursor(), getCost(), function);
-		backtrack();
-		return result;
+	public DepthFirstCostTreeTraversal<T,C> split() throws EmptyTraversalException {
+		try {
+			DepthFirstCostTreeTraversal<T,C> result = 
+				new DepthFirstCostTreeTraversal<T,C>(nodes.peek().getValue(), getCost(), function);
+			
+			backtrack();
+			return result;
+		} catch(EmptyStackException ese) {
+			throw new EmptyTraversalException();
+		}
 	}
 	
-	/**
-	 * Returns a list of nodes packed as <code>Pair</code>s from a root to a cursor node
-	 */
-	public Enumeration<Pair<T,C>> getPathWithCosts() {
-		Stack<Pair<T,C>> result = new Stack<Pair<T,C>>();
-		
-		if(!nodes.isEmpty()) {
-			TreeNode n = nodes.peek();
-			
-			while(n != null) {
-				result.push(new Pair<T,C>(n.getValue(),n.getCost()));
-				n = n.getParent();
-			}
-		}
-		
-		return result.elements();
-	}
-
 	private DepthFirstCostTreeTraversal() {}
+	
+	private void prune() {
+		TreeNode parent = null;
+		
+		do {
+			TreeNode n = nodes.pop();
+			parent = n.getParent();
+		} while(parent != null && parent == nodes.peek());
+	}
 	
 	protected Stack<TreeNode> nodes = new Stack<TreeNode>();
 	protected CostFunction<T,C> function;
+	private NodeIteratorImpl pathIterator = new NodeIteratorImpl(null);
 	
 	class TreeNode {
 		T value;
@@ -286,11 +230,11 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		TreeNode getParent() { return parent; }
 	}
 	
-	private class PathIteratorImpl implements PathIterator<T> {
+	private class NodeIteratorImpl implements PathIterator<T> {
 		
 		private TreeNode cursor;
 
-		public PathIteratorImpl(TreeNode node) {
+		public NodeIteratorImpl(TreeNode node) {
 			this.cursor = node;
 		}
 
@@ -304,6 +248,11 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 			return result;
 		}
 		
-	}	
+		private PathIterator reset(TreeNode node) {
+			this.cursor = node;
+			return this;
+		}
+
+	}
 
 }

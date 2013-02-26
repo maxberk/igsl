@@ -1,12 +1,11 @@
 package org.igsl.traversal;
 
-import java.util.Collection;
-import java.util.Enumeration;
-
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2012
  */
-import org.igsl.functor.NodeGenerator;
+
+import org.igsl.functor.PathIterator;
+import org.igsl.functor.exception.EmptyTraversalException;
 
 /**
  * Interface TreeTravesal represents a search tree as a set of inner nodes, which are already expanded
@@ -21,29 +20,17 @@ public interface TreeTraversal<T> {
 	/**
 	 * Calls NodeGenerator.expand() on a node from front set and accumulates node's children into the search
 	 * tree structure. If there are no children, searches for a new node to be expanded performing tree pruning
-	 * for nodes without successors. For an empty tree exits without any processing.
+	 * for nodes without successors. For an empty tree exits without any processing. If a terminal node is expanded,
+	 * returns false not performing any changes in a search tree, otherwise - true.
 	 */
-	public void moveForward();
+	public boolean moveForward() throws EmptyTraversalException;
 	
 	/**
 	 * Performs tree pruning for a best node in the front set and searches for a new node.
-	 * For an empty tree exits without any processing.
+	 * For an empty tree exits without any processing with a false result, otherwise returns true.
 	 */
-	public void backtrack();
+	public void backtrack() throws EmptyTraversalException;
 
-	/**
-	 * Returns a value of the node to be expanded next
-	 * @return - cursor value
-	 */
-	public T getCursor();
-
-	/**
-	 * Returns a NodeGenerator function
-	 * @return - reference to a <code>NodeGenerator</code> instance
-	 * @see NodeGenerator
-	 */
-	public NodeGenerator<T> getNodeGenerator();
-	
 	/**
 	 * Check if there are nodes to expand.
 	 * @return true - if there are no front nodes, false - otherwise.
@@ -51,39 +38,19 @@ public interface TreeTraversal<T> {
 	public boolean isEmpty();
 
 	/**
-	 * Provides a path iterator in a search tree from the cursor node to the root of a search tree.
-	 * @return - <code>PathIterator</code>>
+	 * Provides a path in a search tree from the cursor node to the root of a search tree.
+	 * For an empty search tree returns an empty enumeration. Path iterator returned is
+	 * a singleton in compare with <code>getPath</code> result
+	 * @return -  node iterator
 	 */
-	public PathIterator<T> getPath();
-
-	/**
-	 * Returns a collection of frontier nodes in a search tree.
-	 * @return - <code>Collection</code> of node values
-	 */
-	public Collection<T> getLeafs();
-
-	/**
-	 * Returns a number of edges in a search tree from a root node to a cursor.
-	 * @return - int value, -1 for an empty traversal
-	 * @see #isEmpty()
-	 */
-	public int getDepth();
+	public PathIterator<T> getPathIterator();
 	
 	/**
-	 * Interface to iterate over a current path in a search tree, namely from
-	 * a cursor leaf node to a root node.
-	 * 
-	 * @param <T> - type of value in a search tree
+	 * Provides a path in a search tree from the cursor node to the root of a search tree.
+	 * For an empty search tree returns an empty enumeration.
+	 * @return -  node iterator
 	 */
-	public interface PathIterator<T> {
-		
-		/**
-		 * Means a node is not a search tree root
-		 * @return true - if it is not a root node, false - if it is a root node.
-		 */
-		public boolean hasPreviousNode();
-		
-		public T previousNode();
-	}
-
+	public PathIterator<T> getPath();
+	
+	
 }
