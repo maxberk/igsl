@@ -1,9 +1,9 @@
 /**
- * Implicit Graph Search Library(C), 2009 
+ * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
  */
 package org.igsl.traversal;
 
-import org.igsl.functor.CostFunction;
+import org.igsl.traversal.TreeTraversal;
 
 /**
  * Interface CostTreeTravesal represents a traversal that accumulates cost while traversing the search tree.
@@ -13,18 +13,10 @@ import org.igsl.functor.CostFunction;
 public interface CostTreeTraversal<T,C> extends TreeTraversal<T> {
 
 	/**
-	 * A cost of the cursor
+	 * An accumulated cost of the cursor node in a serach tree
 	 * 
 	 * @return - cost of the cursor 
 	 */
 	public C getCost();
 	
-	/**
-	 * Returns a CostFunction function
-	 * 
-	 * @return - reference to a <code>CostFunction</code> instance
-	 * @see CostFunction
-	 */
-	public CostFunction<T,C> getCostFunction();
-
 }

@@ -15,7 +15,7 @@ public class KnightTourSolver implements NodeGenerator<Position> {
 	/**
 	 * Constructor for Knight Tour solver
 	 */
-	public KnightTourSolver(int dim) {
+	public  KnightTourSolver(int dim) {
 		this.dim = dim;
 	}
 	

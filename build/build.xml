@@ -1,4 +1,4 @@
-<!-- Implicit Graph Search Library(C), 2009, 2010, 2011, 2013 -->
+<!-- Implicit Graph Search Library(C), 2009, 2010, 2011 -->
 
 <project name="igsl" default="doc.promoted" basedir="..">
 	<fileset id="src.files.promoted" dir="src" includesfile="build/classes.promoted"/>
@@ -81,7 +81,7 @@
 	
 	<target name="compile.test.promoted" depends="make.jar.promoted">
 		<mkdir dir="temp"/>
-		<copy todir="temp">
+		<copy todir="temp" verbose="true">
 			<fileset refid="app.files.promoted"/>
 			<fileset refid="test.files.promoted"/>
 		</copy>
@@ -117,7 +117,7 @@
 		<delete dir="temp"/>
 	</target>
 	
-	<target name="run.test.promoted" depends="compile.test.promoted">
+	<!--target name="run.test.promoted" depends="compile.test.promoted">
 		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
 			<classpath>
 				<pathelement path="bin"/>
@@ -162,7 +162,17 @@
 			</classpath>
 		</java>
 		<delete dir="bin"/>
-	</target>
+	</target-->
+	
+	<target name="run.test.promoted" depends="compile.test.promoted">
+		<java fork="true" classname="org.igsl.test.coinproblem.variant3.CoinProblemTest">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+		<delete dir="bin"/>
+	</target>	
 	
 	<target name="run.test.all" depends="compile.test.all">
 		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">

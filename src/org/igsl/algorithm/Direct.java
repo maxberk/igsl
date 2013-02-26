@@ -1,19 +1,13 @@
 /**
  * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
  */
+
 package org.igsl.algorithm;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
-
 import org.igsl.cost.Addable;
+import org.igsl.functor.PathIterator;
 import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
-import org.igsl.traversal.TreeTraversal.PathIterator;
 
 /**
  * Class containing direct graph search methods. All these methods return <code>void</code> and usually modify
@@ -31,32 +25,9 @@ public final class Direct {
 	 * @param tr search tree traversal
 	 */
 	public static <T> void searchForward(TreeTraversal<T> tr) {
-		while(!tr.isEmpty() && !tr.getNodeGenerator().isGoal(tr.getCursor())) {
-			tr.moveForward();
-		}
+		while(!tr.isEmpty() && tr.moveForward());
 	}
-
-	/**
-	 * Search for all possible solutions based on <code>searchForward</code> call.
-	 * 
-	 * @param <T> type of the node
-	 * @param tr search tree traversal
-	 * @return an iterator to a list of solutions
-	 */
-	public static <T> Iterator<Enumeration<T>> findAllSolutions(TreeTraversal<T> tr) {
-		ArrayList<Enumeration<T>> result = new ArrayList<Enumeration<T>>();
-		
-		while(!tr.isEmpty()) {
-			searchForward(tr);
-			if(!tr.isEmpty()) {
-				result.add(convertTo(tr.getPath()));
-			}
-			tr.backtrack();
-		}
-		
-		return result.iterator();
-	}
-
+	
 	/**
 	 * Cost threshold algorithms - the solution found should not exceed a predefined cost value. Either founds
 	 * the first matching solution and exits or the traversal becomes empty on exhausting the search space.
@@ -70,10 +41,8 @@ public final class Direct {
 		while(!tr.isEmpty()) {
 			if( tr.getCost().compareTo(thresh) > 0) {
 				tr.backtrack();
-			} else if(tr.getNodeGenerator().isGoal(tr.getCursor())) {
+			} else if(!tr.moveForward()) {
 				return;
-			} else {
-				tr.moveForward();
 			}
 		}
 	}
@@ -84,90 +53,33 @@ public final class Direct {
 	 * @param <T> type of the node
 	 * @param <C> type of the cost
 	 * @param tr search tree traversal
-	 * @return a <code>PathIterator</code> pointing to nodes on an optimal path from end to a root
+	 * @return an enumeration containing nodes on an optimal path from beginning to end
 	 */
-	public static <T,C extends Addable<C> & Comparable<C>> Enumeration<T> branchAndBound(CostTreeTraversal<T,C> tr) {
+	public static <T,C extends Addable<C> & Comparable<C>> PathIterator<T> branchAndBound(CostTreeTraversal<T,C> tr) {
 		searchForward(tr);
 		
+		PathIterator<T> result = tr.getPath();
+		
 		if(tr.isEmpty()) {
-			return convertTo(tr.getPath());
+			return result;
 		}
 		
-		PathIterator<T> result = tr.getPath();
 		C thresh = tr.getCost();
 		tr.backtrack();
 		
 		while(!tr.isEmpty()) {
 			int compareResult = tr.getCost().compareTo(thresh);
 			
-			if(tr.getNodeGenerator().isGoal(tr.getCursor())	&& (compareResult < 0))	{
+			if(!tr.moveForward() && compareResult < 0)	{
 				result = tr.getPath();
 				thresh = tr.getCost();
 				tr.backtrack();
 			} else if(compareResult >= 0) {
 				tr.backtrack();
-			} else {
-				tr.moveForward();
 			}
 		}
 		
-		return convertTo(result);
+		return result;
 	}
-	
-	/**
-	 * Search for all optimal solutions based on <code>branchAndBound</code> techniques.
-	 * 
-	 * @param <T> type of the node
-	 * @param <C> type of the cost
-	 * @param tr search tree traversal
-	 * @return an iterator to a list of solutions
-	 */
-	public static <T,C extends Addable<C> & Comparable<C>> Iterator<Enumeration<T>> findAllSolutions(CostTreeTraversal<T,C> tr) {
-		ArrayList<Enumeration<T>> result = new ArrayList<Enumeration<T>>();
-		
-		searchForward(tr);
-		
-		if(tr.isEmpty()) {
-			return result.iterator();
-		}
-		
-		Enumeration<T> path = convertTo(tr.getPath());
-		C thresh = tr.getCost();
-		result.add(path);
-		
-		tr.backtrack();
-		
-		while(!tr.isEmpty()) {
-			if(tr.getNodeGenerator().isGoal(tr.getCursor())) {
-				int compareResult = tr.getCost().compareTo(thresh);
-				
-				if(compareResult < 0)	{
-					path = convertTo(tr.getPath());
-					thresh = tr.getCost();
-	
-					result.clear();
-					result.add(path);
-				} else if(compareResult == 0) {
-					result.add(path);
-				}
-				
-				tr.backtrack();
-			} else {
-				tr.moveForward();
-			}
-		}
-		
-		return result.iterator();
-	}
-	
-	private static<T> Enumeration<T> convertTo(PathIterator<T> pi) {
-		Stack<T> result = new Stack<T>();
-		
-		while(pi.hasPreviousNode()) {
-			result.add(pi.previousNode());
-		}
-		
-		return result.elements();	
-	}
-	
+
 }
