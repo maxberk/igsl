@@ -2,7 +2,7 @@
  * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
  */
 
-package org.igsl.app.tsp;
+package org.igsl.app.hamiltonianpath;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +20,7 @@ import org.igsl.functor.exception.DefaultValuesUnsupportedException;
  * cost instances in the template initialization.
  *
  */
-public class TSPSolver implements FiniteSetNodeGenerator<String>
+public class HamiltonianPathSolver implements FiniteSetNodeGenerator<String>
 {
 	private HashMap<String, Waypoint> waypoints = new HashMap<String, Waypoint>();
 
@@ -39,9 +39,17 @@ public class TSPSolver implements FiniteSetNodeGenerator<String>
 	 * !!!
 	 */
 	public String[] getAllValues() {
+		String[] result = new String[waypoints.size()];	
+		int i = 0;
+	
 		Set<String> set = waypoints.keySet();
 		
-		return null; // TODO
+		Iterator<String> iterator = set.iterator();
+		while(iterator.hasNext()) {
+			result[i++] = iterator.next();
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -51,15 +59,22 @@ public class TSPSolver implements FiniteSetNodeGenerator<String>
 	 * 
 	 */
 	public boolean isValidTransition(String newName, PathIterator<String> iterator) {
-		Waypoint w11 = waypoints.get(newName);
-		
+		if(!iterator.hasPreviousNode()) {
+			return true;
+		}	
 		String lastName = iterator.previousNode();
+		
+		if(!iterator.hasPreviousNode()) {
+			return true;
+		}	
+		String startName = iterator.previousNode();
+
+		Waypoint w11 = waypoints.get(newName);
 		Waypoint w12 = waypoints.get(lastName);
 		
 		double dx1 = w12.x - w11.x;
 		double dy1 = w12.y - w11.y;
 		
-		String startName = iterator.previousNode();
 		while(iterator.hasPreviousNode()) {
 			Waypoint w21 = waypoints.get(startName);
 			String finishName = iterator.previousNode();
