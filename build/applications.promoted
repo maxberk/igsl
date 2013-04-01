@@ -1,2 +1,3 @@
 org/igsl/app/coinproblem/variant3/Denomination.java
 org/igsl/app/coinproblem/variant3/CoinProblemSolver.java
+org/igsl/app/hamiltonianpath/HamiltonianPathSolver.java

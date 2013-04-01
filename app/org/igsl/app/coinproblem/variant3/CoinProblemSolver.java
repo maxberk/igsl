@@ -36,8 +36,6 @@ public class CoinProblemSolver implements CostFunction<Denomination,AddableInteg
 	}
 	
 	public List<Denomination> expand(PathIterator<Denomination> path) {
-		LinkedList<Denomination> result = new LinkedList<Denomination>();
-
 		if(path.hasPreviousNode()) {
 			Denomination lastDenom = path.previousNode();
 			int coinSum = 0;
@@ -57,6 +55,8 @@ public class CoinProblemSolver implements CostFunction<Denomination,AddableInteg
 			if(coinSum == value) {
 				return null; // null result			
 			}
+
+			LinkedList<Denomination> result = new LinkedList<Denomination>();
 			
 			int nextIdx = lastDenom.getIndex() + 1;
 			if(nextIdx < denominations.length) {
@@ -76,20 +76,6 @@ public class CoinProblemSolver implements CostFunction<Denomination,AddableInteg
 	
 	public AddableInteger getTransitionCost(Denomination from, Denomination to) {
 		return new AddableInteger(to.getAmount());
-	}
-	
-	public boolean isGoal(PathIterator<Denomination> path) {
-		int coinSum = 0;
-		
-		while(path.hasPreviousNode()) {
-			Denomination d = path.previousNode();
-			
-			if(d.getIndex() >= 0) {
-				coinSum += denominations[d.getIndex()] * d.getAmount();
-			}
-		}
-		
-		return (coinSum == value);
 	}
 	
 	/**

@@ -3,10 +3,13 @@ org/igsl/traversal/CostTreeTraversal.java
 org/igsl/traversal/Copyable.java
 org/igsl/traversal/Splitable.java
 org/igsl/traversal/linear/DepthFirstTreeTraversal.java
+org/igsl/traversal/linear/finiteset/DepthFirstTreeTraversal.java
 org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java
 org/igsl/functor/PathIterator.java
 org/igsl/functor/NodeGenerator.java
+org/igsl/functor/FiniteSetNodeGenerator.java
 org/igsl/functor/CostFunction.java
+org/igsl/functor/FiniteSetCostFunction.java
 org/igsl/functor/HeuristicFunction.java
 org/igsl/functor/exception/DefaultValuesUnsupportedException.java
 org/igsl/functor/exception/EmptyTraversalException.java
