@@ -6,6 +6,7 @@ org/igsl/traversal/linear/DepthFirstTreeTraversal.java
 org/igsl/traversal/linear/finiteset/DepthFirstTreeTraversal.java
 org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java
 org/igsl/functor/PathIterator.java
+org/igsl/functor/FiniteSetPathIterator.java
 org/igsl/functor/NodeGenerator.java
 org/igsl/functor/FiniteSetNodeGenerator.java
 org/igsl/functor/CostFunction.java
