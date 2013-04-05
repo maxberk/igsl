@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.FiniteSetNodeGenerator;
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.FiniteSetPathIterator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
@@ -58,7 +58,7 @@ public class HamiltonianPathSolver implements FiniteSetNodeGenerator<String>
 	 * waypoints.
 	 * 
 	 */
-	public boolean isValidTransition(String newName, PathIterator<String> iterator) {
+	public boolean isValidTransition(String newName, FiniteSetPathIterator<String> iterator) {
 		if(!iterator.hasPreviousNode()) {
 			return true;
 		}	

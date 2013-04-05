@@ -47,6 +47,8 @@ public class HamiltonianPathTest {
 
 		// Find a solution without cost preference
 		Direct.searchForward(tr);
+		tr.backtrack();
+		Direct.searchForward(tr);
 		System.out.print("Admissable(non-optimal) path found while searching forward: ");
 		PathIterator<String> path = tr.getPath();
 		while(path.hasPreviousNode()) {
