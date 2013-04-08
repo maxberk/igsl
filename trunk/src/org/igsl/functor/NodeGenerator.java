@@ -23,7 +23,7 @@ public interface NodeGenerator<T> {
 	 * @param path path of nodes in a search tree ordered from the root
 	 * @return list of new nodes' values in a search tree
 	 */
-	List<T> expand(PathIterator<T> iterator);
+	List<T> expand(BackwardPathIterator<T> iterator);
 	
 	/**
 	 * Defines root(start) node value 

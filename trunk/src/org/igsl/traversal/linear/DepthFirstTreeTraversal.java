@@ -15,8 +15,7 @@ import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.Copyable;
 import org.igsl.traversal.TreeTraversal;
-import org.igsl.functor.PathIterator;
-import org.w3c.dom.traversal.NodeIterator;
+import org.igsl.functor.BackwardPathIterator;
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
@@ -132,14 +131,14 @@ public class DepthFirstTreeTraversal<T>
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public PathIterator<T> getPathIterator() {
+	public BackwardPathIterator<T> getPathIterator() {
 		return pathIterator.reset(nodes.peek());
 	}
 	
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public PathIterator<T> getPath() {
+	public BackwardPathIterator<T> getPath() {
 		return new PathIteratorImpl(nodes.peek());
 	}
 	
@@ -194,7 +193,7 @@ public class DepthFirstTreeTraversal<T>
 		TreeNode getParent() { return parent; }
 	}
 	
-	private class PathIteratorImpl implements PathIterator<T> {
+	private class PathIteratorImpl implements BackwardPathIterator<T> {
 		
 		private TreeNode cursor;
 
@@ -212,7 +211,7 @@ public class DepthFirstTreeTraversal<T>
 			return result;
 		}
 		
-		private PathIterator reset(TreeNode node) {
+		private BackwardPathIterator reset(TreeNode node) {
 			this.cursor = node;
 			return this;
 		}

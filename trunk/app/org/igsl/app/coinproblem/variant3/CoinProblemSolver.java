@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import org.igsl.cost.AddableInteger;
 import org.igsl.functor.CostFunction;
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
@@ -35,7 +35,7 @@ public class CoinProblemSolver implements CostFunction<Denomination,AddableInteg
 		return denominations[index];
 	}
 	
-	public List<Denomination> expand(PathIterator<Denomination> path) {
+	public List<Denomination> expand(BackwardPathIterator<Denomination> path) {
 		if(path.hasPreviousNode()) {
 			Denomination lastDenom = path.previousNode();
 			int coinSum = 0;

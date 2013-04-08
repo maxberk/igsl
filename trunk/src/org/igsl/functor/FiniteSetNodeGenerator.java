@@ -29,6 +29,6 @@ public interface FiniteSetNodeGenerator<T> {
 	 * 
 	 * @return default start node value
 	 */
-	boolean isValidTransition(T value, FiniteSetPathIterator<T> iterator);
+	boolean isValidTransition(T value, BackwardPathIterator<T> iterator);
 
 }

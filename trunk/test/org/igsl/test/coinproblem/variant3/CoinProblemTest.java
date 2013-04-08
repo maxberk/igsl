@@ -8,7 +8,7 @@ import org.igsl.algorithm.Direct;
 import org.igsl.app.coinproblem.variant3.CoinProblemSolver;
 import org.igsl.app.coinproblem.variant3.Denomination;
 import org.igsl.cost.AddableInteger;
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
 
@@ -40,7 +40,7 @@ public class CoinProblemTest {
 			long finishTime2 = System.currentTimeMillis();
 			System.out.println("Work time for greedy search = " + (finishTime2 - startTime2));
 
-			PathIterator<Denomination> path2 = tr2.getPath();
+			BackwardPathIterator<Denomination> path2 = tr2.getPath();
 				
 			int amount2 = 0;
 			while(path2.hasPreviousNode()) {
@@ -58,7 +58,7 @@ public class CoinProblemTest {
 				new DepthFirstCostTreeTraversal<Denomination, AddableInteger>(solver);
 
 			long startTime = System.currentTimeMillis();
-			PathIterator<Denomination> path = Direct.branchAndBound(tr);
+			BackwardPathIterator<Denomination> path = Direct.branchAndBound(tr);
 			long finishTime = System.currentTimeMillis();
 			System.out.println("Work time for optimal search is = " + (finishTime - startTime));
 			
