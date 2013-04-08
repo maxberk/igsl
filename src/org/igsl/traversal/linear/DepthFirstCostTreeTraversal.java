@@ -12,7 +12,7 @@ import java.util.Stack;
 
 import org.igsl.cost.Addable;
 import org.igsl.functor.CostFunction;
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.Copyable;
@@ -139,14 +139,14 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public PathIterator<T> getPathIterator() {
+	public BackwardPathIterator<T> getPathIterator() {
 		return pathIterator.reset(nodes.peek());
 	}
 	
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public PathIterator<T> getPath() {
+	public BackwardPathIterator<T> getPath() {
 		return new NodeIteratorImpl(nodes.peek());
 	}
 
@@ -230,7 +230,7 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 		TreeNode getParent() { return parent; }
 	}
 	
-	private class NodeIteratorImpl implements PathIterator<T> {
+	private class NodeIteratorImpl implements BackwardPathIterator<T> {
 		
 		private TreeNode cursor;
 
@@ -248,7 +248,7 @@ public class DepthFirstCostTreeTraversal<T,C extends Addable<C> & Comparable<C>>
 			return result;
 		}
 		
-		private PathIterator reset(TreeNode node) {
+		private BackwardPathIterator reset(TreeNode node) {
 			this.cursor = node;
 			return this;
 		}

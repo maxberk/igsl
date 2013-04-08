@@ -5,7 +5,7 @@
 package org.igsl.algorithm;
 
 import org.igsl.cost.Addable;
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.BackwardPathIterator;
 import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
 
@@ -55,10 +55,10 @@ public final class Direct {
 	 * @param tr search tree traversal
 	 * @return an enumeration containing nodes on an optimal path from beginning to end
 	 */
-	public static <T,C extends Addable<C> & Comparable<C>> PathIterator<T> branchAndBound(CostTreeTraversal<T,C> tr) {
+	public static <T,C extends Addable<C> & Comparable<C>> BackwardPathIterator<T> branchAndBound(CostTreeTraversal<T,C> tr) {
 		searchForward(tr);
 		
-		PathIterator<T> result = tr.getPath();
+		BackwardPathIterator<T> result = tr.getPath();
 		
 		if(tr.isEmpty()) {
 			return result;

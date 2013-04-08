@@ -10,8 +10,8 @@ import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
-import org.igsl.functor.PathIterator;
-import org.igsl.functor.FiniteSetPathIterator;
+import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.ForwardPathIterator;
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
@@ -64,7 +64,7 @@ public class DepthFirstTreeTraversal<T>
 				if(!isFound) {
 					T value = values[i];
 					
-					if(generator.isValidTransition(value, getFiniteSetPathIterator())) {
+					if(generator.isValidTransition(value, getPathIteratorImpl())) {
 						stack[depth++] = i;
 						return true;
 					}
@@ -99,7 +99,7 @@ public class DepthFirstTreeTraversal<T>
 					if(!isFound) {
 						T value = values[i];
 						
-						if(generator.isValidTransition(value, getFiniteSetPathIterator())) {
+						if(generator.isValidTransition(value, getPathIteratorImpl())) {
 							stack[depth-1] = i;
 							return;
 						}
@@ -117,15 +117,15 @@ public class DepthFirstTreeTraversal<T>
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public PathIterator<T> getPathIterator() {
-		return getFiniteSetPathIterator();
+	public BackwardPathIterator<T> getPathIterator() {
+		return getPathIteratorImpl();
 	}
 	
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
-	public PathIterator<T> getPath() {
-		return new FiniteSetPathIteratorImpl(this);
+	public BackwardPathIterator<T> getPath() {
+		return new PathIteratorImpl(this, depth);
 	}
 	
 	/**
@@ -137,9 +137,9 @@ public class DepthFirstTreeTraversal<T>
 		return result;
 	}
 	
-	private FiniteSetPathIterator getFiniteSetPathIterator() {
+	private PathIteratorImpl getPathIteratorImpl() {
 		if(pathIterator == null) {
-			pathIterator = new FiniteSetPathIteratorImpl(this);
+			pathIterator = new PathIteratorImpl(this, depth);
 		} else {
 			pathIterator.reset();
 		}
@@ -155,16 +155,18 @@ public class DepthFirstTreeTraversal<T>
 	protected int[] stack;
 	protected int depth;
 	
-	private FiniteSetPathIteratorImpl pathIterator;
+	private PathIteratorImpl pathIterator;
 	
-	private class FiniteSetPathIteratorImpl implements FiniteSetPathIterator<T> {
+	private class PathIteratorImpl 
+		implements BackwardPathIterator<T>, ForwardPathIterator<T> {
 		
 		private DepthFirstTreeTraversal<T> tr;
-		private int idx;
+		private int start, idx;
 
-		public FiniteSetPathIteratorImpl(DepthFirstTreeTraversal<T> tr) {
+		public PathIteratorImpl(DepthFirstTreeTraversal<T> tr, int start) {
 			this.tr = tr;
-			this.idx = tr.depth;
+			this.start = start;
+			this.idx = start;
 		}
 
 		public boolean hasPreviousNode() {
@@ -175,16 +177,17 @@ public class DepthFirstTreeTraversal<T>
 			return tr.values[tr.stack[--idx]];
 		}
 		
-		public T rootNode() {
-			return tr.isEmpty() ? null : tr.values[tr.stack[0]];
+		public boolean hasNextNode() {
+			return idx < depth;		
+		}
+
+		public T nextNode() {
+			return tr.values[tr.stack[++idx]];
 		}
 		
-		public T leafNode() {
-			return tr.isEmpty() ? null : tr.values[tr.stack[depth - 1]];
-		}
 		
-		private FiniteSetPathIterator reset() {
-			this.idx = tr.depth;
+		private PathIteratorImpl reset() {
+			this.idx = start;
 			return this;
 		}
 		

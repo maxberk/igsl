@@ -11,7 +11,7 @@ import org.igsl.algorithm.Direct;
 import org.igsl.cost.AddableDouble;
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.traversal.TreeTraversal;
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.BackwardPathIterator;
 import org.igsl.traversal.linear.finiteset.DepthFirstTreeTraversal;
 
 import org.igsl.app.hamiltonianpath.HamiltonianPathSolver;
@@ -50,7 +50,7 @@ public class HamiltonianPathTest {
 		tr.backtrack();
 		Direct.searchForward(tr);
 		System.out.print("Admissable(non-optimal) path found while searching forward: ");
-		PathIterator<String> path = tr.getPath();
+		BackwardPathIterator<String> path = tr.getPath();
 		while(path.hasPreviousNode()) {
 			String toPrint = path.previousNode()  + "->";
 			System.out.print(toPrint);

@@ -4,7 +4,7 @@ package org.igsl.traversal;
  * Implicit Graph Search Library(C), 2009, 2012
  */
 
-import org.igsl.functor.PathIterator;
+import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.exception.EmptyTraversalException;
 
 /**
@@ -43,14 +43,14 @@ public interface TreeTraversal<T> {
 	 * a singleton in compare with <code>getPath</code> result
 	 * @return -  node iterator
 	 */
-	public PathIterator<T> getPathIterator();
+	public BackwardPathIterator<T> getPathIterator();
 	
 	/**
 	 * Provides a path in a search tree from the cursor node to the root of a search tree.
 	 * For an empty search tree returns an empty enumeration.
 	 * @return -  node iterator
 	 */
-	public PathIterator<T> getPath();
+	public BackwardPathIterator<T> getPath();
 	
 	
 }

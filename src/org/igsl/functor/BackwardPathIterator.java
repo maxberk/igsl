@@ -10,7 +10,7 @@ package org.igsl.functor;
  * 
  * @param <T> - type of value in a search tree
  */
-public interface PathIterator<T> {
+public interface BackwardPathIterator<T> {
 	
 	/**
 	 * Means a node is not a search tree root
