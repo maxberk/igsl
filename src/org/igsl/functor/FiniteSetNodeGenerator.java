@@ -25,9 +25,9 @@ public interface FiniteSetNodeGenerator<T> {
 	 * Validate if a new node is valid in expansion procedure
 	 * 
 	 * @param value value for a new node
-	 * @param iterator path iterator from a root node  to a currently expanded node
+	 * @param iterator path iterator from a currently expanded node to a root node
 	 * 
-	 * @return default start node value
+	 * @return true - if transition to value is valid
 	 */
 	boolean isValidTransition(T value, BackwardPathIterator<T> iterator);
 
