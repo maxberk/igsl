@@ -37,6 +37,15 @@ public class HamiltonianPathTest {
 		solver.addWaypoint("f", 0.5, 0.5);
 		solver.addWaypoint("g", -0.8, 0.1);
 		solver.addWaypoint("h", -0.8, 0.8);
+
+		solver.addWaypoint("i", -0.2, 0.4);
+		solver.addWaypoint("k", -0.7, 0.1);
+		solver.addWaypoint("l", -0.9, 0.8);
+		solver.addWaypoint("m", -0.3, 0.3);
+		solver.addWaypoint("n", -0.6, 0.4);
+		solver.addWaypoint("o", -0.2, 0.7);
+		solver.addWaypoint("p", -0.8, 0.5);
+		solver.addWaypoint("r", -0.7, 0.4);
 		
 		System.out.println("=====Hamiltonian Path Problem.=====");
 		

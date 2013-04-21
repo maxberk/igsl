@@ -5,19 +5,26 @@
 package org.igsl.traversal.linear.finiteset;
 
 import java.util.EmptyStackException;
-import org.igsl.functor.FiniteSetNodeGenerator;
+import java.util.ArrayList;
+
+
+import org.igsl.functor.FixedDepthNodeGenerator;
+import org.igsl.functor.ValuesIterator;
+
 import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.functor.exception.EmptyTraversalException;
+
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
+
 import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.ForwardPathIterator;
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
  */
-public class DepthFirstTreeTraversal<T>
-	implements TreeTraversal<T>, Copyable<DepthFirstTreeTraversal<T>>
+public class FixedDepthTreeTraversal<T>
+	implements TreeTraversal<T>, Copyable<FixedDepthTreeTraversal<T>>
 {
 	/**
 	 * Constructor based on a start search node and expansion operator
@@ -27,16 +34,19 @@ public class DepthFirstTreeTraversal<T>
 	 * @throws NullPointerException thrown if node generator is null
 	 * @see FiniteNodeSetGenerator
 	 */
-	public DepthFirstTreeTraversal(FiniteSetNodeGenerator<T> generator) 
+	public FixedDepthTreeTraversal(FixedDepthNodeGenerator<T> generator) 
 		throws NullPointerException
 	{
 		if(generator == null) {
 			throw new NullPointerException();
 		} else {
 			this.generator = generator;
-			this.values = generator.getAllValues();
-			this.stack = new int[this.values.length];
-			this.stack[0] = 0;
+			this.stack = new ArrayList<ValuesIterator<T>>(generator.getMaxDepth());
+			
+			for(int i = 0; i < this.stack.size(); ++i) {
+				this.stack.add(generator.createValues(i));
+			}
+			
 			this.depth = 1;
 		}
 	}
@@ -48,33 +58,35 @@ public class DepthFirstTreeTraversal<T>
 	 * searches for other nodes in the tree performing pruning procedure.
 	 */
 	public boolean moveForward() throws EmptyTraversalException {
-		if(depth == values.length) { // terminal node
+		if(depth == stack.size()) { // terminal node
 			return false;
-		} else { // depth < values.length
-			for(int i = 0; i < values.length; ++i) {
+		} else { // depth < stack.length
+			ValuesIterator<T> iterator = stack.get(depth + 1);
+			generator.updateValues(iterator, getPathIterator());
+			
+			while(iterator.hasNext()) {
+				T value = iterator.next();
+				
 				boolean isFound = false;
 				
-				for(int j = 0; j < depth; ++j) {
-					if(stack[j] == i) {
+				for(int i = 0; i < depth; ++i) {
+					if(value.equals(stack.get(i).getValue())) {
 						isFound = true;
 						break;
 					}
 				}
 				
-				if(!isFound) {
-					T value = values[i];
-					
-					if(generator.isValidTransition(value, getPathIteratorImpl())) {
-						stack[depth++] = i;
-						return true;
-					}
+				if(!isFound && generator.isValidTransition(value, getPathIterator())) {
+					++depth;
+					return true;
 				}
+				
 			}
 			
 			backtrack();
 			
 			return true;
-		} // depth < values.length
+		} // depth < stack.length
 	}
 	
 	/**
@@ -86,24 +98,25 @@ public class DepthFirstTreeTraversal<T>
 			throw new EmptyTraversalException();
 		} else { // depth > 0
 			do {
-				for(int i = stack[depth - 1] + 1; i < values.length; ++i) {
+				ValuesIterator<T> iterator = stack.get(depth);
+	
+				while(iterator.hasNext()) {
+					T value = iterator.next();
+					
 					boolean isFound = false;
 					
-					for(int j = 0; j < depth-1; ++j) {
-						if(stack[j] == i) {
+					for(int i = 0; i < depth; ++i) {
+						if(value.equals(stack.get(i).getValue())) {
 							isFound = true;
 							break;
 						}
 					}
 					
-					if(!isFound) {
-						T value = values[i];
-						
-						if(generator.isValidTransition(value, getPathIteratorImpl())) {
-							stack[depth-1] = i;
-							return;
-						}
+					if(!isFound && generator.isValidTransition(value, getPathIterator())) {
+						++depth;
+						return;
 					}
+					
 				}
 			} while(--depth > 0);
 		}
@@ -132,8 +145,8 @@ public class DepthFirstTreeTraversal<T>
 	 * Implementation details of Copyable interface.
 	 * Returns a TreeTraversal with a copy of a cursor node
 	 */
-	public DepthFirstTreeTraversal<T> getCopyOf() {
-		DepthFirstTreeTraversal<T> result =	new DepthFirstTreeTraversal<T>();
+	public FixedDepthTreeTraversal<T> getCopyOf() {
+		FixedDepthTreeTraversal<T> result =	new FixedDepthTreeTraversal<T>();
 		return result;
 	}
 	
@@ -147,12 +160,11 @@ public class DepthFirstTreeTraversal<T>
 		return pathIterator;
 	}
 	
-	private DepthFirstTreeTraversal() {}
+	private FixedDepthTreeTraversal() {}
 	
-	protected FiniteSetNodeGenerator<T> generator;
+	protected FixedDepthNodeGenerator<T> generator;
 	
-	protected T[] values;
-	protected int[] stack;
+	protected ArrayList<ValuesIterator<T>> stack;
 	protected int depth;
 	
 	private PathIteratorImpl pathIterator;
@@ -160,10 +172,10 @@ public class DepthFirstTreeTraversal<T>
 	private class PathIteratorImpl 
 		implements BackwardPathIterator<T>, ForwardPathIterator<T> {
 		
-		private DepthFirstTreeTraversal<T> tr;
+		private FixedDepthTreeTraversal<T> tr;
 		private int start, idx;
 
-		public PathIteratorImpl(DepthFirstTreeTraversal<T> tr, int start) {
+		public PathIteratorImpl(FixedDepthTreeTraversal<T> tr, int start) {
 			this.tr = tr;
 			this.start = start;
 			this.idx = start;
@@ -174,7 +186,7 @@ public class DepthFirstTreeTraversal<T>
 		}
 
 		public T previousNode() {
-			return tr.values[tr.stack[--idx]];
+			return tr.stack.get(--idx).getValue();
 		}
 		
 		public boolean hasNextNode() {
@@ -182,7 +194,7 @@ public class DepthFirstTreeTraversal<T>
 		}
 
 		public T nextNode() {
-			return tr.values[tr.stack[++idx]];
+			return tr.stack.get(++idx).getValue();
 		}
 		
 		
