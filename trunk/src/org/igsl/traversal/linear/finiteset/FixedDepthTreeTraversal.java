@@ -7,7 +7,6 @@ package org.igsl.traversal.linear.finiteset;
 import java.util.EmptyStackException;
 import java.util.ArrayList;
 
-
 import org.igsl.functor.FixedDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 
@@ -62,7 +61,7 @@ public class FixedDepthTreeTraversal<T>
 			return false;
 		} else { // depth < stack.length
 			ValuesIterator<T> iterator = stack.get(depth + 1);
-			generator.updateValues(iterator, getPathIterator());
+			iterator.update(getPathIterator());
 			
 			while(iterator.hasNext()) {
 				T value = iterator.next();

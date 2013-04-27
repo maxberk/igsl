@@ -18,8 +18,6 @@ public interface FixedDepthNodeGenerator<T> {
 	
 	ValuesIterator<T> createValues(int idx);
 	
-	void updateValues(ValuesIterator<T> vi, BackwardPathIterator<T> bpi);
-
 	/**
 	 * Validate if a new node is valid in expansion procedure
 	 * 

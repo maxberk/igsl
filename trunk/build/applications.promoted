@@ -1,3 +1,5 @@
 org/igsl/app/coinproblem/variant3/Denomination.java
 org/igsl/app/coinproblem/variant3/CoinProblemSolver.java
 org/igsl/app/hamiltonianpath/HamiltonianPathSolver.java
+org/igsl/app/knighttour2/Position.java
+org/igsl/app/knighttour2/KnightTourSolver.java
