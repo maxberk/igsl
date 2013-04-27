@@ -14,5 +14,7 @@ public interface ValuesIterator<T> {
 	T next();
 	
 	T getValue();
+	
+	void update(BackwardPathIterator<T> bpi);
 
 }
