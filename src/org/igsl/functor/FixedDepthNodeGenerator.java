@@ -12,7 +12,6 @@ public interface FixedDepthNodeGenerator<T> {
 
 	/**
 	 * Returns maximal depth
-	 * 
 	 */
 	int getMaxDepth();
 	

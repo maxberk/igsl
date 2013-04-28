@@ -40,9 +40,10 @@ public class FixedDepthTreeTraversal<T>
 			throw new NullPointerException();
 		} else {
 			this.generator = generator;
-			this.stack = new ArrayList<ValuesIterator<T>>(generator.getMaxDepth());
 			
-			for(int i = 0; i < this.stack.size(); ++i) {
+			int maxDepth = generator.getMaxDepth();
+			this.stack = new ArrayList<ValuesIterator<T>>(maxDepth);
+			for(int i = 0; i < maxDepth; ++i) {
 				this.stack.add(generator.createValues(i));
 			}
 			
@@ -60,10 +61,13 @@ public class FixedDepthTreeTraversal<T>
 		if(depth == stack.size()) { // terminal node
 			return false;
 		} else { // depth < stack.length
-			ValuesIterator<T> iterator = stack.get(depth + 1);
+			System.out.println("depth = " + depth);
+
+			ValuesIterator<T> iterator = stack.get(depth);
 			iterator.update(getPathIterator());
 			
 			while(iterator.hasNext()) {
+				
 				T value = iterator.next();
 				
 				boolean isFound = false;
@@ -153,7 +157,7 @@ public class FixedDepthTreeTraversal<T>
 		if(pathIterator == null) {
 			pathIterator = new PathIteratorImpl(this, depth);
 		} else {
-			pathIterator.reset();
+			pathIterator.reset(depth);
 		}
 		
 		return pathIterator;
@@ -172,12 +176,11 @@ public class FixedDepthTreeTraversal<T>
 		implements BackwardPathIterator<T>, ForwardPathIterator<T> {
 		
 		private FixedDepthTreeTraversal<T> tr;
-		private int start, idx;
+		private int idx;
 
-		public PathIteratorImpl(FixedDepthTreeTraversal<T> tr, int start) {
+		public PathIteratorImpl(FixedDepthTreeTraversal<T> tr, int depth) {
 			this.tr = tr;
-			this.start = start;
-			this.idx = start;
+			this.idx = depth;
 		}
 
 		public boolean hasPreviousNode() {
@@ -197,8 +200,8 @@ public class FixedDepthTreeTraversal<T>
 		}
 		
 		
-		private PathIteratorImpl reset() {
-			this.idx = start;
+		private PathIteratorImpl reset(int depth) {
+			this.idx = depth;
 			return this;
 		}
 		

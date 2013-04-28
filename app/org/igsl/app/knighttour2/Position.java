@@ -10,6 +10,13 @@ package org.igsl.app.knighttour2;
 public class Position {
 	int i, j; // cell indices
 	
+	public Position() {}
+	
+	public Position(int i, int j) {
+		this.i = i;
+		this.j = j;
+	}
+	
 	/**
 	 * Creates a start position.
 	 */

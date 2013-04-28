@@ -1,2 +1,3 @@
 org/igsl/test/coinproblem/variant3/CoinProblemTest.java
 org/igsl/test/hamiltonianpath/HamiltonianPathTest.java
+org/igsl/test/knighttour2/KnightTourTest.java
