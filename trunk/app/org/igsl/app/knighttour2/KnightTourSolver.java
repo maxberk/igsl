@@ -1,12 +1,8 @@
 package org.igsl.app.knighttour2;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.igsl.functor.FixedDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 
 /**
  * Knight Tour solver presented to demonstrate constraint-satisfaction techniques.
@@ -17,16 +13,17 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 	/**
 	 * Constructor for Knight Tour solver
 	 */
-	public KnightTourSolver(int dim) {
+	public KnightTourSolver(int dim, Position initial) {
 		this.dim = dim;
+		this.initial = initial;
 	}
 	
 	public int getMaxDepth() {
-		return -1;
+		return dim*dim;
 	}
 	
 	public ValuesIterator<Position> createValues(int idx) {
-		return new ValuesIteratorImpl();
+		return (idx == 0) ? new ValuesIteratorImpl(initial) : new ValuesIteratorImpl();
 	}
 	
 	public boolean isValidTransition(Position pos, BackwardPathIterator<Position> bpi) {
@@ -47,6 +44,13 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 			this.j = -1;
 			from = null;
 			pos = new Position();
+		}
+		
+		public ValuesIteratorImpl(Position pos) {
+			this.i = 0;
+			this.j = -1;
+			from = null;
+			this.pos = pos;
 		}
 		
 		public boolean hasNext() {
@@ -78,6 +82,7 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 		public void update(BackwardPathIterator<Position> iterator) {
 			if(iterator.hasPreviousNode()) {
 				from = iterator.previousNode();
+				System.out.println("from = " + from);
 			}
 			
 			this.i = 0;
@@ -86,5 +91,6 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 	}
 	
 	private int dim; // problem dim
+	private Position initial; // intial knight position
 
 }

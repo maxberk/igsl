@@ -170,7 +170,14 @@
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
-		</java>		
+		</java>
+		<java fork="true" classname="org.igsl.test.knighttour2.KnightTourTest">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+				<pathelement location="lib/igsl-not-promoted.jar"/>
+			</classpath>
+		</java>
 		<delete dir="bin"/>
 	</target>	
 	
