@@ -15,6 +15,11 @@ public interface FixedDepthNodeGenerator<T> {
 	 */
 	int getMaxDepth();
 	
+	/**
+	 * Create <code>ValuesIterator</code> instance for nodes on a given depth
+	 * 
+	 * @param idx depth value index
+	 */
 	ValuesIterator<T> createValues(int idx);
 	
 	/**

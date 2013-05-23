@@ -41,20 +41,30 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 		
 		public ValuesIteratorImpl() {
 			this.i = 0;
-			this.j = -1;
+			this.j = 0;
 			from = null;
 			pos = new Position();
 		}
 		
 		public ValuesIteratorImpl(Position pos) {
 			this.i = 0;
-			this.j = -1;
+			this.j = 0;
 			from = null;
 			this.pos = pos;
 		}
 		
+		public void update(BackwardPathIterator<Position> iterator) {
+			if(iterator.hasPreviousNode()) {
+				from = iterator.previousNode();
+				//System.out.println("Updating ... from = " + from);
+			}
+			
+			this.i = 0;
+			this.j = 0;
+		}
+		
 		public boolean hasNext() {
-			return (i != 3 && j != 2);
+			return (i != 3 || j != 2);
 		}
 
 		public Position next() {
@@ -79,15 +89,6 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 			return pos;
 		}
 		
-		public void update(BackwardPathIterator<Position> iterator) {
-			if(iterator.hasPreviousNode()) {
-				from = iterator.previousNode();
-				System.out.println("from = " + from);
-			}
-			
-			this.i = 0;
-			this.j = -1;
-		}
 	}
 	
 	private int dim; // problem dim

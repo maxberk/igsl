@@ -8,13 +8,13 @@ package org.igsl.functor;
  * Interface ValuesIterator.
  */
 public interface ValuesIterator<T> {
+	
+	void update(BackwardPathIterator<T> iterator);
 
 	boolean hasNext();
 
 	T next();
 	
 	T getValue();
-	
-	void update(BackwardPathIterator<T> bpi);
 
 }
