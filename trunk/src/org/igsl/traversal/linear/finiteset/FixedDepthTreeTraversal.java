@@ -61,7 +61,7 @@ public class FixedDepthTreeTraversal<T>
 		if(depth == stack.size()) { // terminal node
 			return false;
 		} else { // depth < stack.length
-			System.out.println("depth = " + depth);
+			//System.out.println("depth = " + depth);
 
 			ValuesIterator<T> iterator = stack.get(depth);
 			iterator.update(getPathIterator());

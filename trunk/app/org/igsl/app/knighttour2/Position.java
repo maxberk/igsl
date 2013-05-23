@@ -43,7 +43,8 @@ public class Position {
 		return j;
 	}
 	
-	public boolean equals(Position other) {
+	public boolean equals(Object o) {
+		Position other = (Position) o;
 		return (i == other.i && j == other.j);
 	}
 	
