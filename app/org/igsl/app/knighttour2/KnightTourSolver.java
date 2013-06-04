@@ -4,11 +4,13 @@ import org.igsl.functor.FixedDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
 
+import java.util.Comparator;
+
 /**
  * Knight Tour solver presented to demonstrate constraint-satisfaction techniques.
  * The class uses a <code>Position</code> class as node instance in template initialization.
  */
-public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
+public class KnightTourSolver implements FixedDepthNodeGenerator<Position>, Comparator<Position> {
 	
 	/**
 	 * Constructor for Knight Tour solver
@@ -31,6 +33,42 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 		int j = pos.getJ();
 		
 		return(i >= 0 && i < dim && j >= 0 && j < dim);
+	}
+	
+	public int compare(Position p1, Position p2) {
+		int d1Imin = Math.abs(p1.getI());
+		int d1Imax = Math.abs(dim - p1.getI());
+		
+		int d1Jmin = Math.abs(p1.getJ());
+		int d1Jmax = Math.abs(dim - p1.getJ());
+		
+		int d1MinMin = d1Imin + d1Jmin;
+		int d1MinMax = d1Imin + d1Jmax;
+		int d1MaxMin = d1Imax + d1Jmin;
+		int d1MaxMax = d1Imax + d1Jmax;
+		
+		int d1 = Math.min(Math.min(d1MinMin, d1MinMax), Math.min(d1MaxMin, d1MaxMax));
+		
+		int d2Imin = Math.abs(p2.getI());
+		int d2Imax = Math.abs(dim - p2.getI());
+		
+		int d2Jmin = Math.abs(p2.getJ());
+		int d2Jmax = Math.abs(dim - p2.getJ());
+		
+		int d2MinMin = d2Imin + d2Jmin;
+		int d2MinMax = d2Imin + d2Jmax;
+		int d2MaxMin = d2Imax + d2Jmin;
+		int d2MaxMax = d2Imax + d2Jmax;
+		
+		int d2 = Math.min(Math.min(d2MinMin, d2MinMax), Math.min(d2MaxMin, d2MaxMax));		
+		
+		if(d1 < d2) {
+			return -1;
+		} else if(d1 > d2) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 	
 	private class ValuesIteratorImpl implements ValuesIterator<Position> {

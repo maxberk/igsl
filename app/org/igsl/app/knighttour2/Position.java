@@ -7,7 +7,7 @@ package org.igsl.app.knighttour2;
 /**
  *  Position for Knight Tour.
  */
-public class Position {
+public class Position implements Cloneable {
 	int i, j; // cell indices
 	
 	public Position() {}

@@ -6,6 +6,7 @@ package org.igsl.traversal.linear.finiteset;
 
 import java.util.EmptyStackException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.igsl.functor.FixedDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
@@ -18,6 +19,8 @@ import org.igsl.traversal.Copyable;
 
 import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.ForwardPathIterator;
+
+
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
@@ -50,6 +53,33 @@ public class FixedDepthTreeTraversal<T>
 			this.depth = 1;
 		}
 	}
+	
+	/**
+	 * Constructor based on a start search node, expansion operator and comparator
+	 * 
+	 * @param value root node value
+	 * @param generator node generator function
+	 * @param comparator node comparator function
+	 * @throws NullPointerException thrown if node generator is null
+	 * @see FiniteNodeSetGenerator
+	 */
+	public FixedDepthTreeTraversal(FixedDepthNodeGenerator<T> generator, Comparator<T> comparator) 
+		throws NullPointerException
+	{
+		if(generator == null) {
+			throw new NullPointerException();
+		} else {
+			this.generator = generator;
+			
+			int maxDepth = generator.getMaxDepth();
+			this.stack = new ArrayList<ValuesIterator<T>>(maxDepth);
+			for(int i = 0; i < maxDepth; ++i) {
+				this.stack.add(generator.createValues(i));
+			}
+			
+			this.depth = 1;
+		}
+	}	
 	
 	/**
 	 * Expands nodes base on "last found - first expanded" technique.
