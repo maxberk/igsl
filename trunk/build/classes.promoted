@@ -13,6 +13,7 @@ org/igsl/functor/NodeGenerator.java
 org/igsl/functor/FiniteSetNodeGenerator.java
 org/igsl/functor/FixedDepthNodeGenerator.java
 org/igsl/functor/ValuesIterator.java
+org/igsl/functor/NodeComparator.java
 org/igsl/functor/CostFunction.java
 org/igsl/functor/FiniteSetCostFunction.java
 org/igsl/functor/HeuristicFunction.java
