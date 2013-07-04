@@ -4,13 +4,11 @@ import org.igsl.functor.FixedDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
 
-import java.util.Comparator;
-
 /**
  * Knight Tour solver presented to demonstrate constraint-satisfaction techniques.
  * The class uses a <code>Position</code> class as node instance in template initialization.
  */
-public class KnightTourSolver implements FixedDepthNodeGenerator<Position>, Comparator<Position> {
+public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 	
 	/**
 	 * Constructor for Knight Tour solver
@@ -35,7 +33,9 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position>, Comp
 		return(i >= 0 && i < dim && j >= 0 && j < dim);
 	}
 	
-	public int compare(Position p1, Position p2) {
+	public int compare(BackwardPathIterator<Position> iterator,
+		Position p1, Position p2)
+	{
 		int d1Imin = Math.abs(p1.getI());
 		int d1Imax = Math.abs(dim - p1.getI());
 		
@@ -94,7 +94,6 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position>, Comp
 		public void update(BackwardPathIterator<Position> iterator) {
 			if(iterator.hasPreviousNode()) {
 				from = iterator.previousNode();
-				//System.out.println("Updating ... from = " + from);
 			}
 			
 			this.i = 0;
