@@ -1,7 +1,7 @@
 package org.igsl.app.coinproblem.variant3;
 
 /**
- * Implicit Graph Search Library(C), 2009, 2010, 2011, 2012
+ * Implicit Graph Search Library(C), 2009, 2013
  */
 
 public class Denomination {
@@ -9,14 +9,9 @@ public class Denomination {
 	private int index;
 	private int amount;
 	
-	public Denomination() {
-		this.index = -1;
-		this.amount = 0;
-	}
-	
-	public Denomination(int index, int amount) {
+	public Denomination(int index) {
 		this.index = index;
-		this.amount = amount;
+		this.amount = 0;
 	}
 	
 	public int getIndex() {
@@ -25,6 +20,10 @@ public class Denomination {
 	
 	public int getAmount() {
 		return amount;
-	}	
+	}
+	
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
 
 }

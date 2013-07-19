@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013 
+ * Implicit Graph Search Library(C), 2009, 2013 
  */
 
 package org.igsl.test.coinproblem.variant3;
@@ -7,10 +7,8 @@ package org.igsl.test.coinproblem.variant3;
 import org.igsl.algorithm.Direct;
 import org.igsl.app.coinproblem.variant3.CoinProblemSolver;
 import org.igsl.app.coinproblem.variant3.Denomination;
-import org.igsl.cost.AddableInteger;
 import org.igsl.functor.BackwardPathIterator;
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
-import org.igsl.traversal.linear.DepthFirstCostTreeTraversal;
+import org.igsl.traversal.linear.finiteset.FixedDepthTreeTraversal;
 
 public class CoinProblemTest {
 	/**
@@ -31,51 +29,26 @@ public class CoinProblemTest {
 		System.out.println();
 		System.out.println("Value is " + value);
 		
-		try {
-			DepthFirstCostTreeTraversal<Denomination, AddableInteger> tr2 = 
-					new DepthFirstCostTreeTraversal<Denomination, AddableInteger>(solver);
+		FixedDepthTreeTraversal<Denomination> tr2 = new FixedDepthTreeTraversal<Denomination>(solver);
 
-			long startTime2 = System.currentTimeMillis();
-			Direct.searchForward(tr2);
-			long finishTime2 = System.currentTimeMillis();
-			System.out.println("Work time for greedy search = " + (finishTime2 - startTime2));
+		long startTime2 = System.currentTimeMillis();
+		Direct.searchForward(tr2);
+		long finishTime2 = System.currentTimeMillis();
+		System.out.println("Work time for greedy search = " + (finishTime2 - startTime2));
 
-			BackwardPathIterator<Denomination> path2 = tr2.getPath();
-				
-			int amount2 = 0;
-			while(path2.hasPreviousNode()) {
-				Denomination d = path2.previousNode();
+		BackwardPathIterator<Denomination> path2 = tr2.getPath();
 			
-				if(d.getIndex() >= 0 && d.getAmount() > 0) {
-					System.out.print(d.getAmount() + " * " + denominations[d.getIndex()] + " + ");
-				}
-				amount2 += d.getAmount();
+		int amount2 = 0;
+		while(path2.hasPreviousNode()) {
+			Denomination d = path2.previousNode();
+		
+			if(d.getIndex() >= 0 && d.getAmount() > 0) {
+				System.out.print(d.getAmount() + " * " + denominations[d.getIndex()] + " + ");
 			}
-			System.out.println();
-			System.out.println("Result for greedy search is " + amount2);
-
-			DepthFirstCostTreeTraversal<Denomination, AddableInteger> tr = 
-				new DepthFirstCostTreeTraversal<Denomination, AddableInteger>(solver);
-
-			long startTime = System.currentTimeMillis();
-			BackwardPathIterator<Denomination> path = Direct.branchAndBound(tr);
-			long finishTime = System.currentTimeMillis();
-			System.out.println("Work time for optimal search is = " + (finishTime - startTime));
-			
-			int amount = 0;
-			while(path.hasPreviousNode()) {
-				Denomination d = path.previousNode();
-				
-				if(d.getIndex() >= 0 && d.getAmount() > 0) {
-					System.out.print(d.getAmount() + " * " + denominations[d.getIndex()] + " + ");
-				}
-				amount += d.getAmount();
-			}
-			System.out.println();
-			System.out.println("Result for optimal search is " + amount);
-			
-		} catch (DefaultValuesUnsupportedException e) {
+			amount2 += d.getAmount();
 		}
+		System.out.println();
+		System.out.println("Result for greedy search is " + amount2);
 	}
 
 }
