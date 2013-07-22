@@ -1,8 +1,8 @@
-/**
- * Implicit Graph Search Library(C), 2013 
- */
-
 package org.igsl.traversal.linear.finiteset;
+
+/**
+ * Implicit Graph Search Library(C), 2009, 2013 
+ */
 
 import java.util.EmptyStackException;
 import java.util.ArrayList;
@@ -58,38 +58,21 @@ public class FixedDepthTreeTraversal<T>
 	 * searches for other nodes in the tree performing pruning procedure.
 	 */
 	public boolean moveForward() throws EmptyTraversalException {
-		if(depth == stack.size()) { // terminal node
+		if(depth == stack.size() || depth == 0) { // terminal node
 			return false;
-		} else { // depth < stack.length
-			//System.out.println("depth = " + depth);
-
-			ValuesIterator<T> iterator = stack.get(depth);
+		} else {
+			ValuesIterator<T> iterator = stack.get(depth-1);
 			iterator.update(getPathIterator());
 			
-			while(iterator.hasNext()) {
-				
-				T value = iterator.next();
-				
-				boolean isFound = false;
-				
-				for(int i = 0; i < depth; ++i) {
-					if(value.equals(stack.get(i).getValue())) {
-						isFound = true;
-						break;
-					}
-				}
-				
-				if(!isFound && generator.isValidTransition(value, getPathIterator())) {
-					++depth;
-					return true;
-				}
-				
+			if(iterator.hasNext()) {
+				iterator.next();
+				++depth;
+			} else {
+				backtrack();
 			}
 			
-			backtrack();
-			
 			return true;
-		} // depth < stack.length
+		} // depth == stack.size() || depth == 0
 	}
 	
 	/**
@@ -103,23 +86,9 @@ public class FixedDepthTreeTraversal<T>
 			do {
 				ValuesIterator<T> iterator = stack.get(depth);
 	
-				while(iterator.hasNext()) {
-					T value = iterator.next();
-					
-					boolean isFound = false;
-					
-					for(int i = 0; i < depth; ++i) {
-						if(value.equals(stack.get(i).getValue())) {
-							isFound = true;
-							break;
-						}
-					}
-					
-					if(!isFound && generator.isValidTransition(value, getPathIterator())) {
-						++depth;
-						return;
-					}
-					
+				if(iterator.hasNext()) {
+					iterator.next();
+					break;
 				}
 			} while(--depth > 0);
 		}

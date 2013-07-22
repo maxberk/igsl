@@ -25,5 +25,9 @@ public class Denomination {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+	
+	public void decAmount() {
+		--amount;
+	}
 
 }
