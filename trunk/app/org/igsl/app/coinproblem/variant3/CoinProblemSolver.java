@@ -44,7 +44,6 @@ public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
 	}
 	
 	private class ValuesIteratorImpl implements ValuesIterator<Denomination> {
-		
 		private int value;
 		private Denomination d;
 		
@@ -61,7 +60,7 @@ public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
 				accValue += denominations[denom.getIndex()] * denom.getAmount();
 			}
 			
-			d.setAmount((value - accValue) % denominations[d.getIndex()]);
+			d.setAmount((value - accValue) / denominations[d.getIndex()] + 1);
 		}
 
 		public boolean hasNext() {
@@ -69,7 +68,7 @@ public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
 		}
 
 		public Denomination next() {
-			d.setAmount(d.getAmount() - 1);
+			d.decAmount();
 			return d;
 		}
 		
