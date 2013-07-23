@@ -39,8 +39,15 @@ public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
 		return new ValuesIteratorImpl(idx, value);
 	}
 	
-	public boolean isValidTransition(Denomination value, BackwardPathIterator<Denomination> bpi) {
-		return true;
+	public boolean isGoal(BackwardPathIterator<Denomination> bpi) {
+		int accValue = 0;
+		
+		while(bpi.hasPreviousNode()) {
+			Denomination denom = bpi.previousNode();
+			accValue += denominations[denom.getIndex()] * denom.getAmount();
+		}
+		
+		return accValue == value;
 	}
 	
 	private class ValuesIteratorImpl implements ValuesIterator<Denomination> {
