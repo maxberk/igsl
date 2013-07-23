@@ -58,10 +58,10 @@ public class FixedDepthTreeTraversal<T>
 	 * searches for other nodes in the tree performing pruning procedure.
 	 */
 	public boolean moveForward() throws EmptyTraversalException {
-		if(depth == stack.size() || depth == 0) { // terminal node
+		if(depth == 0 || generator.isGoal(getPathIterator())) { // empty
 			return false;
-		} else {
-			ValuesIterator<T> iterator = stack.get(depth-1);
+		} else if(depth < stack.size()) {
+			ValuesIterator<T> iterator = stack.get(depth);
 			iterator.update(getPathIterator());
 			
 			if(iterator.hasNext()) {
@@ -72,7 +72,17 @@ public class FixedDepthTreeTraversal<T>
 			}
 			
 			return true;
-		} // depth == stack.size() || depth == 0
+		} else {
+			ValuesIterator<T> iterator = stack.get(depth-1);
+			
+			if(iterator.hasNext()) {
+				iterator.next();
+			} else {
+				backtrack();
+			}
+			
+			return true;
+		}
 	}
 	
 	/**
@@ -84,7 +94,7 @@ public class FixedDepthTreeTraversal<T>
 			throw new EmptyTraversalException();
 		} else { // depth > 0
 			do {
-				ValuesIterator<T> iterator = stack.get(depth);
+				ValuesIterator<T> iterator = stack.get(depth-1);
 	
 				if(iterator.hasNext()) {
 					iterator.next();

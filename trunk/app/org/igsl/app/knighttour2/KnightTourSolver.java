@@ -33,6 +33,10 @@ public class KnightTourSolver implements FixedDepthNodeGenerator<Position> {
 		return(i >= 0 && i < dim && j >= 0 && j < dim);
 	}
 	
+	public boolean isGoal(BackwardPathIterator<Position> bpi) {
+		return false;
+	}
+	
 	public int compare(BackwardPathIterator<Position> iterator,
 		Position p1, Position p2)
 	{

@@ -22,14 +22,6 @@ public interface FixedDepthNodeGenerator<T> {
 	 */
 	ValuesIterator<T> createValues(int idx);
 	
-	/**
-	 * Validate if a new node is valid in expansion procedure
-	 * 
-	 * @param value value for a new node
-	 * @param iterator path iterator from a currently expanded node to a root node
-	 * 
-	 * @return true - if transition to value is valid
-	 */
-	boolean isValidTransition(T value, BackwardPathIterator<T> bpi);
+	boolean isGoal(BackwardPathIterator<T> bpi);
 
 }
