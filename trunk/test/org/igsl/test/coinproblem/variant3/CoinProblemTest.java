@@ -16,8 +16,8 @@ public class CoinProblemTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		int[] denominations = new int[]{7, 5, 1};
-		int value = 94;
+		int[] denominations = new int[]{7, 5, 3};
+		int value = 93;
 			
 		CoinProblemSolver solver = new CoinProblemSolver(denominations, value);
 		

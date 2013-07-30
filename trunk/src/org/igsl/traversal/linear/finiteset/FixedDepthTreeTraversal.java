@@ -48,7 +48,7 @@ public class FixedDepthTreeTraversal<T>
 			}
 			
 			this.depth = 1;
-			this.initialized = false;
+			this.stack.get(this.depth-1).update(null);
 		}
 	}
 	
@@ -60,56 +60,31 @@ public class FixedDepthTreeTraversal<T>
 	 */
 	public boolean moveForward() throws EmptyTraversalException {
 
-		System.out.print("depth = " + depth + ": ");
-		BackwardPathIterator<T> pi = getPathIterator();
-		while(pi.hasPreviousNode()) {
-			T value = pi.previousNode();
-			System.out.print(value + "->");
-		}
-		System.out.println();
+		//System.out.print("depth = " + depth + ": ");
+		//BackwardPathIterator<T> pi = getPathIterator();
+		//while(pi.hasPreviousNode()) {
+			//T value = pi.previousNode();
+			//System.out.print(value + "->");
+		//}
+		//System.out.println();
 		
 		if(depth == 0 || generator.isGoal(getPathIterator())) { // empty
 			return false;
-		} else if(depth == 1) {
+		} else {
 			ValuesIterator<T> iterator = stack.get(depth-1);
-			if(!initialized) {
-				iterator.update(getPathIterator());
-				initialized = true;
-			}
-			
+
 			if(iterator.hasNext()) {
 				iterator.next();
-				++depth;
+				
+				if(depth < stack.size()) {
+					iterator = stack.get((++depth) - 1);
+					iterator.update(getPathIterator());
+				}
 			} else {
 				backtrack();
 			}
-			
-			
 			
 			return true;			
-		} else if(depth < stack.size()) {
-			ValuesIterator<T> iterator = stack.get(depth-1);
-			iterator.update(getPathIterator());
-			
-			if(iterator.hasNext()) {
-				iterator.next();
-				++depth;
-			} else {
-				backtrack();
-			}
-			
-			return true;
-		} else { // if(depth == stack.size())
-			ValuesIterator<T> iterator = stack.get(depth-1);
-			iterator.update(getPathIterator());
-			
-			if(iterator.hasNext()) {
-				iterator.next();
-			} else {
-				backtrack();
-			}
-			
-			return true;
 		}
 	}
 	
