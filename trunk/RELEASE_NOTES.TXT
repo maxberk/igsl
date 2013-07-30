@@ -1,13 +1,13 @@
 (C) Implicit Graph Search Library, 2009, 2013
 
-=== RELEASE NOTES, version 0.2.1 ===
+=== RELEASE NOTES, version 0.2.2 ===
 
-Release is intermediate and contains examples both for old and new IGSL interfaces.
+Release contains examples only for new IGSL interfaces for constraint-satisfaction problems.
 As usual it contains IGSL classes packed into igsl.jar which could be found in lib directory.
 Generated IGSL core interfaces' and traversal's implementations' documentation could be
-found in javadoc directory. Compiled IGSL demo applications Coin Problem, Hamiltonian Path
-and Knight's Tour problems along with tests using them are presented in bin directory.
-Java code for demo applications and tests is presented in app directory.
+found in javadoc directory. Compiled IGSL demo applications Coin Problem and Hamiltonian Path
+problems along with tests using them are presented in bin directory. Java code for demo
+applications and tests is presented in app directory.
 
 For Coin problem:
 
@@ -16,9 +16,5 @@ java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.c
 For Hamiltonian Path problem:
 
 java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.hamiltonianpath.HamiltonianPathTest
-
-For Knight's Tour problem:
-
-java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.knighttour2.KnightTourTest
 
 Samples' classes are already compiled into bin directory.
