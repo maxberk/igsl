@@ -62,17 +62,19 @@ public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
 		public void update(BackwardPathIterator<Denomination> iterator) {
 			int accValue = 0;
 			
-			while(iterator.hasPreviousNode()) {
-				Denomination denom = iterator.previousNode();
-				accValue += denominations[denom.getIndex()] * denom.getAmount();
+			if(iterator != null) {
+				while(iterator.hasPreviousNode()) {
+					Denomination denom = iterator.previousNode();
+					accValue += denominations[denom.getIndex()] * denom.getAmount();
+				}
 			}
 			
-			System.out.println(">>>>>>");
+			//System.out.println(">>>>>>");
 			int amount = (value - accValue) / denominations[d.getIndex()];
-			System.out.println("value - accValue = " + (value - accValue));
-			System.out.println("denominations[d.getIndex()] = " + denominations[d.getIndex()]);
-			System.out.println("amount = " + amount);
-			System.out.println("<<<<<<");
+			//System.out.println("value - accValue = " + (value - accValue));
+			//System.out.println("denominations[d.getIndex()] = " + denominations[d.getIndex()]);
+			//System.out.println("amount = " + amount);
+			//System.out.println("<<<<<<");
 			
 			d.setAmount(amount+1);
 		}
