@@ -29,5 +29,9 @@ public class Denomination {
 	public void decAmount() {
 		--amount;
 	}
+	
+	public String toString() {
+		return index + "(" + amount + ")";
+	}
 
 }
