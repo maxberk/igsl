@@ -30,25 +30,21 @@ public class CoinProblemTest {
 		System.out.println("Value is " + value);
 		
 		FixedDepthTreeTraversal<Denomination> tr2 = new FixedDepthTreeTraversal<Denomination>(solver);
-
-		long startTime2 = System.currentTimeMillis();
 		Direct.searchForward(tr2);
-		long finishTime2 = System.currentTimeMillis();
-		System.out.println("Work time for greedy search = " + (finishTime2 - startTime2));
-
 		BackwardPathIterator<Denomination> path2 = tr2.getPath();
 			
 		int amount2 = 0;
 		while(path2.hasPreviousNode()) {
 			Denomination d = path2.previousNode();
 		
-			if(d.getIndex() >= 0 && d.getAmount() > 0) {
+			if(d.getIndex() >= 0) {
 				System.out.print(d.getAmount() + " * " + denominations[d.getIndex()] + " + ");
 			}
+			
 			amount2 += d.getAmount();
 		}
 		System.out.println();
-		System.out.println("Result for greedy search is " + amount2);
+		System.out.println("Total number of coins for greedy search: " + amount2);
 	}
 
 }
