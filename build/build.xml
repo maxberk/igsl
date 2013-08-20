@@ -1,4 +1,4 @@
-<!-- Implicit Graph Search Library(C), 2009, 2010, 2011, 2013 -->
+<!-- Implicit Graph Search Library(C), 2009, 2013 -->
 
 <project name="igsl" default="doc.promoted" basedir="..">
 	<fileset id="src.files.promoted" dir="src" includesfile="build/classes.promoted"/>
@@ -165,7 +165,7 @@
 		<delete dir="bin"/>
 	</target-->
 	
-	<target name="run.test.promoted" depends="compile.test.promoted">
+	<target name="run.test.promoted" depends="clean,compile.test.promoted">
 		<java fork="true" classname="org.igsl.test.coinproblem.variant3.CoinProblemTest">
 			<classpath>
 				<pathelement path="bin"/>
@@ -250,6 +250,7 @@
 		<delete dir="bin"/>
 		<delete dir="lib"/>
 		<delete dir="temp"/>
+		<delete dir="release"/>
 	</target>
 	
 	<target name="clean.javadoc">

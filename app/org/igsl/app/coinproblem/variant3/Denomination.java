@@ -26,8 +26,9 @@ public class Denomination {
 		this.amount = amount;
 	}
 	
-	public void decAmount() {
+	public Denomination decAmount() {
 		--amount;
+		return this;
 	}
 	
 	public String toString() {
