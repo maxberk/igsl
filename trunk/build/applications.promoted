@@ -3,3 +3,5 @@ org/igsl/app/coinproblem/variant3/CoinProblemSolver.java
 org/igsl/app/hamiltonianpath/HamiltonianPathSolver.java
 org/igsl/app/knighttour2/Position.java
 org/igsl/app/knighttour2/KnightTourSolver.java
+org/igsl/app/eightqueens/Queen.java
+org/igsl/app/eightqueens/EQPSolver.java

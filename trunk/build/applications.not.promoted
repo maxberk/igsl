@@ -2,8 +2,6 @@ org/igsl/app/fifteens/Position.java
 org/igsl/app/fifteens/FifteensSolver.java
 org/igsl/app/sudoku/Cell.java
 org/igsl/app/sudoku/SudokuSolver.java
-org/igsl/app/eightqueens/Queen.java
-org/igsl/app/eightqueens/EQPSolver.java
 org/igsl/app/knighttour/Knight.java
 org/igsl/app/knighttour/KnightTourSolver.java
 org/igsl/app/coinproblem/variant2/Coin.java

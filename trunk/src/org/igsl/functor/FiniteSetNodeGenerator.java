@@ -4,10 +4,6 @@
 
 package org.igsl.functor;
 
-import java.util.List;
-
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
-
 /**
  * Interface FiniteSetNodeGenerator should be implemented to initialize a tree traversal
  * on a limited set of node values.

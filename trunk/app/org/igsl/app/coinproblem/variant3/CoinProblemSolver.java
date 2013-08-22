@@ -39,6 +39,11 @@ public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
 		return new ValuesIteratorImpl(idx, value);
 	}
 	
+	public boolean isValidTransition(Denomination value, BackwardPathIterator<Denomination> iterator) {
+		return true;
+	}
+	
+	
 	public boolean isGoal(BackwardPathIterator<Denomination> bpi) {
 		int accValue = 0;
 		
