@@ -1,7 +1,6 @@
 org/igsl/test/fifteens/FifteensTest.java
 org/igsl/test/tsp/TSPConcurrentTest.java
 org/igsl/test/sudoku/SudokuTest.java
-org/igsl/test/eightqueens/EightQueensTest.java
 org/igsl/test/coinproblem/variant2/CoinProblemTest.java
 org/igsl/test/coinproblem/variant3/OverallCoinProblemTest.java
 org/igsl/test/coinproblem/variant4/CoinProblemTest.java

@@ -1,66 +1,35 @@
 /**
- * Implicit Graph Search Library(C), 2011 
+ * Implicit Graph Search Library(C), 2009, 2013 
  */
 
 package org.igsl.test.eightqueens;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-
 import org.igsl.algorithm.Direct;
-import org.igsl.algorithm.Iterative;
-import org.igsl.app.eightqueens.Board;
+import org.igsl.app.eightqueens.Queen;
 import org.igsl.app.eightqueens.EQPSolver;
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
-import org.igsl.traversal.linear.DepthFirstTreeTraversal;
-
-import static org.igsl.functor.memoize.Memoizer.*;
+import org.igsl.functor.BackwardPathIterator;
+import org.igsl.traversal.linear.finiteset.FixedDepthTreeTraversal;
 
 public class EightQueensTest {
 	
 	/**
-	 * Eight Queens problem test scenarios based on DepthFirstTreeTraversal. First scenario demonstrates
-	 * how to find all solutions with <code>searchForward</code> method while the second utilizes
-	 * iterative <code>deepenIteratively</code> techniques. 
-	 * 
-	 * @param args
 	 */
 	public static void main(String[] args) {
-		EQPSolver solver = new EQPSolver();
+		EQPSolver solver = new EQPSolver(8);
 		
-		System.out.println("=====Eight Queens Problems. Direct search. All solutions=====");
+		System.out.println("=====Eight Queens Problems. Direct search.=====");
 		
-		DepthFirstTreeTraversal<Board> tr = new DepthFirstTreeTraversal<Board>(new Board(), solver);
+		FixedDepthTreeTraversal<Queen> tr = new FixedDepthTreeTraversal<Queen>(solver);
+		Direct.searchForward(tr);
+		BackwardPathIterator<Queen> path = tr.getPath();
 		
-		Iterator<Enumeration<Board>> iterator = Direct.findAllSolutions(tr);
-		int id = 0;
-		
-		while(iterator.hasNext()) {
-			System.out.print("Solution " + (++id) + ": ");
-			Enumeration<Board> path = iterator.next();
-			while(path.hasMoreElements()) {
-				Board r = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
-				System.out.print(toPrint);
-			}
-			System.out.println();
+		while(path.hasPreviousNode()) {
+			Queen q = path.previousNode();
+			String toPrint = (path.hasPreviousNode()) ? q.toString() + "->" : q.toString();
+			System.out.print(toPrint);
 		}
 		
-		System.out.println("=====Eight Queens Problems. Solution for iterative search=====");
-		
-		try {
-			DepthFirstTreeTraversal<Board> tr2 = new DepthFirstTreeTraversal<Board>(memoize(solver));
-					
-			Enumeration<Board> path = Iterative.deepenIteratively(tr2);
-			System.out.print("Solution found iteratively: ");
-			while(path.hasMoreElements()) {
-				Board r = path.nextElement();
-				String toPrint = (path.hasMoreElements()) ? r.toString() + "->" : r.toString();
-				System.out.print(toPrint);
-			}
-			System.out.println();
-		} catch(DefaultValuesUnsupportedException e) {
-		}
+		System.out.println();
 	}
 
 }

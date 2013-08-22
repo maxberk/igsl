@@ -22,6 +22,8 @@ public interface FixedDepthNodeGenerator<T> {
 	 */
 	ValuesIterator<T> createValues(int idx);
 	
+	boolean isValidTransition(T value, BackwardPathIterator<T> iterator);
+	
 	boolean isGoal(BackwardPathIterator<T> bpi);
 
 }
