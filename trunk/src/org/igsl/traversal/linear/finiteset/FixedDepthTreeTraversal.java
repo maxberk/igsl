@@ -72,18 +72,27 @@ public class FixedDepthTreeTraversal<T>
 			return false;
 		} else {
 			ValuesIterator<T> iterator = stack.get(depth-1);
-
-			if(iterator.hasNext()) {
-				iterator.next();
+			boolean valid = false;
+			
+			while(iterator.hasNext()) {
+				T value = iterator.next();
 				
-				if(depth < stack.size()) {
-					iterator = stack.get((++depth) - 1);
-					iterator.update(getPathIterator());
+				valid = generator.isValidTransition(value, getPathIterator(depth-1));
+				
+				if(valid) {
+					if(depth < stack.size()) {
+						iterator = stack.get((++depth) - 1);
+						iterator.update(getPathIterator());
+					}
+
+					break;
 				}
-			} else {
-				backtrack();
 			}
 			
+			if(!valid) {
+				backtrack();
+			}
+				
 			return true;			
 		}
 	}
@@ -98,9 +107,19 @@ public class FixedDepthTreeTraversal<T>
 		} else { // depth > 0
 			do {
 				ValuesIterator<T> iterator = stack.get(depth-1);
-	
-				if(iterator.hasNext()) {
-					iterator.next();
+				boolean valid = false;
+				
+				while(iterator.hasNext()) {
+					T value = iterator.next();
+
+					valid = generator.isValidTransition(value, getPathIterator(depth-1));
+					
+					if(valid) {
+						break;
+					}
+				}
+				
+				if(valid) {
 					break;
 				}
 			} while(--depth > 0);
@@ -116,8 +135,15 @@ public class FixedDepthTreeTraversal<T>
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
 	public BackwardPathIterator<T> getPathIterator() {
-		return getPathIteratorImpl();
+		return getPathIteratorImpl(depth);
 	}
+	
+	/**
+	 * Returns a list of traversal from a root node to cursor including both
+	 */
+	public BackwardPathIterator<T> getPathIterator(int depthValue) {
+		return getPathIteratorImpl(depthValue);
+	}	
 	
 	/**
 	 * Returns a list of traversal from a root node to cursor including both
@@ -135,11 +161,11 @@ public class FixedDepthTreeTraversal<T>
 		return result;
 	}
 	
-	private PathIteratorImpl getPathIteratorImpl() {
+	private PathIteratorImpl getPathIteratorImpl(int depthValue) {
 		if(pathIterator == null) {
-			pathIterator = new PathIteratorImpl(this, depth);
+			pathIterator = new PathIteratorImpl(this, depthValue);
 		} else {
-			pathIterator.reset(depth);
+			pathIterator.reset(depthValue);
 		}
 		
 		return pathIterator;
