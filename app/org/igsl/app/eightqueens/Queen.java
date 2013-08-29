@@ -15,7 +15,7 @@ public class Queen {
 	 */
 	public Queen(int i) {
 		this.i = i;
-		this.j = 0;
+		this.j = 1;
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class Queen {
 	}
 
 	public void firstPosition() {
-		j = 0;
+		j = 1;
 	}
 	
 	public Queen nextPosition() {

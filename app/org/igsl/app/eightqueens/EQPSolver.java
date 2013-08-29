@@ -26,12 +26,13 @@ public class EQPSolver implements FixedDepthNodeGenerator<Queen> {
 	}
 	
 	public ValuesIterator<Queen> createValues(int idx) {
-		return new ValuesIteratorImpl(idx);
+		return new ValuesIteratorImpl(idx+1);
 	}
 	
 	public boolean isValidTransition(Queen queen, BackwardPathIterator<Queen> iterator) {
 		while(iterator.hasPreviousNode()) {
 			Queen q = iterator.previousNode();
+			
 			if(q.canBeat(queen)) {
 				return false;
 			}
