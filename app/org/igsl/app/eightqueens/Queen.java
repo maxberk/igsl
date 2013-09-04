@@ -22,8 +22,7 @@ public class Queen {
 	 * 
 	 */
 	public boolean canBeat(Queen q) {
-		return (i == q.i) || (j == q.j) ||
-			(Math.abs(i - q.i) == Math.abs(j - q.j));
+		return (j == q.j) || (Math.abs(i - q.i) == Math.abs(j - q.j));
 	}
 	
 	public int getI() {
