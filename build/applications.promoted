@@ -5,3 +5,4 @@ org/igsl/app/knighttour2/Position.java
 org/igsl/app/knighttour2/KnightTourSolver.java
 org/igsl/app/eightqueens/Queen.java
 org/igsl/app/eightqueens/EQPSolver.java
+org/igsl/app/eightqueens2/EQPSolver.java
