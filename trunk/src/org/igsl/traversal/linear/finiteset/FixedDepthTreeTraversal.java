@@ -60,13 +60,13 @@ public class FixedDepthTreeTraversal<T>
 	 */
 	public boolean moveForward() throws EmptyTraversalException {
 
-		//System.out.print("depth = " + depth + ": ");
-		//BackwardPathIterator<T> pi = getPathIterator();
-		//while(pi.hasPreviousNode()) {
-			//T value = pi.previousNode();
-			//System.out.print(value + "->");
-		//}
-		//System.out.println();
+		System.out.print("depth = " + depth + ": ");
+		BackwardPathIterator<T> pi = getPathIterator();
+		while(pi.hasPreviousNode()) {
+			T value = pi.previousNode();
+			System.out.print(value + "->");
+		}
+		System.out.println();
 		
 		if(depth == 0 || generator.isGoal(getPathIterator())) { // empty
 			return false;

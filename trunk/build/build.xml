@@ -162,6 +162,16 @@
 				<pathelement location="lib/igsl-not-promoted.jar"/>
 			</classpath>
 		</java>
+		
+		<java fork="true" classname="org.igsl.test.hamiltonianpath.HamiltonianPathTest">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
+	
+	
+		
 		<delete dir="bin"/>
 	</target-->
 	
@@ -172,13 +182,13 @@
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
-		<java fork="true" classname="org.igsl.test.hamiltonianpath.HamiltonianPathTest">
+		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
-		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
+		<java fork="true" classname="org.igsl.test.eightqueens2.EightQueensTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>

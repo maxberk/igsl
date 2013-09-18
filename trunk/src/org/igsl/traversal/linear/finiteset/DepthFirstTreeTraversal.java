@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2013 
+ * Implicit Graph Search Library(C), 2009, 2013 
  */
 
 package org.igsl.traversal.linear.finiteset;
@@ -30,6 +30,7 @@ public class DepthFirstTreeTraversal<T>
 	public DepthFirstTreeTraversal(FiniteSetNodeGenerator<T> generator) 
 		throws NullPointerException
 	{
+		System.out.println("ksdjfksdjl");
 		if(generator == null) {
 			throw new NullPointerException();
 		} else {
@@ -125,7 +126,7 @@ public class DepthFirstTreeTraversal<T>
 	 * Returns a list of traversal from a root node to cursor including both
 	 */
 	public BackwardPathIterator<T> getPath() {
-		return new PathIteratorImpl(this, depth);
+		return new PathIteratorImpl(this);
 	}
 	
 	/**
@@ -139,7 +140,7 @@ public class DepthFirstTreeTraversal<T>
 	
 	private PathIteratorImpl getPathIteratorImpl() {
 		if(pathIterator == null) {
-			pathIterator = new PathIteratorImpl(this, depth);
+			pathIterator = new PathIteratorImpl(this);
 		} else {
 			pathIterator.reset();
 		}
@@ -163,10 +164,10 @@ public class DepthFirstTreeTraversal<T>
 		private DepthFirstTreeTraversal<T> tr;
 		private int start, idx;
 
-		public PathIteratorImpl(DepthFirstTreeTraversal<T> tr, int start) {
+		public PathIteratorImpl(DepthFirstTreeTraversal<T> tr) {
 			this.tr = tr;
-			this.start = start;
-			this.idx = start;
+			this.start = tr.depth;
+			this.idx = this.start;
 		}
 
 		public boolean hasPreviousNode() {
@@ -187,7 +188,8 @@ public class DepthFirstTreeTraversal<T>
 		
 		
 		private PathIteratorImpl reset() {
-			this.idx = start;
+			this.start = tr.depth;
+			this.idx = this.start;
 			return this;
 		}
 		
