@@ -44,6 +44,7 @@ public class EQPSolver implements FixedDepthNodeGenerator<Queen> {
 	public boolean isGoal(BackwardPathIterator<Queen> bpi) {
 		if(bpi.hasPreviousNode()) {
 			Queen q = bpi.previousNode();
+			
 			return (q.getI() == dim);
 		} else {
 			return false;

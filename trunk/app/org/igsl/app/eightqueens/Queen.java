@@ -46,7 +46,7 @@ public class Queen {
 	 * Returns vertical and horizontal indices of a knight 
 	 */
 	public String toString() {
-		return "(" + i + "," + j + ")";
+		return j + "";
 	}
 	
 }
