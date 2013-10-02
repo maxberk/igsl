@@ -16,7 +16,7 @@ public class EightQueensTest {
 	public static void main(String[] args) {
 		EQPSolver solver = new EQPSolver(8);
 		
-		System.out.println("=====Eight Queens Problem 2. Direct search.=====");
+		System.out.println("=====Eight Queens Problem for finite set DepthFirstTreeTraversal.=====");
 		
 		DepthFirstTreeTraversal<Integer> tr = new DepthFirstTreeTraversal<Integer>(solver);
 		Direct.searchForward(tr);

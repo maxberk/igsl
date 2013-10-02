@@ -30,7 +30,6 @@ public class DepthFirstTreeTraversal<T>
 	public DepthFirstTreeTraversal(FiniteSetNodeGenerator<T> generator) 
 		throws NullPointerException
 	{
-		System.out.println("ksdjfksdjl");
 		if(generator == null) {
 			throw new NullPointerException();
 		} else {
