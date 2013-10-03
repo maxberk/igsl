@@ -1,13 +1,15 @@
 (C) Implicit Graph Search Library, 2009, 2013
 
-=== RELEASE NOTES, version 0.2.3 ===
+=== RELEASE NOTES, version 0.2.4 ===
 
 Release contains examples only for new IGSL interfaces for constraint-satisfaction problems.
 As usual it contains IGSL classes packed into igsl.jar which could be found in lib directory.
 Generated IGSL core interfaces' and traversal's implementations' documentation could be
 found in javadoc directory. Compiled IGSL demo applications Coin Problem, Hamiltonian Path and
 Eight Queens problems along with tests using them are presented in bin directory. Java code for demo
-applications and tests is presented in app directory.
+applications and tests is presented in app directory. For Eight Queens problem two traversal types are
+presented - fixed depth tree traversal which is also introduced in Coin Problem solver - along with
+finite set depth-first tree traversal which is also used in Hamiltonian Path sample.
 
 For Coin problem:
 
@@ -17,8 +19,12 @@ For Hamiltonian Path problem:
 
 java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.hamiltonianpath.HamiltonianPathTest
 
-For Eight Queens problem:
+For Eight Queens problem (test with fixed depth tree traversal):
 
 java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightqueens.EightQueensTest
+
+For Eight Queens problem (test with finite set depth-first tree traversal):
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.eightqueens2.EightQueensTest
 
 Samples' classes are already compiled into bin directory.
