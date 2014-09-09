@@ -4,7 +4,6 @@ org/igsl/traversal/Copyable.java
 org/igsl/traversal/Splitable.java
 org/igsl/traversal/linear/DepthFirstTreeTraversal.java
 org/igsl/traversal/linear/finiteset/DepthFirstTreeTraversal.java
-org/igsl/traversal/linear/finiteset/OrderedDepthFirstTreeTraversal.java
 org/igsl/traversal/linear/DepthFirstCostTreeTraversal.java
 org/igsl/traversal/linear/finiteset/FixedDepthTreeTraversal.java
 org/igsl/functor/BackwardPathIterator.java
@@ -12,7 +11,6 @@ org/igsl/functor/ForwardPathIterator.java
 org/igsl/functor/FiniteSetPathIterator.java
 org/igsl/functor/NodeGenerator.java
 org/igsl/functor/FiniteSetNodeGenerator.java
-org/igsl/functor/OrderedFiniteSetNodeGenerator.java
 org/igsl/functor/FixedDepthNodeGenerator.java
 org/igsl/functor/InfiniteDepthNodeGenerator.java
 org/igsl/functor/ValuesIterator.java
