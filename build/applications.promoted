@@ -7,3 +7,5 @@ org/igsl/app/eightqueens/Queen.java
 org/igsl/app/eightqueens/EQPSolver.java
 org/igsl/app/eightqueens2/EQPSolver.java
 org/igsl/app/cryptarithm/CryptarithmSolver.java
+org/igsl/app/egyptianfractions/MutableInteger.java
+org/igsl/app/egyptianfractions/EgyptianFractionsProblemSolver.java
