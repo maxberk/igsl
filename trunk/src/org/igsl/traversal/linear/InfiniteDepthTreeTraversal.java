@@ -1,0 +1,173 @@
+/**
+ * Implicit Graph Search Library(C), 2009, 2014 
+ */
+
+package org.igsl.traversal.linear;
+
+import java.util.Stack;
+import java.util.EmptyStackException;
+import java.util.ListIterator;
+import org.igsl.functor.ValuesIterator;
+import org.igsl.functor.InfiniteDepthNodeGenerator;
+import org.igsl.functor.exception.DefaultValuesUnsupportedException;
+import org.igsl.functor.exception.EmptyTraversalException;
+import org.igsl.traversal.TreeTraversal;
+import org.igsl.traversal.Copyable;
+import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.ForwardPathIterator;
+
+/**
+ * Depth-first search implementation for a problem graph without edge cost.
+ */
+public class InfiniteDepthTreeTraversal<T>
+	implements TreeTraversal<T>, Copyable<InfiniteDepthTreeTraversal<T>>
+{
+	/**
+	 * Constructor based on expansion operator
+	 * 
+	 * @param value root node value
+	 * @param generator node generator function
+	 * @throws NullPointerException thrown if node generator is null
+	 * @see InfiniteDepthNodeGenerator
+	 */
+	public InfiniteDepthTreeTraversal(InfiniteDepthNodeGenerator<T> generator) 
+		throws NullPointerException
+	{
+		if(generator == null) {
+			throw new NullPointerException();
+		} else {
+			this.generator = generator;
+			
+			this.stack = new Stack();
+			this.depth = 0;
+			
+			this.stack.push(generator.createValues(null));
+		}
+	}
+	
+	/**
+	 */
+	public boolean moveForward() throws EmptyTraversalException {
+		if(depth == 0 || generator.isGoal(getPathIterator())) {
+			return false;
+		} else {
+			ValuesIterator<T> iterator = stack.get(depth);
+			iterator.update(getPathIterator());
+			
+			if(iterator.hasNext()) {
+				iterator.next();
+				++depth;
+			} else {
+				backtrack();
+			}
+			
+			return true;
+		}
+		
+	}
+	
+	/**
+	 * Simply prunes the cursor node and its predecessors if necessary
+	 * till a ready-for-expansion node is found.
+	 */
+	public void backtrack() throws EmptyTraversalException {
+		if(depth == 0) {
+			throw new EmptyTraversalException();
+		} else do { // depth > 0
+			ValuesIterator<T> iterator = stack.get(depth-1);
+			
+			if(iterator.hasNext()) {
+				iterator.next();
+				break;
+			}
+		} while(--depth > 0); // else
+			
+		if(depth == 0) {
+			throw new EmptyTraversalException();
+		}
+	}
+	
+	/**
+	 * Check if traversal has no nodes to expand
+	 */
+	public boolean isEmpty() { return depth == 0; }
+	
+	/**
+	 * Returns a list of traversal from a root node to cursor including both
+	 */
+	public BackwardPathIterator<T> getPathIterator() {
+		return getPathIteratorImpl();
+	}
+	
+	/**
+	 * Returns a list of traversal from a root node to cursor including both
+	 */
+	public BackwardPathIterator<T> getPath() {
+		return new PathIteratorImpl(this);
+	}
+	
+	/**
+	 * Implementation details of Copyable interface.
+	 * Returns a TreeTraversal with a copy of a cursor node
+	 */
+	public InfiniteDepthTreeTraversal<T> getCopyOf() {
+		InfiniteDepthTreeTraversal<T> result = new InfiniteDepthTreeTraversal<T>();
+		return result;
+	}
+	
+	private PathIteratorImpl getPathIteratorImpl() {
+		if(pathIterator == null) {
+			pathIterator = new PathIteratorImpl(this);
+		} else {
+			pathIterator.reset();
+		}
+		
+		return pathIterator;
+	}
+	
+	private InfiniteDepthTreeTraversal() {}
+	
+	protected InfiniteDepthNodeGenerator<T> generator;
+	
+	protected Stack<ValuesIterator<T> > stack;
+	protected int depth;
+	
+	private PathIteratorImpl pathIterator;
+	
+	private class PathIteratorImpl 
+		implements BackwardPathIterator<T>, ForwardPathIterator<T> {
+
+		private InfiniteDepthTreeTraversal<T> tr;
+		private ListIterator<ValuesIterator<T> > bli, fli;
+
+		public PathIteratorImpl(InfiniteDepthTreeTraversal<T> tr) {
+			this.tr = tr;
+			this.bli = tr.stack.listIterator(tr.depth-1);
+			this.fli = tr.stack.listIterator();
+		}
+
+		public boolean hasPreviousNode() {
+			return bli.hasPrevious();		
+		}
+
+		public T previousNode() {
+			return bli.previous().getValue();
+		}
+		
+		public boolean hasNextNode() {
+			return bli.hasNext();		
+		}
+
+		public T nextNode() {
+			return bli.next().getValue();
+		}
+		
+		private PathIteratorImpl reset() {
+			this.bli = tr.stack.listIterator(tr.depth-1);
+			this.fli = tr.stack.listIterator();
+			return this;
+		}
+		
+	}
+
+}
