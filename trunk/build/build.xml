@@ -200,6 +200,12 @@
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
+		<java fork="true" classname="org.igsl.test.egyptianfractions.EgyptianFractionsTest">
+			<classpath>
+				<pathelement path="bin"/>
+				<pathelement location="lib/igsl.jar"/>
+			</classpath>
+		</java>
 		<delete dir="bin"/>
 	</target>	
 	
