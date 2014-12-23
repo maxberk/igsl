@@ -5,11 +5,10 @@
 package org.igsl.traversal.linear;
 
 import java.util.Stack;
-import java.util.EmptyStackException;
 import java.util.ListIterator;
+
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.InfiniteDepthNodeGenerator;
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
@@ -37,11 +36,11 @@ public class InfiniteDepthTreeTraversal<T>
 			throw new NullPointerException();
 		} else {
 			this.generator = generator;
+
+			this.depth = 1;
 			
 			this.stack = new Stack();
-			this.depth = 0;
-			
-			this.stack.push(generator.createValues(null));
+			this.stack.push(generator.createValues(getPathIterator()));
 		}
 	}
 	
@@ -51,8 +50,16 @@ public class InfiniteDepthTreeTraversal<T>
 		if(depth == 0 || generator.isGoal(getPathIterator())) {
 			return false;
 		} else {
-			ValuesIterator<T> iterator = stack.get(depth);
-			iterator.update(getPathIterator());
+			ValuesIterator<T> iterator = null;
+			
+			if(stack.size() < depth + 1) {
+				++depth;
+				iterator = generator.createValues(getPathIterator());
+				stack.push(iterator);
+			} else {
+				iterator = stack.get(depth);
+				iterator.update(getPathIterator());
+			}
 			
 			if(iterator.hasNext()) {
 				iterator.next();
@@ -63,7 +70,6 @@ public class InfiniteDepthTreeTraversal<T>
 			
 			return true;
 		}
-		
 	}
 	
 	/**
@@ -142,6 +148,7 @@ public class InfiniteDepthTreeTraversal<T>
 
 		public PathIteratorImpl(InfiniteDepthTreeTraversal<T> tr) {
 			this.tr = tr;
+			
 			this.bli = tr.stack.listIterator(tr.depth-1);
 			this.fli = tr.stack.listIterator();
 		}
@@ -155,16 +162,17 @@ public class InfiniteDepthTreeTraversal<T>
 		}
 		
 		public boolean hasNextNode() {
-			return bli.hasNext();		
+			return fli.nextIndex() < tr.depth-1;		
 		}
 
 		public T nextNode() {
-			return bli.next().getValue();
+			return fli.next().getValue();
 		}
 		
 		private PathIteratorImpl reset() {
 			this.bli = tr.stack.listIterator(tr.depth-1);
 			this.fli = tr.stack.listIterator();
+			
 			return this;
 		}
 		
