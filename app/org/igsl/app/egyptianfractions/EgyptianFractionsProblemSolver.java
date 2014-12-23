@@ -15,7 +15,6 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 	private long numerator, denominator;
 	
 	/**
-	 * 
 	 * @param numerator
 	 * @param denominator
 	 */
@@ -33,7 +32,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 	}
 		
 	public boolean isGoal(BackwardPathIterator<MutableInteger> bpi) {
-		return getNumerator(bpi) == 1;
+		return getNumerator(bpi) == 0;
 	}
 	
 	private long getStartValue(BackwardPathIterator<MutableInteger> bpi) {
@@ -56,7 +55,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		
 		while(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
-			
+
 			numrest = numrest * mi.getValue() - denrest;
 			denrest = denrest * mi.getValue();
 		}
@@ -65,14 +64,19 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 	}
 	
 	private class ValuesIteratorImpl implements ValuesIterator<MutableInteger> {
+		private MutableInteger startValue;
 		private MutableInteger i;
 		
 		public ValuesIteratorImpl(BackwardPathIterator<MutableInteger> bpi) {
-			this.i = new MutableInteger(getStartValue(bpi));
+			long lStartValue = getStartValue(bpi);
+			this.startValue = new MutableInteger(lStartValue);
+			this.i = new MutableInteger(lStartValue);
 		}
 		
 		public void update(BackwardPathIterator<MutableInteger> bpi) {
-			i.assignValue(getStartValue(bpi));
+			long lStartValue = getStartValue(bpi);
+			startValue.assignValue(lStartValue);
+			i.assignValue(lStartValue);
 		}
 
 		public boolean hasNext() {
@@ -80,7 +84,12 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		}
 
 		public MutableInteger next() {
-			return i.inc();
+			if(i.getValue() == startValue.getValue()) {
+				startValue.assignValue(0);
+				return i;
+			} else {
+				return i.inc();
+			}
 		}
 		
 		public MutableInteger getValue() {

@@ -23,7 +23,7 @@ public class EgyptianFractionsTest {
 		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator);
 		
 		System.out.println("=====Egyptian Fractions Problem Solver=====");
-		System.out.println("Numerator = " + numerator + ", denominator = " + denominator);
+		System.out.print(numerator + "/" + denominator + "=");
 		
 		InfiniteDepthTreeTraversal<MutableInteger> tr = new InfiniteDepthTreeTraversal<MutableInteger>(solver);
 		Direct.searchForward(tr);
@@ -31,7 +31,7 @@ public class EgyptianFractionsTest {
 			
 		while(path.hasPreviousNode()) {
 			MutableInteger mi = path.previousNode();
-			System.out.print(mi.getValue() + "->");
+			System.out.print("1/" + mi.getValue() + "+");
 		}
 		System.out.println();
 	}
