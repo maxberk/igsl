@@ -16,25 +16,30 @@ public class EgyptianFractionsTest {
 	 * 
 	 * @param args
 	 */
+
 	public static void main(String[] args) {
-		long numerator = 7;
-		long denominator = 8;
+		long numerator = 3;
+		long denominator = 7;
 		
 		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator);
 		
 		System.out.println("=====Egyptian Fractions Problem Solver=====");
-		System.out.print(numerator + "/" + denominator + "=");
+		System.out.println(numerator + "/" + denominator + "=");
 		
 		InfiniteDepthTreeTraversal<MutableInteger> tr = new InfiniteDepthTreeTraversal<MutableInteger>(solver);
-		Direct.searchForward(tr);
-		BackwardPathIterator<MutableInteger> path = tr.getPath();
+		for(int i = 1; i < 10; ++i) {
+			Direct.searchForward(tr);
+			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			
-		while(path.hasPreviousNode()) {
-			MutableInteger mi = path.previousNode();
-			System.out.print("1/" + mi.getValue() + "+");
+			System.out.println();
+			while(path.hasPreviousNode()) {
+				MutableInteger mi = path.previousNode();
+				System.out.print("1/" + mi.getValue() + "+");
+			}
+			System.out.println();
+
+			tr.backtrack();
 		}
-		
-		System.out.println();
 	}
 
 }
