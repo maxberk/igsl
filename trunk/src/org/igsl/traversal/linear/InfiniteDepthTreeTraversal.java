@@ -79,14 +79,14 @@ public class InfiniteDepthTreeTraversal<T>
 	public void backtrack() throws EmptyTraversalException {
 		if(depth == 0) {
 			throw new EmptyTraversalException();
-		} else do { // depth > 0
+		} else while(--depth > 0) { // depth > 0
 			ValuesIterator<T> iterator = stack.get(depth-1);
 			
 			if(iterator.hasNext()) {
 				iterator.next();
 				break;
 			}
-		} while(--depth > 0); // else
+		}
 			
 		if(depth == 0) {
 			throw new EmptyTraversalException();
@@ -171,10 +171,6 @@ public class InfiniteDepthTreeTraversal<T>
 		}
 		
 		private PathIteratorImpl reset() {
-			if(tr.depth == 4) {
-				System.out.println("tr.depth!!! = " + tr.depth);
-			}
-			
 			this.bli = tr.stack.listIterator(tr.depth);
 			this.fli = tr.stack.listIterator();
 			
