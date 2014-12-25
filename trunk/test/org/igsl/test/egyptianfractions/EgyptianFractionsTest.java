@@ -17,7 +17,7 @@ public class EgyptianFractionsTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		long numerator = 5;
+		long numerator = 7;
 		long denominator = 8;
 		
 		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator);
@@ -33,6 +33,7 @@ public class EgyptianFractionsTest {
 			MutableInteger mi = path.previousNode();
 			System.out.print("1/" + mi.getValue() + "+");
 		}
+		
 		System.out.println();
 	}
 

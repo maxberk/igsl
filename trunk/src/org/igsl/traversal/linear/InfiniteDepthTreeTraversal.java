@@ -37,10 +37,10 @@ public class InfiniteDepthTreeTraversal<T>
 		} else {
 			this.generator = generator;
 
-			this.depth = 1;
-			
 			this.stack = new Stack();
 			this.stack.push(generator.createValues(getPathIterator()));
+			
+			this.depth = 1;
 		}
 	}
 	
@@ -53,7 +53,6 @@ public class InfiniteDepthTreeTraversal<T>
 			ValuesIterator<T> iterator = null;
 			
 			if(stack.size() < depth + 1) {
-				++depth;
 				iterator = generator.createValues(getPathIterator());
 				stack.push(iterator);
 			} else {
@@ -61,9 +60,10 @@ public class InfiniteDepthTreeTraversal<T>
 				iterator.update(getPathIterator());
 			}
 			
+			++depth;
+		
 			if(iterator.hasNext()) {
 				iterator.next();
-				++depth;
 			} else {
 				backtrack();
 			}
@@ -149,7 +149,8 @@ public class InfiniteDepthTreeTraversal<T>
 		public PathIteratorImpl(InfiniteDepthTreeTraversal<T> tr) {
 			this.tr = tr;
 			
-			this.bli = tr.stack.listIterator(tr.depth-1);
+			this.bli = (tr.depth == 0) ? tr.stack.listIterator() 
+				: tr.stack.listIterator(tr.depth);
 			this.fli = tr.stack.listIterator();
 		}
 
@@ -162,7 +163,7 @@ public class InfiniteDepthTreeTraversal<T>
 		}
 		
 		public boolean hasNextNode() {
-			return fli.nextIndex() < tr.depth-1;		
+			return fli.nextIndex() <= tr.depth-1;		
 		}
 
 		public T nextNode() {
@@ -170,7 +171,11 @@ public class InfiniteDepthTreeTraversal<T>
 		}
 		
 		private PathIteratorImpl reset() {
-			this.bli = tr.stack.listIterator(tr.depth-1);
+			if(tr.depth == 4) {
+				System.out.println("tr.depth!!! = " + tr.depth);
+			}
+			
+			this.bli = tr.stack.listIterator(tr.depth);
 			this.fli = tr.stack.listIterator();
 			
 			return this;
