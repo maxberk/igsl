@@ -52,11 +52,18 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 				mi = bpi.previousNode();
 				
 				long maxrest = Long.MAX_VALUE / mi.getValue();
-				if(maxrest > numrest && maxrest > denrest) {
+				if(maxrest > numrest) {
 					numrest = numrest * mi.getValue() - denrest;
-					denrest = denrest * mi.getValue();
+					
+					if(maxrest > denrest) {
+						denrest = denrest * mi.getValue();
+					} else {
+						throw new RuntimeException("Overflow occured: maxrest < denrest: "
+								+ maxrest + " < " + denrest);
+					}
 				} else {
-					throw new RuntimeException("Overflow occured!");
+					throw new RuntimeException("Overflow occured: maxrest < numrest: "
+							+ maxrest + " < " + numrest);
 				}
 			}
 		}
@@ -73,11 +80,20 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 			MutableInteger mi = bpi.previousNode();
 
 			long maxrest = Long.MAX_VALUE / mi.getValue();
-			if(maxrest > numrest && maxrest > denrest) {
+			
+			if(maxrest > numrest) {
 				numrest = numrest * mi.getValue() - denrest;
-				denrest = denrest * mi.getValue();
+				
+				if(maxrest > denrest) {
+					denrest = denrest * mi.getValue();
+				} else {
+					throw new RuntimeException("Overflow occured: maxrest < denrest: "
+						+ maxrest + " < " + denrest);
+	
+				}
 			} else {
-				throw new RuntimeException("Overflow occured!");
+				throw new RuntimeException("Overflow occured: maxrest < numrest: "
+					+ maxrest + " < " + numrest + " " + mi.getValue());
 			}
 		}
 		

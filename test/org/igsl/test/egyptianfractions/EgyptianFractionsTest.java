@@ -27,14 +27,18 @@ public class EgyptianFractionsTest {
 		System.out.println(numerator + "/" + denominator + "=");
 		
 		InfiniteDepthTreeTraversal<MutableInteger> tr = new InfiniteDepthTreeTraversal<MutableInteger>(solver);
-		for(int i = 1; i < 10; ++i) {
+		for(int i = 1; i < 12; ++i) {
 			Direct.searchForward(tr);
 			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			
 			System.out.println();
 			while(path.hasPreviousNode()) {
 				MutableInteger mi = path.previousNode();
-				System.out.print("1/" + mi.getValue() + "+");
+				if(path.hasPreviousNode()) {
+					System.out.print("1/" + mi.getValue() + "+");
+				} else {
+					System.out.print("1/" + mi.getValue());
+				}
 			}
 			System.out.println();
 
