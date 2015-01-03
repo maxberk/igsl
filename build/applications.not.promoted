@@ -7,3 +7,4 @@ org/igsl/app/knighttour/KnightTourSolver.java
 org/igsl/app/coinproblem/variant2/Coin.java
 org/igsl/app/coinproblem/variant2/CoinProblemSolver.java
 org/igsl/app/tsp/TSPSolver.java
+org/igsl/app/cryptarithm/CryptarithmSolver.java
