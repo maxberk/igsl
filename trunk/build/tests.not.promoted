@@ -6,3 +6,4 @@ org/igsl/test/coinproblem/variant3/OverallCoinProblemTest.java
 org/igsl/test/coinproblem/variant4/CoinProblemTest.java
 org/igsl/test/knighttour/KnightTourTest.java
 org/igsl/test/tsp/TSPTest.java
+org/igsl/test/cryptarithm/CryptarithmTest.java

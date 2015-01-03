@@ -1,4 +1,4 @@
-<!-- Implicit Graph Search Library(C), 2009, 2013 -->
+<!-- Implicit Graph Search Library(C), 2009, 2015 -->
 
 <project name="igsl" default="doc.promoted" basedir="..">
 	<fileset id="src.files.promoted" dir="src" includesfile="build/classes.promoted"/>
@@ -117,65 +117,7 @@
 		<delete dir="temp"/>
 	</target>
 	
-	<!--target name="run.test.promoted" depends="compile.test.promoted">
-		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-			</classpath>
-		</java>
-		<java fork="true" classname="org.igsl.test.fifteens.FifteensTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-			</classpath>
-		</java>
-		<java fork="true" classname="org.igsl.test.sudoku.SudokuTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-			</classpath>
-		</java>
-		<java fork="true" classname="org.igsl.test.coinproblem.variant1.CoinProblemTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-			</classpath>
-		</java>
-		<java fork="true" classname="org.igsl.test.coinproblem.variant2.CoinProblemTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-			</classpath>
-		</java>
-		<java fork="true" classname="org.igsl.test.knighttour.KnightTourTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-				<pathelement location="lib/igsl-not-promoted.jar"/>
-			</classpath>
-		</java>
-		!!<java fork="true" classname="org.igsl.test.knighttour2.KnightTourTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-				<pathelement location="lib/igsl-not-promoted.jar"/>
-			</classpath>
-		</java>
-		
-		<java fork="true" classname="org.igsl.test.hamiltonianpath.HamiltonianPathTest">
-			<classpath>
-				<pathelement path="bin"/>
-				<pathelement location="lib/igsl.jar"/>
-			</classpath>
-		</java>
-	
-	
-		
-		<delete dir="bin"/>
-	</target-->
-	
-	<target name="run.test.promoted" depends="clean,compile.test.promoted">
+	<target name="run.test.promoted" depends="compile.test.promoted">
 		<java fork="true" classname="org.igsl.test.coinproblem.variant3.CoinProblemTest">
 			<classpath>
 				<pathelement path="bin"/>
@@ -194,20 +136,23 @@
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
+		
 		<java fork="true" classname="org.igsl.test.eightqueens2.EightQueensTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
 		</java>
+		
 		<java fork="true" classname="org.igsl.test.egyptianfractions.EgyptianFractionsTest">
 			<classpath>
 				<pathelement path="bin"/>
 				<pathelement location="lib/igsl.jar"/>
 			</classpath>
-		</java>
+		</java>		
+	
 		<delete dir="bin"/>
-	</target>	
+	</target>
 	
 	<target name="run.test.all" depends="compile.test.all">
 		<java fork="true" classname="org.igsl.test.eightqueens.EightQueensTest">
