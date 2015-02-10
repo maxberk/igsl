@@ -1,7 +1,7 @@
 package org.igsl.app.egyptianfractions;
 
 /**
- * Implicit Graph Search Library(C), 2009, 2014 
+ * Implicit Graph Search Library(C), 2009, 2015 
  */
 
 import org.igsl.functor.InfiniteDepthNodeGenerator;
@@ -27,7 +27,50 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		return new ValuesIteratorImpl(iterator);
 	}
 	
-	public boolean isValidTransition(MutableInteger value, BackwardPathIterator<MutableInteger> iterator) {
+	public boolean isValidTransition(MutableInteger value, BackwardPathIterator<MutableInteger> bpi) {
+		long numrest = numerator;
+		long denrest = denominator;
+
+		long minValue = 0;
+		
+		if(bpi.hasPreviousNode()) {
+			MutableInteger mi = bpi.previousNode();
+			minValue = mi.getValue();
+			
+			numrest = numrest * mi.getValue() - denrest;
+			denrest = denrest * mi.getValue();
+
+			while(bpi.hasPreviousNode()) {
+				mi = bpi.previousNode();
+				
+				long maxrest = Long.MAX_VALUE / mi.getValue();
+				if(maxrest > numrest) {
+					numrest = numrest * mi.getValue() - denrest;
+					
+					if(maxrest > denrest) {
+						denrest = denrest * mi.getValue();
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+		}
+		
+		long maxrest = Long.MAX_VALUE / value.getValue();
+		if(maxrest > numrest) {
+			numrest = numrest * value.getValue() - denrest;
+			
+			if(maxrest > denrest) {
+				denrest = denrest * value.getValue();
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		
 		return true;
 	}
 		

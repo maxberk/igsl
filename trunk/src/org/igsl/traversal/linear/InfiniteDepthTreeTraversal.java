@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2014 
+ * Implicit Graph Search Library(C), 2009, 2015 
  */
 
 package org.igsl.traversal.linear;
@@ -60,10 +60,14 @@ public class InfiniteDepthTreeTraversal<T>
 				iterator.update(getPathIterator());
 			}
 			
-			++depth;
-		
 			if(iterator.hasNext()) {
-				iterator.next();
+				T value = iterator.next();
+				
+				if(generator.isValidTransition(value, getPathIterator()) == false) {
+					backtrack();
+				} else {
+					++depth;
+				}
 			} else {
 				backtrack();
 			}
@@ -79,12 +83,18 @@ public class InfiniteDepthTreeTraversal<T>
 	public void backtrack() throws EmptyTraversalException {
 		if(depth == 0) {
 			throw new EmptyTraversalException();
-		} else while(--depth > 0) { // depth > 0
+		} else while(depth > 0) {
 			ValuesIterator<T> iterator = stack.get(depth-1);
 			
+			--depth;
+			
 			if(iterator.hasNext()) {
-				iterator.next();
-				break;
+				T value = iterator.next();
+				
+				if(generator.isValidTransition(value, getPathIterator())) {
+					++depth;
+					break;
+				}
 			}
 		}
 			
