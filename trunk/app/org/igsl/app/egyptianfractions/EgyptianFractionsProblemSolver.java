@@ -8,9 +8,13 @@ import org.igsl.functor.InfiniteDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
 
+import java.math.BigInteger;
+
 /**
  */
 public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerator<MutableInteger>{
+	
+	private static int idx = 0;
 	
 	private long numerator, denominator;
 	
@@ -82,11 +86,8 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		long numrest = numerator;
 		long denrest = denominator;
 
-		long minValue = 0;
-		
 		if(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
-			minValue = mi.getValue();
 			
 			numrest = numrest * mi.getValue() - denrest;
 			denrest = denrest * mi.getValue();
@@ -95,24 +96,78 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 				mi = bpi.previousNode();
 				
 				long maxrest = Long.MAX_VALUE / mi.getValue();
-				if(maxrest > numrest) {
+				if(maxrest > denrest) {
 					numrest = numrest * mi.getValue() - denrest;
-					
-					if(maxrest > denrest) {
-						denrest = denrest * mi.getValue();
-					} else {
-						throw new RuntimeException("Overflow occured: maxrest < denrest: "
-								+ maxrest + " < " + denrest);
-					}
+					denrest = denrest * mi.getValue();
 				} else {
-					throw new RuntimeException("Overflow occured: maxrest < numrest: "
-							+ maxrest + " < " + numrest);
+					throw new RuntimeException("Overflow occured: maxrest < denrest: "
+							+ maxrest + " < " + denrest);
 				}
 			}
 		}
+
+		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
+		if(numrest == 1) return result;
 		
-		long result = (long) Math.ceil( (double) denrest / (double) numrest);
-		return (result > minValue) ? result : minValue + 1;
+		long numrestprev = numrest; //ni-1
+		long denrestprev = denrest; //di-1		
+		
+		long nextresult;
+		long maxrest = Long.MAX_VALUE / result;
+		if(maxrest > numrest) {
+			numrest = numrest * result - denrest; //ni
+			if(numrest == 0) return result;
+			
+			if(maxrest > denrest) {
+				denrest = denrest * result; //di
+				nextresult = (long) Math.ceil( (double) denrest / (double) numrest); // ai+1
+			} else {
+				BigInteger bNumrestNew = BigInteger.valueOf(numrest);
+
+				BigInteger bDenrest = BigInteger.valueOf(denrest);
+				BigInteger bResult = BigInteger.valueOf(result);
+				
+				BigInteger bDenrestNew = bDenrest.multiply(bResult);
+				denrest = bDenrestNew.longValue();
+
+				BigInteger bNextresult = bDenrestNew.divide(bNumrestNew);
+				nextresult = bNextresult.longValue();
+			}
+		} else {
+			BigInteger bNumrest = BigInteger.valueOf(numrest);
+			BigInteger bResult = BigInteger.valueOf(result);
+			BigInteger bDenrest = BigInteger.valueOf(denrest);
+			
+			BigInteger bNumrestNew = bNumrest.multiply(bResult).subtract(bDenrest);
+			
+			if(maxrest > denrest) {
+				denrest = denrest * result; //di
+				nextresult = (long) Math.ceil( (double) denrest / (double) bNumrestNew.longValue() ); // ai+1
+			} else {
+				BigInteger bDenrestNew = bDenrest.multiply(bResult);
+				denrest = bDenrestNew.longValue();
+				
+				BigInteger bNextresult = bDenrestNew.divide(bNumrestNew);
+				nextresult = bNextresult.longValue();
+			}
+		}
+		
+		long maxnextresult = (long) Math.ceil( (double) Long.MAX_VALUE / (double) denrest ); // A/di = a~i+1
+		if(nextresult > maxnextresult) {
+			long newresult = (long) Math.ceil(
+				(double) denrestprev / (double) (numrestprev - maxnextresult * denrestprev));
+			
+			//System.out.println(" -->nextresult = " + nextresult + " maxnextresult = " + maxnextresult 
+					//+ " result = " + result + " newresult = " + newresult);
+			
+			result = newresult;
+		} else {
+			//System.out.println("nextresult = " + nextresult + " maxnextresult = " + maxnextresult 
+					//+ " result = " + result);
+		}
+		
+		//return (result > minValue) ? result : minValue + 1;
+		return result;
 	}
 	
 	private long getNumerator(BackwardPathIterator<MutableInteger> bpi) {

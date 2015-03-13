@@ -27,7 +27,7 @@ public class EgyptianFractionsTest {
 		System.out.println(numerator + "/" + denominator + "=");
 		
 		InfiniteDepthTreeTraversal<MutableInteger> tr = new InfiniteDepthTreeTraversal<MutableInteger>(solver);
-		for(int i = 1; i < 10; ++i) {
+		for(int i = 1; i < 5; ++i) {
 			Direct.searchForward(tr);
 			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			
