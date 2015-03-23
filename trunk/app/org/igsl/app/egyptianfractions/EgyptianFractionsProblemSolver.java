@@ -107,67 +107,29 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		}
 
 		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
-		if(numrest == 1) return result;
 		
-		long numrestprev = numrest; //ni-1
-		long denrestprev = denrest; //di-1		
-		
-		long nextresult;
 		long maxrest = Long.MAX_VALUE / result;
-		if(maxrest > numrest) {
-			numrest = numrest * result - denrest; //ni
-			if(numrest == 0) return result;
-			
-			if(maxrest > denrest) {
-				denrest = denrest * result; //di
-				nextresult = (long) Math.ceil( (double) denrest / (double) numrest); // ai+1
-			} else {
-				BigInteger bNumrestNew = BigInteger.valueOf(numrest);
-
-				BigInteger bDenrest = BigInteger.valueOf(denrest);
-				BigInteger bResult = BigInteger.valueOf(result);
-				
-				BigInteger bDenrestNew = bDenrest.multiply(bResult);
-				denrest = bDenrestNew.longValue();
-
-				BigInteger bNextresult = bDenrestNew.divide(bNumrestNew);
-				nextresult = bNextresult.longValue();
-			}
+		if(maxrest > denrest) {
+			return result;
 		} else {
-			BigInteger bNumrest = BigInteger.valueOf(numrest);
-			BigInteger bResult = BigInteger.valueOf(result);
-			BigInteger bDenrest = BigInteger.valueOf(denrest);
+			double a1 = (double) numrest / (double) denrest;
+			double a2 = (double) denrest / (double) Long.MAX_VALUE;
 			
-			BigInteger bNumrestNew = bNumrest.multiply(bResult).subtract(bDenrest);
-			
-			if(maxrest > denrest) {
-				denrest = denrest * result; //di
-				nextresult = (long) Math.ceil( (double) denrest / (double) bNumrestNew.longValue() ); // ai+1
-			} else {
-				BigInteger bDenrestNew = bDenrest.multiply(bResult);
-				denrest = bDenrestNew.longValue();
+			double d = a1 * a1 - 4 * a2;
+			if(d > 0) {
+				double x1 = (a1 - Math.sqrt(d)) / (2 * a2);
+				double x2 = (a1 + Math.sqrt(d)) / (2 * a2);
+				System.out.println("x1 = " + x1 + "; x2 = " + x2);
 				
-				BigInteger bNextresult = bDenrestNew.divide(bNumrestNew);
-				nextresult = bNextresult.longValue();
+				if(Math.ceil(x1) < Math.floor(x2)) {
+					return (long) Math.ceil(x1);
+				}
+			} else {
+				//System.out.println("d = " + d);
 			}
-		}
-		
-		long maxnextresult = (long) Math.ceil( (double) Long.MAX_VALUE / (double) denrest ); // A/di = a~i+1
-		if(nextresult > maxnextresult) {
-			long newresult = (long) Math.ceil(
-				(double) denrestprev / (double) (numrestprev - maxnextresult * denrestprev));
 			
-			//System.out.println(" -->nextresult = " + nextresult + " maxnextresult = " + maxnextresult 
-					//+ " result = " + result + " newresult = " + newresult);
-			
-			result = newresult;
-		} else {
-			//System.out.println("nextresult = " + nextresult + " maxnextresult = " + maxnextresult 
-					//+ " result = " + result);
+			return 0;
 		}
-		
-		//return (result > minValue) ? result : minValue + 1;
-		return result;
 	}
 	
 	private long getNumerator(BackwardPathIterator<MutableInteger> bpi) {
@@ -215,7 +177,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		}
 
 		public boolean hasNext() {
-			return true;
+			return (i.getValue() != 0);
 		}
 
 		public MutableInteger next() {
