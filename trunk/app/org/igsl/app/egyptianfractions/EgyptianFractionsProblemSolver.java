@@ -28,18 +28,13 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 	}
 	
 	public boolean isValidTransition(MutableInteger value, BackwardPathIterator<MutableInteger> bpi) {
-		long numrest = numerator;
 		long denrest = denominator;
-
 		while(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
-			
-			numrest = numrest * mi.getValue() - denrest;
 			denrest = denrest * mi.getValue();
 		}
 		
 		long maxrest = 1000000 / value.getValue();
-
 		return maxrest > denrest;
 	}
 		
