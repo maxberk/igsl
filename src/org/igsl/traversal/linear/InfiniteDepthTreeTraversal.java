@@ -1,11 +1,8 @@
+package org.igsl.traversal.linear;
+
 /**
  * Implicit Graph Search Library(C), 2009, 2015 
  */
-
-package org.igsl.traversal.linear;
-
-import java.util.Stack;
-import java.util.ListIterator;
 
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.InfiniteDepthNodeGenerator;
@@ -14,6 +11,9 @@ import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
 import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.ForwardPathIterator;
+
+import java.util.Stack;
+import java.util.ListIterator;
 
 /**
  * Depth-first search implementation for a problem graph without edge cost.
