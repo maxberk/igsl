@@ -28,14 +28,8 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 	}
 	
 	public boolean isValidTransition(MutableInteger value, BackwardPathIterator<MutableInteger> bpi) {
-		long denrest = denominator;
-		while(bpi.hasPreviousNode()) {
-			MutableInteger mi = bpi.previousNode();
-			denrest = denrest * mi.getValue();
-		}
-		
 		long maxrest = 1000000 / value.getValue();
-		return maxrest > denrest;
+		return getDenominator(bpi) < maxrest;
 	}
 		
 	public boolean isGoal(BackwardPathIterator<MutableInteger> bpi) {
@@ -47,30 +41,17 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		long denrest = denominator;
 
 		long prevresult = 0;
-		if(bpi.hasPreviousNode()) {
+		while(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
 			
 			numrest = numrest * mi.getValue() - denrest;
 			denrest = denrest * mi.getValue();
-
-			while(bpi.hasPreviousNode()) {
-				mi = bpi.previousNode();
-				
-				long maxrest = 1000000 / mi.getValue();
-				if(maxrest > denrest) {
-					numrest = numrest * mi.getValue() - denrest;
-					denrest = denrest * mi.getValue();
-				} else {
-					throw new RuntimeException("Overflow occured: maxrest < denrest: "
-							+ maxrest + " < " + denrest);
-				}
-				
-				if(!bpi.hasPreviousNode()) {
-					prevresult = mi.getValue();
-				}
+	
+			if(!bpi.hasPreviousNode()) {
+				prevresult = mi.getValue();
 			}
 		}
-
+		
 		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
 		if(result <= prevresult) {
 			result = prevresult + 1;
@@ -112,6 +93,17 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		}
 		
 		return numrest;
+	}
+	
+	private long getDenominator(BackwardPathIterator<MutableInteger> bpi) {
+		long denrest = denominator;
+	
+		while(bpi.hasPreviousNode()) {
+			MutableInteger mi = bpi.previousNode();
+			denrest = denrest * mi.getValue();
+		}
+		
+		return denrest;
 	}
 	
 	private class ValuesIteratorImpl implements ValuesIterator<MutableInteger> {
