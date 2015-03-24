@@ -25,12 +25,8 @@ public final class Direct {
 	 * @param tr search tree traversal
 	 */
 	public static <T> void searchForward(TreeTraversal<T> tr) {
-		int iter = 0;
-//		while(!tr.isEmpty() && tr.moveForward() && ++iter < 1122150) {
 		while(!tr.isEmpty() && tr.moveForward()) {
-			//System.out.print(++iter + " ");
 		}
-		//System.out.print("iters = "+iter);
 	}
 	
 	/**
