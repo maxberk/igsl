@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
+ * Implicit Graph Search Library(C), 2009, 2013
  */
 
 package org.igsl.algorithm;
@@ -25,7 +25,12 @@ public final class Direct {
 	 * @param tr search tree traversal
 	 */
 	public static <T> void searchForward(TreeTraversal<T> tr) {
-		while(!tr.isEmpty() && tr.moveForward());
+		int iter = 0;
+//		while(!tr.isEmpty() && tr.moveForward() && ++iter < 1122150) {
+		while(!tr.isEmpty() && tr.moveForward()) {
+			//System.out.print(++iter + " ");
+		}
+		//System.out.print("iters = "+iter);
 	}
 	
 	/**
