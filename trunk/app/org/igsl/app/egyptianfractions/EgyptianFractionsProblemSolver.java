@@ -8,13 +8,9 @@ import org.igsl.functor.InfiniteDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
 
-import java.math.BigInteger;
-
 /**
  */
 public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerator<MutableInteger>{
-	
-	private static int idx = 0;
 	
 	private long numerator, denominator;
 	
@@ -35,11 +31,8 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		long numrest = numerator;
 		long denrest = denominator;
 
-		long minValue = 0;
-		
 		if(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
-			minValue = mi.getValue();
 			
 			numrest = numrest * mi.getValue() - denrest;
 			denrest = denrest * mi.getValue();
@@ -47,7 +40,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 			while(bpi.hasPreviousNode()) {
 				mi = bpi.previousNode();
 				
-				long maxrest = Long.MAX_VALUE / mi.getValue();
+				long maxrest = 1000000 / mi.getValue();
 				if(maxrest > numrest) {
 					numrest = numrest * mi.getValue() - denrest;
 					
@@ -62,7 +55,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 			}
 		}
 		
-		long maxrest = Long.MAX_VALUE / value.getValue();
+		long maxrest = 1000000 / value.getValue();
 		if(maxrest > numrest) {
 			numrest = numrest * value.getValue() - denrest;
 			
@@ -86,6 +79,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		long numrest = numerator;
 		long denrest = denominator;
 
+		long prevresult = 0;
 		if(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
 			
@@ -95,7 +89,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 			while(bpi.hasPreviousNode()) {
 				mi = bpi.previousNode();
 				
-				long maxrest = Long.MAX_VALUE / mi.getValue();
+				long maxrest = 1000000 / mi.getValue();
 				if(maxrest > denrest) {
 					numrest = numrest * mi.getValue() - denrest;
 					denrest = denrest * mi.getValue();
@@ -103,17 +97,24 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 					throw new RuntimeException("Overflow occured: maxrest < denrest: "
 							+ maxrest + " < " + denrest);
 				}
+				
+				if(!bpi.hasPreviousNode()) {
+					prevresult = mi.getValue();
+				}
 			}
 		}
 
 		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
+		if(result <= prevresult) {
+			result = prevresult + 1;
+		}
 		
-		long maxrest = Long.MAX_VALUE / result;
+		long maxrest = 1000000 / result;
 		if(maxrest > denrest) {
 			return result;
 		} else {
 			double a1 = (double) numrest / (double) denrest;
-			double a2 = (double) denrest / (double) Long.MAX_VALUE;
+			double a2 = (double) denrest / (double) 1000000;
 			
 			double d = a1 * a1 - 4 * a2;
 			if(d > 0) {
@@ -139,7 +140,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		while(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
 
-			long maxrest = Long.MAX_VALUE / mi.getValue();
+			long maxrest = 1000000 / mi.getValue();
 			
 			if(maxrest > numrest) {
 				numrest = numrest * mi.getValue() - denrest;
