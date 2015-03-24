@@ -39,13 +39,8 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		}
 		
 		long maxrest = 1000000 / value.getValue();
-		if(maxrest > denrest) {
-			numrest = numrest * value.getValue() - denrest;
-			denrest = denrest * value.getValue();
-			return true;
-		} else {
-			return false;
-		}
+
+		return maxrest > denrest;
 	}
 		
 	public boolean isGoal(BackwardPathIterator<MutableInteger> bpi) {
