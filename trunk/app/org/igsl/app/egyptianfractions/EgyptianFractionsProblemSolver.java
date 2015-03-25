@@ -41,20 +41,25 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		long denrest = denominator;
 
 		long prevresult = 0;
-		while(bpi.hasPreviousNode()) {
+		if(bpi.hasPreviousNode()) {
 			MutableInteger mi = bpi.previousNode();
 			
+			prevresult = mi.getValue();
+
 			numrest = numrest * mi.getValue() - denrest;
 			denrest = denrest * mi.getValue();
-	
-			if(!bpi.hasPreviousNode()) {
-				prevresult = mi.getValue();
-			}
+
+			while(bpi.hasPreviousNode()) {
+				mi = bpi.previousNode();
+				
+				numrest = numrest * mi.getValue() - denrest;
+				denrest = denrest * mi.getValue();
+			};
 		}
 		
 		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
 		if(result <= prevresult) {
-			result = prevresult + 1;
+			return prevresult + 1;
 		}
 		
 		long maxrest = 1000000 / result;
@@ -75,6 +80,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 				}
 			} else {
 				//System.out.println("d = " + d);
+				//System.out.print(".");
 			}
 			
 			return 0;
