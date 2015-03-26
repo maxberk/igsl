@@ -38,7 +38,9 @@ public class InfiniteDepthTreeTraversal<T>
 			this.generator = generator;
 
 			this.stack = new Stack();
-			this.stack.push(generator.createValues(getPathIterator()));
+			ValuesIterator<T> iterator = generator.createValues(getPathIterator());
+			iterator.next();
+			this.stack.push(iterator);
 			
 			this.depth = 1;
 		}
