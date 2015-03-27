@@ -1,5 +1,5 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2014 
+ * Implicit Graph Search Library(C), 2009, 2015 
  */
 
 package org.igsl.test.egyptianfractions;
@@ -20,18 +20,20 @@ public class EgyptianFractionsTest {
 	public static void main(String[] args) {
 		long numerator = 3;
 		long denominator = 7;
+		long maxdenominator = 47;
 		
-		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator);
+		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator, maxdenominator);
 		
 		System.out.println("=====Egyptian Fractions Problem Solver=====");
 		System.out.println(numerator + "/" + denominator + "=");
 		
 		InfiniteDepthTreeTraversal<MutableInteger> tr = new InfiniteDepthTreeTraversal<MutableInteger>(solver);
-		for(int i = 1; i < 225; ++i) {
+		for(int i = 1; i < 42; ++i) {
 			Direct.searchForward(tr);
 			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			
 			System.out.println();
+			System.out.print(i + ": ");
 			while(path.hasPreviousNode()) {
 				MutableInteger mi = path.previousNode();
 				if(path.hasPreviousNode()) {

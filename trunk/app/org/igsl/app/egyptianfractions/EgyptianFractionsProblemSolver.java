@@ -12,15 +12,17 @@ import org.igsl.functor.BackwardPathIterator;
  */
 public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerator<MutableInteger>{
 	
-	private long numerator, denominator;
+	private long numerator, denominator, maxdenominator;
 	
 	/**
 	 * @param numerator
 	 * @param denominator
+	 * @param maxdenominator
 	 */
-	public EgyptianFractionsProblemSolver(long numerator, long denominator) {
+	public EgyptianFractionsProblemSolver(long numerator, long denominator, long maxdenominator) {
 		this.numerator = numerator;
 		this.denominator = denominator;
+		this.maxdenominator = maxdenominator;
 	}
 	
 	public ValuesIterator<MutableInteger> createValues(BackwardPathIterator<MutableInteger> iterator) {
@@ -28,8 +30,9 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 	}
 	
 	public boolean isValidTransition(MutableInteger value, BackwardPathIterator<MutableInteger> bpi) {
-		long maxrest = 1000000 / value.getValue();
-		return getDenominator(bpi) < maxrest;
+		//long maxrest = 1000000 / value.getValue();
+		//return getDenominator(bpi) <= maxrest;
+		return value.getValue() <= maxdenominator;
 	}
 		
 	public boolean isGoal(BackwardPathIterator<MutableInteger> bpi) {
@@ -60,8 +63,11 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
 		if(result <= prevresult) {
 			return prevresult + 1;
+		} else {
+			return result;
 		}
 		
+		/*
 		long maxrest = 1000000 / result;
 		if(maxrest > denrest) {
 			return result;
@@ -85,6 +91,7 @@ public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerato
 			
 			return 0;
 		}
+		*/
 	}
 	
 	private long getNumerator(BackwardPathIterator<MutableInteger> bpi) {
