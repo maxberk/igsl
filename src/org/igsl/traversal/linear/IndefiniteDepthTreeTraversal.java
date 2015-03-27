@@ -5,7 +5,7 @@ package org.igsl.traversal.linear;
  */
 
 import org.igsl.functor.ValuesIterator;
-import org.igsl.functor.InfiniteDepthNodeGenerator;
+import org.igsl.functor.IndefiniteDepthNodeGenerator;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
@@ -18,8 +18,8 @@ import java.util.ListIterator;
 /**
  * Depth-first search implementation for a problem graph without edge cost.
  */
-public class InfiniteDepthTreeTraversal<T>
-	implements TreeTraversal<T>, Copyable<InfiniteDepthTreeTraversal<T>>
+public class IndefiniteDepthTreeTraversal<T>
+	implements TreeTraversal<T>, Copyable<IndefiniteDepthTreeTraversal<T>>
 {
 	/**
 	 * Constructor based on expansion operator
@@ -27,9 +27,9 @@ public class InfiniteDepthTreeTraversal<T>
 	 * @param value root node value
 	 * @param generator node generator function
 	 * @throws NullPointerException thrown if node generator is null
-	 * @see InfiniteDepthNodeGenerator
+	 * @see IndefiniteDepthNodeGenerator
 	 */
-	public InfiniteDepthTreeTraversal(InfiniteDepthNodeGenerator<T> generator) 
+	public IndefiniteDepthTreeTraversal(IndefiniteDepthNodeGenerator<T> generator) 
 		throws NullPointerException
 	{
 		if(generator == null) {
@@ -128,8 +128,8 @@ public class InfiniteDepthTreeTraversal<T>
 	 * Implementation details of Copyable interface.
 	 * Returns a TreeTraversal with a copy of a cursor node
 	 */
-	public InfiniteDepthTreeTraversal<T> getCopyOf() {
-		InfiniteDepthTreeTraversal<T> result = new InfiniteDepthTreeTraversal<T>();
+	public IndefiniteDepthTreeTraversal<T> getCopyOf() {
+		IndefiniteDepthTreeTraversal<T> result = new IndefiniteDepthTreeTraversal<T>();
 		return result;
 	}
 	
@@ -143,9 +143,9 @@ public class InfiniteDepthTreeTraversal<T>
 		return pathIterator;
 	}
 	
-	private InfiniteDepthTreeTraversal() {}
+	private IndefiniteDepthTreeTraversal() {}
 	
-	protected InfiniteDepthNodeGenerator<T> generator;
+	protected IndefiniteDepthNodeGenerator<T> generator;
 	
 	protected Stack<ValuesIterator<T> > stack;
 	protected int depth;
@@ -155,10 +155,10 @@ public class InfiniteDepthTreeTraversal<T>
 	private class PathIteratorImpl 
 		implements BackwardPathIterator<T>, ForwardPathIterator<T> {
 
-		private InfiniteDepthTreeTraversal<T> tr;
+		private IndefiniteDepthTreeTraversal<T> tr;
 		private ListIterator<ValuesIterator<T> > bli, fli;
 
-		public PathIteratorImpl(InfiniteDepthTreeTraversal<T> tr) {
+		public PathIteratorImpl(IndefiniteDepthTreeTraversal<T> tr) {
 			this.tr = tr;
 			
 			this.bli = (tr.depth == 0) ? tr.stack.listIterator() 

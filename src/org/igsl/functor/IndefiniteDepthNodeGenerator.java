@@ -1,13 +1,13 @@
 /**
- * Implicit Graph Search Library(C), 2009, 2014
+ * Implicit Graph Search Library(C), 2009, 2015
  */
 
 package org.igsl.functor;
 
 /**
- * Interface InfiniteDepthNodeGenerator
+ * Interface IndefiniteDepthNodeGenerator
  */
-public interface InfiniteDepthNodeGenerator<T> {
+public interface IndefiniteDepthNodeGenerator<T> {
 
 	ValuesIterator<T> createValues(BackwardPathIterator<T> iterator);
 	

@@ -4,13 +4,13 @@ package org.igsl.app.egyptianfractions;
  * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-import org.igsl.functor.InfiniteDepthNodeGenerator;
+import org.igsl.functor.IndefiniteDepthNodeGenerator;
 import org.igsl.functor.ValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
 
 /**
  */
-public class EgyptianFractionsProblemSolver implements InfiniteDepthNodeGenerator<MutableInteger>{
+public class EgyptianFractionsProblemSolver implements IndefiniteDepthNodeGenerator<MutableInteger>{
 	
 	private long numerator, denominator, maxdenominator;
 	
