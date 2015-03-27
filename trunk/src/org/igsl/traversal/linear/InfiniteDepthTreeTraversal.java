@@ -92,7 +92,7 @@ public class InfiniteDepthTreeTraversal<T>
 			
 			if(iterator.hasNext()) {
 				T value = iterator.next();
-				
+								
 				if(generator.isValidTransition(value, getPathIterator())) {
 					++depth;
 					break;
