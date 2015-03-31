@@ -9,7 +9,8 @@ import org.igsl.app.egyptianfractions.EgyptianFractionsProblemSolver;
 import org.igsl.app.egyptianfractions.MutableInteger;
 
 import org.igsl.functor.BackwardPathIterator;
-import org.igsl.traversal.linear.InfiniteDepthTreeTraversal;
+import org.igsl.traversal.linear.IndefiniteDepthTreeTraversal;
+import org.igsl.functor.exception.EmptyTraversalException;
 
 public class EgyptianFractionsTest {
 	/**
@@ -18,17 +19,18 @@ public class EgyptianFractionsTest {
 	 */
 
 	public static void main(String[] args) {
-		long numerator = 3;
-		long denominator = 7;
-		long maxdenominator = 47;
+		long numerator = 2;
+		long denominator = 9;
+		long maxdenominator = 65;
 		
 		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator, maxdenominator);
 		
 		System.out.println("=====Egyptian Fractions Problem Solver=====");
 		System.out.println(numerator + "/" + denominator + "=");
 		
-		InfiniteDepthTreeTraversal<MutableInteger> tr = new InfiniteDepthTreeTraversal<MutableInteger>(solver);
-		for(int i = 1; i < 42; ++i) {
+		IndefiniteDepthTreeTraversal<MutableInteger> tr = new IndefiniteDepthTreeTraversal<MutableInteger>(solver);
+		int i = 0;
+		while(i++ < 50 && !tr.isEmpty()) {
 			Direct.searchForward(tr);
 			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			
@@ -43,8 +45,12 @@ public class EgyptianFractionsTest {
 				}
 			}
 			System.out.println();
-
-			tr.backtrack();
+			
+			try {
+				tr.backtrack();
+			} catch(EmptyTraversalException ete) {
+				break;
+			}
 		}
 	}
 

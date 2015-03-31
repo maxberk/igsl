@@ -66,12 +66,20 @@ public class IndefiniteDepthTreeTraversal<T>
 				T value = iterator.next();
 				
 				if(generator.isValidTransition(value, getPathIterator()) == false) {
-					backtrack();
+					try {
+						backtrack();
+					} catch(EmptyTraversalException ete) {
+						return false;
+					}
 				} else {
 					++depth;
 				}
 			} else {
-				backtrack();
+				try {
+					backtrack();
+				} catch (EmptyTraversalException ete) {
+					return false;
+				}
 			}
 			
 			return true;
