@@ -4,11 +4,12 @@ package org.igsl.traversal.linear;
  * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-import org.igsl.functor.ValuesIterator;
+import org.igsl.functor.RandomAccessValuesIterator;
 import org.igsl.functor.IndefiniteDepthNodeGenerator;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
+import org.igsl.functor.RandomAccess;
 import org.igsl.functor.BackwardPathIterator;
 import org.igsl.functor.ForwardPathIterator;
 
@@ -19,7 +20,7 @@ import java.util.ListIterator;
  * Depth-first search implementation for a problem graph without edge cost.
  */
 public class IndefiniteDepthTreeTraversal<T>
-	implements TreeTraversal<T>, Copyable<IndefiniteDepthTreeTraversal<T>>
+	implements TreeTraversal<T>, RandomAccess<T>, Copyable<IndefiniteDepthTreeTraversal<T>>
 {
 	/**
 	 * Constructor based on expansion operator
@@ -38,7 +39,7 @@ public class IndefiniteDepthTreeTraversal<T>
 			this.generator = generator;
 
 			this.stack = new Stack();
-			ValuesIterator<T> iterator = generator.createValues(getPathIterator());
+			RandomAccessValuesIterator<T> iterator = generator.createValues(this);
 			iterator.next();
 			this.stack.push(iterator);
 			
@@ -49,23 +50,23 @@ public class IndefiniteDepthTreeTraversal<T>
 	/**
 	 */
 	public boolean moveForward() throws EmptyTraversalException {
-		if(depth == 0 || generator.isGoal(getPathIterator())) {
+		if(depth == 0 || generator.isGoal(this)) {
 			return false;
 		} else {
-			ValuesIterator<T> iterator = null;
+			RandomAccessValuesIterator<T> iterator = null;
 			
 			if(stack.size() < depth + 1) {
-				iterator = generator.createValues(getPathIterator());
+				iterator = generator.createValues(this);
 				stack.push(iterator);
 			} else {
 				iterator = stack.get(depth);
-				iterator.update(getPathIterator());
+				iterator.update(this);
 			}
 			
 			if(iterator.hasNext()) {
 				T value = iterator.next();
 				
-				if(generator.isValidTransition(value, getPathIterator()) == false) {
+				if(generator.isValidTransition(value, this) == false) {
 					try {
 						backtrack();
 					} catch(EmptyTraversalException ete) {
@@ -94,14 +95,14 @@ public class IndefiniteDepthTreeTraversal<T>
 		if(depth == 0) {
 			throw new EmptyTraversalException();
 		} else while(depth > 0) {
-			ValuesIterator<T> iterator = stack.get(depth-1);
+			RandomAccessValuesIterator<T> iterator = stack.get(depth-1);
 			
 			--depth;
 			
 			if(iterator.hasNext()) {
 				T value = iterator.next();
 								
-				if(generator.isValidTransition(value, getPathIterator())) {
+				if(generator.isValidTransition(value, this)) {
 					++depth;
 					break;
 				}
@@ -141,6 +142,20 @@ public class IndefiniteDepthTreeTraversal<T>
 		return result;
 	}
 	
+	/**
+	 * 
+	 */
+	public int length() {
+		return depth;
+	}
+	
+	/**
+	 * 
+	 */
+	public T get(int idx) {
+		return stack.get(idx).getValue();
+	}
+	
 	private PathIteratorImpl getPathIteratorImpl() {
 		if(pathIterator == null) {
 			pathIterator = new PathIteratorImpl(this);
@@ -155,7 +170,7 @@ public class IndefiniteDepthTreeTraversal<T>
 	
 	protected IndefiniteDepthNodeGenerator<T> generator;
 	
-	protected Stack<ValuesIterator<T> > stack;
+	protected Stack<RandomAccessValuesIterator<T> > stack;
 	protected int depth;
 	
 	private PathIteratorImpl pathIterator;
@@ -164,7 +179,7 @@ public class IndefiniteDepthTreeTraversal<T>
 		implements BackwardPathIterator<T>, ForwardPathIterator<T> {
 
 		private IndefiniteDepthTreeTraversal<T> tr;
-		private ListIterator<ValuesIterator<T> > bli, fli;
+		private ListIterator<RandomAccessValuesIterator<T> > bli, fli;
 
 		public PathIteratorImpl(IndefiniteDepthTreeTraversal<T> tr) {
 			this.tr = tr;

@@ -5,7 +5,8 @@ package org.igsl.app.egyptianfractions;
  */
 
 import org.igsl.functor.IndefiniteDepthNodeGenerator;
-import org.igsl.functor.ValuesIterator;
+import org.igsl.functor.RandomAccess;
+import org.igsl.functor.RandomAccessValuesIterator;
 import org.igsl.functor.BackwardPathIterator;
 
 /**
@@ -25,42 +26,31 @@ public class EgyptianFractionsProblemSolver implements IndefiniteDepthNodeGenera
 		this.maxdenominator = maxdenominator;
 	}
 	
-	public ValuesIterator<MutableInteger> createValues(BackwardPathIterator<MutableInteger> iterator) {
-		return new ValuesIteratorImpl(iterator);
+	public RandomAccessValuesIterator<MutableInteger> createValues(RandomAccess<MutableInteger> tr) {
+		return new RandomAccessValuesIteratorImpl(tr);
 	}
 	
-	public boolean isValidTransition(MutableInteger value, BackwardPathIterator<MutableInteger> bpi) {
+	public boolean isValidTransition(MutableInteger value, RandomAccess<MutableInteger> tr) {
 		//long maxrest = 1000000 / value.getValue();
 		//return getDenominator(bpi) <= maxrest;
 		return value.getValue() <= maxdenominator;
 	}
 		
-	public boolean isGoal(BackwardPathIterator<MutableInteger> bpi) {
-		return getNumerator(bpi) == 0;
+	public boolean isGoal(RandomAccess<MutableInteger> tr) {
+		return getNumerator(tr) == 0;
 	}
 	
-	private long getStartValue(BackwardPathIterator<MutableInteger> bpi) {
+	private long getStartValue(RandomAccess<MutableInteger> tr) {
 		long numrest = numerator;
 		long denrest = denominator;
 
-		long prevresult = 0;
-		if(bpi.hasPreviousNode()) {
-			MutableInteger mi = bpi.previousNode();
-			
-			prevresult = mi.getValue();
-
-			numrest = numrest * mi.getValue() - denrest;
-			denrest = denrest * mi.getValue();
-
-			while(bpi.hasPreviousNode()) {
-				mi = bpi.previousNode();
-				
-				numrest = numrest * mi.getValue() - denrest;
-				denrest = denrest * mi.getValue();
-			};
+		for(int i = tr.length() - 1; i >= 0; --i) {
+			numrest = numrest * tr.get(i).getValue() - denrest;
+			denrest = denrest * tr.get(i).getValue();
 		}
 		
 		long result = (long) Math.ceil( (double) denrest / (double) numrest); // ai
+		long prevresult = tr.length() > 0 ? tr.get(tr.length()-1).getValue() : 0;
 		if(result <= prevresult) {
 			return prevresult + 1;
 		} else {
@@ -94,15 +84,13 @@ public class EgyptianFractionsProblemSolver implements IndefiniteDepthNodeGenera
 		*/
 	}
 	
-	private long getNumerator(BackwardPathIterator<MutableInteger> bpi) {
+	private long getNumerator(RandomAccess<MutableInteger> tr) {
 		long numrest = numerator;
 		long denrest = denominator;
 		
-		while(bpi.hasPreviousNode()) {
-			MutableInteger mi = bpi.previousNode();
-
-			numrest = numrest * mi.getValue() - denrest;
-			denrest = denrest * mi.getValue();
+		for(int i = tr.length() - 1; i >= 0; --i) {
+			numrest = numrest * tr.get(i).getValue() - denrest;
+			denrest = denrest * tr.get(i).getValue();
 		}
 		
 		return numrest;
@@ -119,18 +107,18 @@ public class EgyptianFractionsProblemSolver implements IndefiniteDepthNodeGenera
 		return denrest;
 	}
 	
-	private class ValuesIteratorImpl implements ValuesIterator<MutableInteger> {
+	private class RandomAccessValuesIteratorImpl implements RandomAccessValuesIterator<MutableInteger> {
 		private MutableInteger startValue;
 		private MutableInteger i;
 		
-		public ValuesIteratorImpl(BackwardPathIterator<MutableInteger> bpi) {
-			long lStartValue = getStartValue(bpi);
+		public RandomAccessValuesIteratorImpl(RandomAccess<MutableInteger> tr) {
+			long lStartValue = getStartValue(tr);
 			this.startValue = new MutableInteger(lStartValue);
 			this.i = new MutableInteger(lStartValue);
 		}
 		
-		public void update(BackwardPathIterator<MutableInteger> bpi) {
-			long lStartValue = getStartValue(bpi);
+		public void update(RandomAccess<MutableInteger> tr) {
+			long lStartValue = getStartValue(tr);
 			startValue.assignValue(lStartValue);
 			i.assignValue(lStartValue);
 		}
