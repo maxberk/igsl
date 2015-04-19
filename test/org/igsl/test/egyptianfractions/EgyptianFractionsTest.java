@@ -19,8 +19,8 @@ public class EgyptianFractionsTest {
 	 */
 
 	public static void main(String[] args) {
-		long numerator = 2;
-		long denominator = 9;
+		long numerator = 4;
+		long denominator = 5;
 		long maxdenominator = 65;
 		
 		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator, maxdenominator);
