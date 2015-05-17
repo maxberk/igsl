@@ -4,3 +4,4 @@ org/igsl/test/knighttour2/KnightTourTest.java
 org/igsl/test/eightqueens/EightQueensTest.java
 org/igsl/test/eightqueens2/EightQueensTest.java
 org/igsl/test/egyptianfractions/EgyptianFractionsTest.java
+org/igsl/test/golombruler/GolombRulerTest.java

@@ -2,35 +2,33 @@
  * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-package org.igsl.test.egyptianfractions;
+package org.igsl.test.golombruler;
 
 import org.igsl.algorithm.Direct;
-import org.igsl.app.egyptianfractions.EgyptianFractionsProblemSolver;
-import org.igsl.app.egyptianfractions.MutableInteger;
+import org.igsl.app.golombruler.GolombRulerSolver;
+import org.igsl.app.golombruler.MutableInteger;
 
 import org.igsl.functor.BackwardPathIterator;
 import org.igsl.traversal.linear.IndefiniteDepthTreeTraversal;
 import org.igsl.functor.exception.EmptyTraversalException;
 
-public class EgyptianFractionsTest {
+public class GolombRulerTest {
 	/**
 	 * 
 	 * @param args
 	 */
 
 	public static void main(String[] args) {
-		long numerator = 4;
-		long denominator = 5;
-		long maxdenominator = 65;
+		int maxValue = 13;
 		
-		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator, maxdenominator);
+		GolombRulerSolver solver = new GolombRulerSolver(maxValue);
 		
-		System.out.println("=====Egyptian Fractions Problem Solver=====");
-		System.out.println(numerator + "/" + denominator + "=");
+		System.out.println("=====Golomb Ruler Solver=====");
+		System.out.println("maxValue = " + maxValue);
 		
-		IndefiniteDepthTreeTraversal<MutableInteger> tr = new IndefiniteDepthTreeTraversal<MutableInteger>(solver, true);
+		IndefiniteDepthTreeTraversal<MutableInteger> tr = new IndefiniteDepthTreeTraversal<MutableInteger>(solver, false);
 		int i = 0;
-		while(i++ < 50 && !tr.isEmpty()) {
+		while(i++ < 1 && !tr.isEmpty()) {
 			Direct.searchForward(tr);
 			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			
@@ -39,9 +37,9 @@ public class EgyptianFractionsTest {
 			while(path.hasPreviousNode()) {
 				MutableInteger mi = path.previousNode();
 				if(path.hasPreviousNode()) {
-					System.out.print("1/" + mi.getValue() + "+");
+					System.out.print(mi.getValue() + ";");
 				} else {
-					System.out.print("1/" + mi.getValue());
+					System.out.print(mi.getValue());
 				}
 			}
 			System.out.println();

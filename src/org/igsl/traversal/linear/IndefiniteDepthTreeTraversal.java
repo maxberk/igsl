@@ -25,18 +25,20 @@ public class IndefiniteDepthTreeTraversal<T>
 	/**
 	 * Constructor based on expansion operator
 	 * 
-	 * @param value root node value
 	 * @param generator node generator function
+	 * @param backtrackIfValidationFailed if set to true traversal skips iterating for next value and performs backtrack,
+	 * otherwise it continues to iterate
 	 * @throws NullPointerException thrown if node generator is null
 	 * @see IndefiniteDepthNodeGenerator
 	 */
-	public IndefiniteDepthTreeTraversal(IndefiniteDepthNodeGenerator<T> generator) 
+	public IndefiniteDepthTreeTraversal(IndefiniteDepthNodeGenerator<T> generator, boolean backtrackIfValidationFailed) 
 		throws NullPointerException
 	{
 		if(generator == null) {
 			throw new NullPointerException();
 		} else {
 			this.generator = generator;
+			this.backtrackIfValidationFailed = backtrackIfValidationFailed;
 
 			this.stack = new Stack();
 			RandomAccessValuesIterator<T> iterator = generator.createValues(this);
@@ -66,11 +68,31 @@ public class IndefiniteDepthTreeTraversal<T>
 			if(iterator.hasNext()) {
 				T value = iterator.next();
 				
-				if(generator.isValidTransition(value, this) == false) {
+				if(generator.isValidTransition(value, this) == false && backtrackIfValidationFailed == true) {
 					try {
 						backtrack();
 					} catch(EmptyTraversalException ete) {
 						return false;
+					}
+				} else if(generator.isValidTransition(value, this) == false && backtrackIfValidationFailed == false) {
+					boolean validTransitionFound = false;
+					
+					while(iterator.hasNext()) {
+						value = iterator.next();
+						
+						if(generator.isValidTransition(value, this)) {
+							validTransitionFound = true;
+							++depth;
+							break;
+						}
+					}
+					
+					if(!validTransitionFound) {
+						try {
+							backtrack();
+						} catch (EmptyTraversalException ete) {
+							return false;
+						}
 					}
 				} else {
 					++depth;
@@ -102,9 +124,25 @@ public class IndefiniteDepthTreeTraversal<T>
 			if(iterator.hasNext()) {
 				T value = iterator.next();
 								
-				if(generator.isValidTransition(value, this)) {
+				if(generator.isValidTransition(value, this) ) {
 					++depth;
 					break;
+				} else if(backtrackIfValidationFailed == false) {
+					boolean validTransitionFound = false;
+					
+					while(iterator.hasNext()) {
+						value = iterator.next();
+						
+						if(generator.isValidTransition(value, this)) {
+							validTransitionFound = true;
+							++depth;
+							break;
+						}
+					}
+					
+					if(validTransitionFound) {
+						break;
+					}
 				}
 			}
 		}
@@ -169,6 +207,7 @@ public class IndefiniteDepthTreeTraversal<T>
 	private IndefiniteDepthTreeTraversal() {}
 	
 	protected IndefiniteDepthNodeGenerator<T> generator;
+	private boolean backtrackIfValidationFailed;
 	
 	protected Stack<RandomAccessValuesIterator<T> > stack;
 	protected int depth;
@@ -190,7 +229,7 @@ public class IndefiniteDepthTreeTraversal<T>
 		}
 
 		public boolean hasPreviousNode() {
-			return bli.hasPrevious();		
+			return bli.hasPrevious();
 		}
 
 		public T previousNode() {
@@ -198,7 +237,7 @@ public class IndefiniteDepthTreeTraversal<T>
 		}
 		
 		public boolean hasNextNode() {
-			return fli.nextIndex() <= tr.depth-1;		
+			return fli.nextIndex() <= tr.depth-1;
 		}
 
 		public T nextNode() {
