@@ -8,3 +8,5 @@ org/igsl/app/eightqueens/EQPSolver.java
 org/igsl/app/eightqueens2/EQPSolver.java
 org/igsl/app/egyptianfractions/MutableInteger.java
 org/igsl/app/egyptianfractions/EgyptianFractionsProblemSolver.java
+org/igsl/app/golombruler/MutableInteger.java
+org/igsl/app/golombruler/GolombRulerSolver.java

@@ -27,12 +27,16 @@ public class GolombRulerSolver implements IndefiniteDepthNodeGenerator<MutableIn
 	}
 	
 	public boolean isValidTransition(MutableInteger value, RandomAccess<MutableInteger> tr) {
-		for(int i = 0; i < tr.length(); ++i) {
-			int d = value.getValue() - tr.get(i).getValue();
+		for(int i = -1; i < tr.length(); ++i) {
+			int d = (i == -1) ? value.getValue() : value.getValue() - tr.get(i).getValue();
 		
-			for(int j = 0; j < tr.length(); ++j) {
+			for(int j = -1; j < tr.length(); ++j) {
 				for(int k = j+1; k < tr.length(); ++k) {
-					if(tr.get(k).getValue() - tr.get(j).getValue() == d) {
+					if(j == -1) {
+						if(tr.get(k).getValue() == d) {
+							return false;
+						}
+					} else if(tr.get(k).getValue() - tr.get(j).getValue() == d) {
 						return false;
 					}
 				}
