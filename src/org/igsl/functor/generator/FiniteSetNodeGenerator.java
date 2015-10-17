@@ -1,8 +1,10 @@
+package org.igsl.functor.generator;
+
 /**
- * Implicit Graph Search Library(C), 2009, 2010, 2011, 2013
+ * Implicit Graph Search Library(C), 2009, 2015
  */
 
-package org.igsl.functor;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  * Interface FiniteSetNodeGenerator should be implemented to initialize a tree traversal
@@ -16,6 +18,13 @@ public interface FiniteSetNodeGenerator<T> {
 	 * @return array of possible node values
 	 */
 	T[] getAllValues();
+	
+	/**
+	 * Limits the search depth by a value between 1 and T[].length
+	 * 
+	 * @return maximal depth of the search tree
+	 */
+	int getMaxDepth();
 	
 	/**
 	 * Validate if a new node is valid in expansion procedure

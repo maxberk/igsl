@@ -1,8 +1,10 @@
+package org.igsl.functor.iterator.values;
+
 /**
  * Implicit Graph Search Library(C), 2009, 2015
  */
 
-package org.igsl.functor;
+import org.igsl.traversal.RandomAccess;
 
 /**
  * Interface ValuesIterator for RandomAccess traversal.

@@ -1,14 +1,18 @@
+package org.igsl.functor.generator;
+
 /**
- * Implicit Graph Search Library(C), 2009, 2013
+ * Implicit Graph Search Library(C), 2009, 2015
  */
 
-package org.igsl.functor;
+import org.igsl.functor.iterator.values.ValuesIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
+
 
 /**
- * Interface FixedDepthNodeGenerator should be implemented to initialize a tree traversal
+ * Interface FiniteDepthNodeGenerator should be implemented to initialize a tree traversal
  * on a limited set of node values.
  */
-public interface FixedDepthNodeGenerator<T> {
+public interface FiniteDepthNodeGenerator<T> {
 
 	/**
 	 * Returns maximal depth

@@ -1,8 +1,11 @@
+package org.igsl.functor.generator;
+
 /**
  * Implicit Graph Search Library(C), 2009, 2015
  */
 
-package org.igsl.functor;
+import org.igsl.traversal.RandomAccess;
+import org.igsl.functor.iterator.values.RandomAccessValuesIterator;
 
 /**
  * Interface IndefiniteDepthNodeGenerator
