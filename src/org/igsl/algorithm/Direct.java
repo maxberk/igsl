@@ -4,9 +4,9 @@
 
 package org.igsl.algorithm;
 
-import org.igsl.cost.Addable;
-import org.igsl.functor.BackwardPathIterator;
-import org.igsl.traversal.CostTreeTraversal;
+//import org.igsl.cost.Addable;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
+//import org.igsl.traversal.CostTreeTraversal;
 import org.igsl.traversal.TreeTraversal;
 
 /**
@@ -25,62 +25,63 @@ public final class Direct {
 	 * @param tr search tree traversal
 	 */
 	public static <T> void searchForward(TreeTraversal<T> tr) {
-		while(!tr.isEmpty() && tr.moveForward()) {
+		//while(!tr.isEmpty() && tr.moveForward()) {
+		while(tr.moveForward()) {			
 		}
 	}
 	
-	/**
-	 * Cost threshold algorithms - the solution found should not exceed a predefined cost value. Either founds
-	 * the first matching solution and exits or the traversal becomes empty on exhausting the search space.
-	 * 
-	 * @param <T> type of the node
-	 * @param <C> type of the cost
-	 * @param tr search tree traversal
-	 * @param thresh predefined cost value
-	 */
-	public static <T,C extends Addable<C> & Comparable<C>> void searchForward(CostTreeTraversal<T,C> tr, C thresh) {
-		while(!tr.isEmpty()) {
-			if( tr.getCost().compareTo(thresh) > 0) {
-				tr.backtrack();
-			} else if(!tr.moveForward()) {
-				return;
-			}
-		}
-	}
-	
-	/**
-	 * Branch-and-bound - a technique to find best-by-cost solution.
-	 * 
-	 * @param <T> type of the node
-	 * @param <C> type of the cost
-	 * @param tr search tree traversal
-	 * @return an enumeration containing nodes on an optimal path from beginning to end
-	 */
-	public static <T,C extends Addable<C> & Comparable<C>> BackwardPathIterator<T> branchAndBound(CostTreeTraversal<T,C> tr) {
-		searchForward(tr);
-		
-		BackwardPathIterator<T> result = tr.getPath();
-		
-		if(tr.isEmpty()) {
-			return result;
-		}
-		
-		C thresh = tr.getCost();
-		tr.backtrack();
-		
-		while(!tr.isEmpty()) {
-			int compareResult = tr.getCost().compareTo(thresh);
-			
-			if(!tr.moveForward() && compareResult < 0)	{
-				result = tr.getPath();
-				thresh = tr.getCost();
-				tr.backtrack();
-			} else if(compareResult >= 0) {
-				tr.backtrack();
-			}
-		}
-		
-		return result;
-	}
+//	/**
+//	 * Cost threshold algorithms - the solution found should not exceed a predefined cost value. Either founds
+//	 * the first matching solution and exits or the traversal becomes empty on exhausting the search space.
+//	 * 
+//	 * @param <T> type of the node
+//	 * @param <C> type of the cost
+//	 * @param tr search tree traversal
+//	 * @param thresh predefined cost value
+//	 */
+//	public static <T,C extends Addable<C> & Comparable<C>> void searchForward(CostTreeTraversal<T,C> tr, C thresh) {
+//		while(!tr.isEmpty()) {
+//			if( tr.getCost().compareTo(thresh) > 0) {
+//				tr.backtrack();
+//			} else if(!tr.moveForward()) {
+//				return;
+//			}
+//		}
+//	}
+//	
+//	/**
+//	 * Branch-and-bound - a technique to find best-by-cost solution.
+//	 * 
+//	 * @param <T> type of the node
+//	 * @param <C> type of the cost
+//	 * @param tr search tree traversal
+//	 * @return an enumeration containing nodes on an optimal path from beginning to end
+//	 */
+//	public static <T,C extends Addable<C> & Comparable<C>> BackwardPathIterator<T> branchAndBound(CostTreeTraversal<T,C> tr) {
+//		searchForward(tr);
+//		
+//		BackwardPathIterator<T> result = tr.getPath();
+//		
+//		if(tr.isEmpty()) {
+//			return result;
+//		}
+//		
+//		C thresh = tr.getCost();
+//		tr.backtrack();
+//		
+//		while(!tr.isEmpty()) {
+//			int compareResult = tr.getCost().compareTo(thresh);
+//			
+//			if(!tr.moveForward() && compareResult < 0)	{
+//				result = tr.getPath();
+//				thresh = tr.getCost();
+//				tr.backtrack();
+//			} else if(compareResult >= 0) {
+//				tr.backtrack();
+//			}
+//		}
+//		
+//		return result;
+//	}
 
 }
