@@ -1,18 +1,18 @@
 package org.igsl.app.coinproblem.variant3;
 
 /**
- * Implicit Graph Search Library(C), 2009, 2013 
+ * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-import org.igsl.functor.FixedDepthNodeGenerator;
-import org.igsl.functor.ValuesIterator;
-import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.generator.FiniteDepthNodeGenerator;
+import org.igsl.functor.iterator.values.ValuesIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  * Coin Problem is a problem of collecting coins of different denominations to meet
  * predefined money value.	
  */
-public class CoinProblemSolver implements FixedDepthNodeGenerator<Denomination>{
+public class CoinProblemSolver implements FiniteDepthNodeGenerator<Denomination>{
 	
 	private int[] denominations;
 	private int value;

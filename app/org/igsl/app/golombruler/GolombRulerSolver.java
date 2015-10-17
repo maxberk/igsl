@@ -4,10 +4,10 @@ package org.igsl.app.golombruler;
  * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-import org.igsl.functor.IndefiniteDepthNodeGenerator;
-import org.igsl.functor.RandomAccess;
-import org.igsl.functor.RandomAccessValuesIterator;
-import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.generator.IndefiniteDepthNodeGenerator;
+import org.igsl.traversal.RandomAccess;
+import org.igsl.functor.iterator.values.RandomAccessValuesIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  */
@@ -27,10 +27,14 @@ public class GolombRulerSolver implements IndefiniteDepthNodeGenerator<MutableIn
 	}
 	
 	public boolean isValidTransition(MutableInteger value, RandomAccess<MutableInteger> tr) {
-		for(int i = -1; i < tr.length(); ++i) {
+		for(int i = tr.length() - 1; i > -1; --i) {
 			int d = (i == -1) ? value.getValue() : value.getValue() - tr.get(i).getValue();
-		
+			
 			for(int j = 0; j < tr.length(); ++j) {
+				if(d == tr.get(j).getValue()) {
+					return false;
+				}
+				
 				for(int k = j+1; k < tr.length(); ++k) {
 					if(tr.get(k).getValue() - tr.get(j).getValue() == d) {
 						return false;
@@ -43,11 +47,11 @@ public class GolombRulerSolver implements IndefiniteDepthNodeGenerator<MutableIn
 	}
 		
 	public boolean isGoal(RandomAccess<MutableInteger> tr) {
-		return getLength(tr) >= maxValue;
+		return getLength(tr) == maxValue;
 	}
 	
 	private int getStartValue(RandomAccess<MutableInteger> tr) {
-		return getLength(tr) + 1;
+		return getLength(tr);
 	}
 	
 	private int getLength(RandomAccess<MutableInteger> tr) {
@@ -55,33 +59,22 @@ public class GolombRulerSolver implements IndefiniteDepthNodeGenerator<MutableIn
 	}
 	
 	private class RandomAccessValuesIteratorImpl implements RandomAccessValuesIterator<MutableInteger> {
-		private MutableInteger startValue;
 		private MutableInteger i;
 		
 		public RandomAccessValuesIteratorImpl(RandomAccess<MutableInteger> tr) {
-			int iStartValue = getStartValue(tr);
-			this.startValue = new MutableInteger(iStartValue);
-			this.i = new MutableInteger(iStartValue);
+			this.i = new MutableInteger(getStartValue(tr));
 		}
 		
 		public void update(RandomAccess<MutableInteger> tr) {
-			int iStartValue = getStartValue(tr);
-			startValue.assignValue(iStartValue);
-			i.assignValue(iStartValue);
+			i.assignValue(getStartValue(tr));
 		}
 
 		public boolean hasNext() {
-			return (i.getValue() != 0);
+			return i.getValue() < maxValue;
 		}
 
 		public MutableInteger next() {
-			if(i.getValue() == startValue.getValue()) {
-				startValue.assignValue(0);
-				return i;
-			} else {
-				return i.inc();
-				
-			}
+			return i.inc();
 		}
 		
 		public MutableInteger getValue() {

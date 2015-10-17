@@ -1,11 +1,11 @@
-/**
- * Implicit Graph Search Library(C), 2009, 2013 
- */
-
 package org.igsl.app.eightqueens2;
 
-import org.igsl.functor.FiniteSetNodeGenerator;
-import org.igsl.functor.BackwardPathIterator;
+/**
+ * Implicit Graph Search Library(C), 2009, 2015
+ */
+
+import org.igsl.functor.generator.FiniteSetNodeGenerator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  * Eight Queens problem solver presented to demonstrate constraint-satisfaction techniques. The problem
@@ -30,13 +30,18 @@ public class EQPSolver implements FiniteSetNodeGenerator<Integer> {
 		return result;
 	}
 	
+	public int getMaxDepth() {
+		return dim;
+	}
+	
 	public boolean isValidTransition(Integer value, BackwardPathIterator<Integer> iterator) {
 		int i = 0;
 		
 		while(iterator.hasPreviousNode()) {
 			Integer node = iterator.previousNode();
 			
-			if(Math.abs(value.intValue() - node.intValue()) == ++i) {
+			if(Math.abs(value.intValue() - node.intValue()) == ++i)
+			{
 				return false;
 			}
 		}
