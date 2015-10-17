@@ -1,14 +1,14 @@
+package org.igsl.test.golombruler;
+
 /**
  * Implicit Graph Search Library(C), 2009, 2015 
  */
-
-package org.igsl.test.golombruler;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.app.golombruler.GolombRulerSolver;
 import org.igsl.app.golombruler.MutableInteger;
 
-import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 import org.igsl.traversal.linear.IndefiniteDepthTreeTraversal;
 import org.igsl.functor.exception.EmptyTraversalException;
 
@@ -19,16 +19,17 @@ public class GolombRulerTest {
 	 */
 
 	public static void main(String[] args) {
-		int maxValue = 13;
+		int maxValue = 9;
 		
 		GolombRulerSolver solver = new GolombRulerSolver(maxValue);
 		
 		System.out.println("=====Golomb Ruler Solver=====");
-		System.out.println("maxValue = " + maxValue);
+		System.out.println("max value = " + maxValue);
 		
 		IndefiniteDepthTreeTraversal<MutableInteger> tr = new IndefiniteDepthTreeTraversal<MutableInteger>(solver, false);
 		int i = 0;
-		while(i++ < 1 && !tr.isEmpty()) {
+		while(!tr.isEmpty()) {
+			++i;
 			Direct.searchForward(tr);
 			BackwardPathIterator<MutableInteger> path = tr.getPath();
 			

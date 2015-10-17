@@ -1,14 +1,14 @@
-/**
- * Implicit Graph Search Library(C), 2009, 2013 
- */
-
 package org.igsl.test.eightqueens;
+
+/**
+ * Implicit Graph Search Library(C), 2009, 2015 
+ */
 
 import org.igsl.algorithm.Direct;
 import org.igsl.app.eightqueens.Queen;
 import org.igsl.app.eightqueens.EQPSolver;
-import org.igsl.functor.BackwardPathIterator;
-import org.igsl.traversal.linear.finiteset.FixedDepthTreeTraversal;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
+import org.igsl.traversal.linear.finite.FiniteDepthTreeTraversal;
 
 public class EightQueensTest {
 	
@@ -17,9 +17,9 @@ public class EightQueensTest {
 	public static void main(String[] args) {
 		EQPSolver solver = new EQPSolver(8);
 		
-		System.out.println("=====Eight Queens Problem for finite set FixedDepthTreeTraversal.=====");
+		System.out.println("=====Eight Queens Problem for FiniteDepthTreeTraversal.=====");
 		
-		FixedDepthTreeTraversal<Queen> tr = new FixedDepthTreeTraversal<Queen>(solver);
+		FiniteDepthTreeTraversal<Queen> tr = new FiniteDepthTreeTraversal<Queen>(solver);
 		Direct.searchForward(tr);
 		BackwardPathIterator<Queen> path = tr.getPath();
 		
