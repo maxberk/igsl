@@ -1,19 +1,19 @@
-/**
- * Implicit Graph Search Library(C), 2009, 2013 
- */
-
 package org.igsl.app.eightqueens;
 
-import org.igsl.functor.FixedDepthNodeGenerator;
-import org.igsl.functor.ValuesIterator;
-import org.igsl.functor.BackwardPathIterator;
+/**
+ * Implicit Graph Search Library(C), 2009, 2015 
+ */
+
+import org.igsl.functor.generator.FiniteDepthNodeGenerator;
+import org.igsl.functor.iterator.values.ValuesIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  * Eight Queens problem solver presented to demonstrate constraint-satisfaction techniques. The problem
  * is formulated as follows: eight queens should be placed on a chess board with a condition not to attack
  * each other. The class uses a <code>Queen</code> class as node instance in template initialization.
  */
-public class EQPSolver implements FixedDepthNodeGenerator<Queen> {
+public class EQPSolver implements FiniteDepthNodeGenerator<Queen> {
 	
 	private int dim;
 	

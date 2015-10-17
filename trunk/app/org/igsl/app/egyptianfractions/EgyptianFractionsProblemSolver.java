@@ -4,10 +4,10 @@ package org.igsl.app.egyptianfractions;
  * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-import org.igsl.functor.IndefiniteDepthNodeGenerator;
-import org.igsl.functor.RandomAccess;
-import org.igsl.functor.RandomAccessValuesIterator;
-import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.generator.IndefiniteDepthNodeGenerator;
+import org.igsl.traversal.RandomAccess;
+import org.igsl.functor.iterator.values.RandomAccessValuesIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  */

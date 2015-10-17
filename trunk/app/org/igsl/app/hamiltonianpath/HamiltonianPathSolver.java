@@ -1,17 +1,15 @@
-/**
- * Implicit Graph Search Library(C), 2009, 2013
- */
-
 package org.igsl.app.hamiltonianpath;
+
+/**
+ * Implicit Graph Search Library(C), 2009, 2015
+ */
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.igsl.cost.AddableDouble;
-import org.igsl.functor.FiniteSetNodeGenerator;
-import org.igsl.functor.BackwardPathIterator;
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
+import org.igsl.functor.generator.FiniteSetNodeGenerator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 
 /**
  * NodeGenerator and CostFunction implementations for Traveling Salesman Problem.
@@ -50,6 +48,10 @@ public class HamiltonianPathSolver implements FiniteSetNodeGenerator<String>
 		}
 		
 		return result;
+	}
+	
+	public int getMaxDepth() {
+		return waypoints.size();
 	}
 	
 	/**
@@ -100,28 +102,6 @@ public class HamiltonianPathSolver implements FiniteSetNodeGenerator<String>
 		}
 				
 		return true;
-	}
-	
-	/**
-	 * Defines zero root(start) node cost 
-	 * @throws DefaultValuesUnsupportedException is not thrown here
-	 * @return default start node cost
-	 */
-	public AddableDouble getDefaultRootCost() throws DefaultValuesUnsupportedException {
-		return new AddableDouble(0);
-	}
-
-	/**
-	 * Calculates transition cost between two waypoints.
-	 */
-	public AddableDouble getTransitionCost(String from, String to) {
-		Waypoint w1 = waypoints.get(from);
-		Waypoint w2 = waypoints.get(to);
-		
-		double dx = w2.x - w1.x;
-		double dy = w2.y - w1.y;
-		
-		return new AddableDouble(Math.sqrt(dx * dx + dy * dy));
 	}
 	
 	class Waypoint {
