@@ -4,6 +4,8 @@ org/igsl/app/sudoku/Cell.java
 org/igsl/app/sudoku/SudokuSolver.java
 org/igsl/app/knighttour/Knight.java
 org/igsl/app/knighttour/KnightTourSolver.java
+org/igsl/app/knighttour2/Position.java
+org/igsl/app/knighttour2/KnightTourSolver.java
 org/igsl/app/coinproblem/variant2/Coin.java
 org/igsl/app/coinproblem/variant2/CoinProblemSolver.java
 org/igsl/app/tsp/TSPSolver.java
