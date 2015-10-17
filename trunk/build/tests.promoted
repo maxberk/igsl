@@ -1,6 +1,5 @@
 org/igsl/test/coinproblem/variant3/CoinProblemTest.java
 org/igsl/test/hamiltonianpath/HamiltonianPathTest.java
-org/igsl/test/knighttour2/KnightTourTest.java
 org/igsl/test/eightqueens/EightQueensTest.java
 org/igsl/test/eightqueens2/EightQueensTest.java
 org/igsl/test/egyptianfractions/EgyptianFractionsTest.java
