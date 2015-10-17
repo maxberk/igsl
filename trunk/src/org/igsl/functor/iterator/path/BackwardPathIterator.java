@@ -1,8 +1,8 @@
-/**
- * Implicit Graph Search Library(C), 2009, 2010, 2011, 2012 
- */
+package org.igsl.functor.iterator.path;
 
-package org.igsl.functor;
+/**
+ * Implicit Graph Search Library(C), 2009, 2015 
+ */
 
 /**
  * Interface to iterate over a current path in a search tree, namely from
