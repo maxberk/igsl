@@ -4,14 +4,14 @@ package org.igsl.traversal.linear;
  * Implicit Graph Search Library(C), 2009, 2015 
  */
 
-import org.igsl.functor.RandomAccessValuesIterator;
-import org.igsl.functor.IndefiniteDepthNodeGenerator;
+import org.igsl.functor.iterator.values.RandomAccessValuesIterator;
+import org.igsl.functor.generator.IndefiniteDepthNodeGenerator;
 import org.igsl.functor.exception.EmptyTraversalException;
 import org.igsl.traversal.TreeTraversal;
 import org.igsl.traversal.Copyable;
-import org.igsl.functor.RandomAccess;
-import org.igsl.functor.BackwardPathIterator;
-import org.igsl.functor.ForwardPathIterator;
+import org.igsl.traversal.RandomAccess;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
+import org.igsl.functor.iterator.path.ForwardPathIterator;
 
 import java.util.Stack;
 import java.util.ListIterator;
@@ -97,7 +97,7 @@ public class IndefiniteDepthTreeTraversal<T>
 				} else {
 					++depth;
 				}
-			} else {
+			} else { // if(iterator.hasNext())
 				try {
 					backtrack();
 				} catch (EmptyTraversalException ete) {
@@ -110,8 +110,10 @@ public class IndefiniteDepthTreeTraversal<T>
 	}
 	
 	/**
-	 * Simply prunes the cursor node and its predecessors if necessary
-	 * till a ready-for-expansion node is found.
+	 * Backtrack differs wheather <code>backtrackIfValidationFailed</code> set to <code>true</code> or <code>false</code>.
+	 * If set to <code>true</code>, traversal depth is not changed, while trying to find a next admissable node value,
+	 * otherwise, being set to <code>false</code>, traversal obligatory steps back to one level also trying to find new node
+	 * value. 
 	 */
 	public void backtrack() throws EmptyTraversalException {
 		if(depth == 0) {
