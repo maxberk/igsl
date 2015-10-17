@@ -4,7 +4,7 @@ package org.igsl.traversal;
  * Implicit Graph Search Library(C), 2009, 2012
  */
 
-import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 import org.igsl.functor.exception.EmptyTraversalException;
 
 /**
