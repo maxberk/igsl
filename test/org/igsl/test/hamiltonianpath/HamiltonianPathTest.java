@@ -1,28 +1,18 @@
-/**
- * Implicit Graph Search Library(C), 2011, 2013 
- */
-
 package org.igsl.test.hamiltonianpath;
 
-import java.util.Enumeration;
-import java.util.Iterator;
+/**
+ * Implicit Graph Search Library(C), 2009, 2015
+ */
 
 import org.igsl.algorithm.Direct;
-import org.igsl.cost.AddableDouble;
-import org.igsl.functor.exception.DefaultValuesUnsupportedException;
-import org.igsl.traversal.TreeTraversal;
-import org.igsl.functor.BackwardPathIterator;
-import org.igsl.traversal.linear.finiteset.DepthFirstTreeTraversal;
-
+import org.igsl.functor.iterator.path.BackwardPathIterator;
+import org.igsl.traversal.linear.finite.FiniteSetTreeTraversal;
 import org.igsl.app.hamiltonianpath.HamiltonianPathSolver;
-
-import static org.igsl.functor.memoize.Memoizer.*;
 
 public class HamiltonianPathTest {
 	
 	/**
-	 * TSP test based on DepthFirstCostTreeTraversal <code>searchForward</code>, <code>branchAndBound</code>
-	 * and <code>deepenIteratively</code> algorithms 
+	 * TSP test based on DepthFirstCostTreeTraversal <code>searchForward</code> algorithm 
 	 * 
 	 * @param args
 	 */
@@ -47,24 +37,26 @@ public class HamiltonianPathTest {
 		solver.addWaypoint("p", -0.8, 0.5);
 		solver.addWaypoint("r", -0.7, 0.4);
 		
-		System.out.println("=====Hamiltonian Path Problem.=====");
+		System.out.println("=====Hamiltonian Path Problem for FiniteSetTreeTraversal.=====");
 		
 		// Depth-first search tree traversal using TSPSolver class
-		// both for NodeGenerator and CostFunction implementations
-		DepthFirstTreeTraversal<String> tr =
-			new DepthFirstTreeTraversal<String>(solver);
+		FiniteSetTreeTraversal<String> tr =
+			new FiniteSetTreeTraversal<String>(solver);
+		
+		int i = 0;
+		while(++i < 10) {
 
-		// Find a solution without cost preference
-		Direct.searchForward(tr);
-		tr.backtrack();
-		Direct.searchForward(tr);
-		System.out.print("Admissable(non-optimal) path found while searching forward: ");
-		BackwardPathIterator<String> path = tr.getPath();
-		while(path.hasPreviousNode()) {
-			String toPrint = path.previousNode()  + "->";
-			System.out.print(toPrint);
-		}
-		System.out.println();
+			// Find a solution
+			Direct.searchForward(tr);
+			BackwardPathIterator<String> path = tr.getPath();
+			while(path.hasPreviousNode()) {
+				String toPrint = path.previousNode()  + "->";
+				System.out.print(toPrint);
+			}
+			System.out.println();
+			
+			tr.backtrack();
+		}	
 	}
 
 }

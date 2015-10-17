@@ -1,14 +1,14 @@
+package org.igsl.test.egyptianfractions;
+
 /**
  * Implicit Graph Search Library(C), 2009, 2015 
  */
-
-package org.igsl.test.egyptianfractions;
 
 import org.igsl.algorithm.Direct;
 import org.igsl.app.egyptianfractions.EgyptianFractionsProblemSolver;
 import org.igsl.app.egyptianfractions.MutableInteger;
 
-import org.igsl.functor.BackwardPathIterator;
+import org.igsl.functor.iterator.path.BackwardPathIterator;
 import org.igsl.traversal.linear.IndefiniteDepthTreeTraversal;
 import org.igsl.functor.exception.EmptyTraversalException;
 
@@ -19,8 +19,8 @@ public class EgyptianFractionsTest {
 	 */
 
 	public static void main(String[] args) {
-		long numerator = 4;
-		long denominator = 5;
+		long numerator = 5;
+		long denominator = 16;
 		long maxdenominator = 65;
 		
 		EgyptianFractionsProblemSolver solver = new EgyptianFractionsProblemSolver(numerator, denominator, maxdenominator);
