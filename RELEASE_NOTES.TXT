@@ -1,16 +1,16 @@
 (C) Implicit Graph Search Library, 2009, 2015
 
-=== RELEASE NOTES, version 0.2.5 ===
+=== RELEASE NOTES, version 0.2.7 ===
 
 Release contains examples only for new IGSL interfaces for constraint-satisfaction problems.
 As usual it contains IGSL classes packed into igsl.jar which could be found in lib directory.
 Generated IGSL core interfaces' and traversal's implementations' documentation could be
 found in javadoc directory. Compiled IGSL demo applications Coin Problem, Hamiltonian Path,
-Eight Queens and Egyptian Fractions problems along with tests using them are presented in bin directory.
+Eight Queens, Egyptian Fractions and Golomb Ruler problems along with tests using them are presented in bin directory.
 Java code for demo applications and tests is presented in app directory. For Eight Queens problem two
 traversal types are presented - fixed depth tree traversal which is also introduced in Coin Problem solver
 - along with finite set depth-first tree traversal which is also used in Hamiltonian Path sample. Infinite
-depth-first tree traversal is applied to multiple Egyptian fractions calculation.
+depth-first tree traversal is applied both to Egyptian fractions and Golomb ruler calculations.
 
 For Coin problem:
 
@@ -31,5 +31,9 @@ java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.e
 For Egyptian Fractions problem (test with infinite depth-first tree traversal):
 
 java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.egyptianfractions.EgyptianFractionsTest
+
+For Golomb Ruler problem (test with infinite depth-first tree traversal):
+
+java -classpath <IGSL_location>/lib/igsl.jar;<IGSL_location>/bin org.igsl.test.golombruler.GolombRulerTest
 
 Samples' classes are already compiled into bin directory.
